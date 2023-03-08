@@ -3,7 +3,6 @@ node_modules
 public/wuhan.gltf
 /dist
 
-
 # local env files
 .env.local
 .env.*.local
@@ -17,8 +16,3 @@ pnpm-debug.log*
 # Editor directories and files
 .idea
 .vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
