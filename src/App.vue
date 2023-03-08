@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Scene from './components/Scene_Component.vue'
+import Scene from './components/Scene_City.vue'
 
 export default {
   name: 'App',
