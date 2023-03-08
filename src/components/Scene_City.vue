@@ -5,6 +5,10 @@
 <script>
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
+//  gltf-pipeline 压缩gltf文件失败，会导致精度丢失，但仍保留该注释，以保日后需要
+// import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+
 import AMapLoader from "@amap/amap-jsapi-loader"; // 高德地图
 export default {
   mounted() {
@@ -32,7 +36,8 @@ export default {
             zoom: 12, //初始化地图级别
             pitch: 50, //摄像机视角
             viewMode: "3D", //是否为3D地图模式
-            zooms: [2, 20],
+            zooms: [3, 20],
+            showBuildingBlock: false, // 显示高德自带地图块
             // mapStyle: 'amap://styles/macaron', // 初始化地图样式
             center: [114.30443, 30.591613], //初始化地图中心点位置
           });
