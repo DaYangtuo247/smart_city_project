@@ -5,16 +5,10 @@
 <script>
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { shallowRef } from "@vue/reactivity";
-import AMapLoader from "@amap/amap-jsapi-loader";
+import AMapLoader from "@amap/amap-jsapi-loader"; // 高德地图
 export default {
-  setup() {
-    const map = shallowRef(null);
-    return {
-      map,
-    };
-  },
   mounted() {
+    //DOM初始化完成进行地图初始化
     this.ininMap();
   },
   methods: {
@@ -22,7 +16,7 @@ export default {
       AMapLoader.load({
         key: "283d29d48a72af6b61305c99b1f8638c", // 申请好的Web端开发者Key
         version: "2.0",
-        plugins: ["AMap.ControlBar", "AMap.ToolBar"], // 插件列表
+        plugins: ["AMap.ToolBar", "AMap.Scale"], // 插件列表
         AMapUI: {
           version: "1.1",
           plugins: ["overlay/SimpleMarker"],
@@ -33,16 +27,19 @@ export default {
       })
         .then((AMap) => {
           var map = new AMap.Map("MapContainer", {
-            rotateEnable: true,
-            pitchEnable: true,
-            zoom: 12,
-            pitch: 50,
-            rotation: -15,
-            viewMode: "3D", //开启3D视图
+            rotateEnable: true, //控制地图是否可以旋转
+            pitchEnable: true, //控制地图是否可以倾斜
+            zoom: 12, //初始化地图级别
+            pitch: 50, //摄像机视角
+            viewMode: "3D", //是否为3D地图模式
             zooms: [2, 20],
-            // mapStyle: 'amap://styles/macaron', // css样式
-            center: [114.30443,30.591613],
+            // mapStyle: 'amap://styles/macaron', // 初始化地图样式
+            center: [114.30443, 30.591613], //初始化地图中心点位置
           });
+          var scale = new AMap.Scale(); // 添加比例尺控件
+          map.addControl(scale);
+          var toolbar = new AMap.ToolBar(); // 缩放工具条
+          map.addControl(toolbar);
 
           var camera;
           var renderer;
@@ -54,7 +51,7 @@ export default {
           //     [116.271363, 39.992414],
           // ]);
           var object;
-          var objPosition = [114.30443,30.591613]; // 模型放置点
+          var objPosition = [114.281453, 30.599251]; // 模型放置点
 
           // 创建 GL 图层
           var gllayer = new AMap.GLCustomLayer({
@@ -151,6 +148,8 @@ export default {
           }
 
           function setPosition(lnglat) {
+            // 设置x、y、z缩放信息
+            object.scale.set(1, 1, 1);
             // 对模型的经纬度进行转换
             var position = customCoords.lngLatsToCoords([lnglat])[0];
             object.position.setX(position[0]);
@@ -173,7 +172,6 @@ body,
   padding: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
   position: absolute;
   top: 0%;
 }
