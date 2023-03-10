@@ -5,18 +5,62 @@
 <script>
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import AMapLoader from "@amap/amap-jsapi-loader"; // 高德地图
+import Stats from "three/examples/jsm/libs/stats.module"; // 性能监视器
+import Dexie from "dexie"; // 使用indexdb缓存数据在本地，发现非常卡，效果不好
+import axios from "axios";
 
 //  gltf-pipeline 压缩gltf文件失败，会导致精度丢失，但仍保留该注释，以保日后需要
 // import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
-import AMapLoader from "@amap/amap-jsapi-loader"; // 高德地图
+let db;
+
 export default {
   mounted() {
     //DOM初始化完成进行地图初始化
+    this.createDB();
     this.ininMap();
   },
   methods: {
+    createDB() {
+      db = new Dexie("threemodel");
+      db.version(1).stores({
+        model: "id, name, type, file",
+      });
+      blobChange(); // 建立完数据库，调用该函数
+      // 修改model表里的数据
+      function putDataToIndexDB(blob) {
+        // 一定要处理成二进制 this.blobChange()返回的是一个blob对象
+        db.model.put({
+          id: "WuHan3Dmodel",
+          name: "武汉3D模型",
+          type: blob.type,
+          file: blob,
+        });
+      }
+      function blobChange() {
+        axios({
+          method: "get",
+          url: "wuhan.gltf",
+          responseType: "blob",
+          crossOrigin: true,
+          withCredentials: true,
+        })
+          .then((res) => {
+            putDataToIndexDB(res.data);// 写入indexDB数据库
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    },
+
     ininMap() {
+      // 添加性能监视器
+      var stats = new Stats();
+      stats.showPanel(0);
+      document.body.appendChild(stats.dom);
+
       AMapLoader.load({
         key: "283d29d48a72af6b61305c99b1f8638c", // 申请好的Web端开发者Key
         version: "2.0",
@@ -56,7 +100,7 @@ export default {
           //     [116.271363, 39.992414],
           // ]);
           var object;
-          var objPosition = [114.281453, 30.599251]; // 模型放置点
+          var objPosition = [114.281454, 30.59925]; // 模型放置点
 
           // 创建 GL 图层
           var gllayer = new AMap.GLCustomLayer({
@@ -94,11 +138,13 @@ export default {
               initGltf();
             },
             render: () => {
+              // 更新性能监视器数据
+              stats.update();
               // 这里必须执行！！重新设置 three 的 gl 上下文状态。
               renderer.resetState();
               // 重新设置图层的渲染中心点，将模型等物体的渲染中心点重置
               // 否则和 LOCA 可视化等多个图层能力使用的时候会出现物体位置偏移的问题
-              customCoords.setCenter([116.271363, 39.992414]);
+              customCoords.setCenter(objPosition);
               var { near, far, fov, up, lookAt, position } =
                 customCoords.getCameraParams();
 
@@ -130,9 +176,18 @@ export default {
           });
           map.add(gllayer);
 
-          function initGltf() {
+          function getDataDB(key) {
+            return db.model.get(key);
+          }
+
+          async function initGltf() {
             var loader = new GLTFLoader();
-            loader.load("wuhan.gltf", (gltf) => {
+
+            const modeldata = await getDataDB('WuHan3Dmodel');
+            const modelUrl = URL.createObjectURL(new Blob([modeldata.file]));
+
+            // loader.load("wuhan.gltf", (gltf) => {
+            loader.load(modelUrl, (gltf) => {
               object = gltf.scene;
               object.scale.set(30, 30, 30);
               setRotation({
