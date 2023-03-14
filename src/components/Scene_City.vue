@@ -138,8 +138,15 @@ export default {
           });
           map.add(gllayer);
           function initGltf() {
-            var loader = new GLTFLoader();
+            const loader = new GLTFLoader();
             loader.load("wuhan.gltf", (gltf) => {
+              gltf.scene.traverse((model) => {
+                if (model.isMesh){
+                  const blueMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+                  model.material = blueMaterial;
+                }
+              });
+              scene.add(gltf.scene);
               object = gltf.scene;
               object.scale.set(30, 30, 30);
               setRotation({
@@ -149,7 +156,19 @@ export default {
               });
               setPosition(objPosition);
               scene.add(object);
-            });
+            });            
+            // var loader = new GLTFLoader();
+            // loader.load("wuhan.gltf", (gltf) => {
+            //   object = gltf.scene;
+            //   object.scale.set(30, 30, 30);
+            //   setRotation({
+            //     x: 90,
+            //     y: 0,
+            //     z: 0,
+            //   });
+            //   setPosition(objPosition);
+            //   scene.add(object);
+            // });
           }
 
           function setRotation(rotation) {
