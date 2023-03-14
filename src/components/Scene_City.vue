@@ -138,12 +138,60 @@ export default {
           });
           map.add(gllayer);
           function initGltf() {
+            // 创建包含扫描线效果的着色器材质
+            // const scanlineMaterial = new THREE.ShaderMaterial({
+            //   uniforms: {
+            //     time: { type: "f", value: 0.0 },
+            //   },
+            //   vertexShader: `
+            //     varying vec2 vUv;
+            //     void main() {
+            //       vUv = uv;
+            //       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            //     }
+            //   `,
+            //   fragmentShader: `
+            //     uniform float time;
+            //     varying vec2 vUv;
+            //     void main() {
+            //       // 将纹理坐标上下反转
+            //       float scanline = fract(vUv.y - time);
+            //       gl_FragColor = vec4(vec3(scanline), 1.0);
+            //     }
+            //   `
+            // });
             const loader = new GLTFLoader();
             loader.load("wuhan.gltf", (gltf) => {
               gltf.scene.traverse((model) => {
                 if (model.isMesh){
-                  const blueMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-                  model.material = blueMaterial;
+                        // 添加边框线
+                  const edges = new THREE.EdgesGeometry(model.geometry);
+                  const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
+                    color: 0xffffff
+                  }));
+                  model.add(line);
+                  const shaderMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                      uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
+                      uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
+                    },
+                    vertexShader: `
+                      uniform float uHeight;
+                      varying float vPosition;
+                      void main() {
+                        vPosition = position.y / uHeight;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                      }
+                    `,
+                    fragmentShader: `
+                      uniform vec3 uColor;
+                      varying float vPosition;
+                      void main() {
+                        gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 1.0); // 通过mix函数混合两个颜色，达到渐变效果
+                      }
+                    `
+                  });
+                  model.material = shaderMaterial;
                 }
               });
               scene.add(gltf.scene);
@@ -156,19 +204,7 @@ export default {
               });
               setPosition(objPosition);
               scene.add(object);
-            });            
-            // var loader = new GLTFLoader();
-            // loader.load("wuhan.gltf", (gltf) => {
-            //   object = gltf.scene;
-            //   object.scale.set(30, 30, 30);
-            //   setRotation({
-            //     x: 90,
-            //     y: 0,
-            //     z: 0,
-            //   });
-            //   setPosition(objPosition);
-            //   scene.add(object);
-            // });
+            });         
           }
 
           function setRotation(rotation) {
