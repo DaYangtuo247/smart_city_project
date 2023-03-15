@@ -44,8 +44,9 @@ export default {
             viewMode: "3D", //是否为3D地图模式
             zooms: [3, 20],
             showBuildingBlock: false, // 显示高德自带地图块
-            // mapStyle: 'amap://styles/macaron', // 初始化地图样式
+            mapStyle:"amap://styles/darkblue", // 初始化地图样式
             center: [114.30443, 30.591613], //初始化地图中心点位置
+            showLabel: false //取消文字标注
           });
           var scale = new AMap.Scale(); // 添加比例尺控件
           map.addControl(scale);
@@ -138,28 +139,6 @@ export default {
           });
           map.add(gllayer);
           function initGltf() {
-            // 创建包含扫描线效果的着色器材质
-            // const scanlineMaterial = new THREE.ShaderMaterial({
-            //   uniforms: {
-            //     time: { type: "f", value: 0.0 },
-            //   },
-            //   vertexShader: `
-            //     varying vec2 vUv;
-            //     void main() {
-            //       vUv = uv;
-            //       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            //     }
-            //   `,
-            //   fragmentShader: `
-            //     uniform float time;
-            //     varying vec2 vUv;
-            //     void main() {
-            //       // 将纹理坐标上下反转
-            //       float scanline = fract(vUv.y - time);
-            //       gl_FragColor = vec4(vec3(scanline), 1.0);
-            //     }
-            //   `
-            // });
             const loader = new GLTFLoader();
             loader.load("wuhan.gltf", (gltf) => {
               gltf.scene.traverse((model) => {
