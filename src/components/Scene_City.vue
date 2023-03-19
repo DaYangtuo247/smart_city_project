@@ -11,10 +11,13 @@ import Stats from "three/examples/jsm/libs/stats.module"; // 性能监视器
 //  gltf-pipeline 压缩gltf文件失败，会导致精度丢失，但仍保留该注释，以保日后需要
 // import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
+let height = 0.0;
+
 export default {
   mounted() {
     //DOM初始化完成进行地图初始化
     this.ininMap();
+    // this.render();
   },
   methods: {
     ininMap() {
@@ -130,17 +133,21 @@ export default {
               // camera.right = right;
               // camera.position.set(...position);
               // camera.updateProjectionMatrix();
-
+              height += 1;
+              if(height>200)
+              {
+                height=0.0
+              }
               renderer.render(scene, camera);
-
               // 这里必须执行！！重新设置 three 的 gl 上下文状态。
               renderer.resetState();
             },
           });
           map.add(gllayer);
+
           function initGltf() {
             const loader = new GLTFLoader();
-            loader.load("wuhan.gltf", (gltf) => {
+            loader.load("wuhan_new.gltf", (gltf) => {
               gltf.scene.traverse((model) => {
                 if (model.isMesh){
                         // 添加边框线
@@ -151,24 +158,43 @@ export default {
                   model.add(line);
                   const shaderMaterial = new THREE.ShaderMaterial({
                     uniforms: {
+                      height: height,
                       uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
                       uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
+                      uFlowColor: {
+                        value: new THREE.Color("#5588aa"),
+                      },
                     },
                     vertexShader: `
                       uniform float uHeight;
                       varying float vPosition;
+                      varying vec3 vPoint;
                       void main() {
                         vPosition = position.y / uHeight;
+                        vPoint = vec3(position.x, -position.z, position.y);
                         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                       }
                     `,
                     fragmentShader: `
+                      varying vec3 vPoint;
                       uniform vec3 uColor;
+                      uniform float height;
+                      uniform vec3 uFlowColor;
                       varying float vPosition;
                       void main() {
-                        gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 1.0); // 通过mix函数混合两个颜色，达到渐变效果
+                        // 计算模型的基础颜色
+                        vec3 distColor = mix(vec3(0.0, 0.4, 1.0), uColor, vPosition);
+                        // 计算流动范围当前点z的高度加上流动线的高度
+                        float topY = vPoint.z + 15.0;
+                        if (height > vPoint.z && height < topY) {
+                            // 颜色渐变 
+                            distColor = uFlowColor; 
+                        }
+                        gl_FragColor = vec4(distColor, 0.8); 
+                        // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
                       }
-                    `
+                    `,
+                    transparent: true,
                   });
                   model.material = shaderMaterial;
                 }
@@ -205,8 +231,23 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+        // data() {
+        //   return {
+        //     height: {
+        //       value: 0,
+        //     },
+        //   };
+        // };
     },
+    
   },
+  data() {
+      return {
+        height: {
+          value: 0,
+        },
+      };
+    },
 };
 </script>
 
