@@ -12,6 +12,13 @@ import Stats from "three/examples/jsm/libs/stats.module"; // 性能监视器
 // import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
 let height = 0.0;
+let camera; //相机
+let scene; //场景
+let renderer;
+let object; // gltf模型场景
+let objPosition = [114.281454, 30.59925]; // 模型放置点
+let mapPosition = [114.30443, 30.591613]; // 地图放置点
+let customCoords;
 
 export default {
   mounted() {
@@ -47,8 +54,8 @@ export default {
             viewMode: "3D", //是否为3D地图模式
             zooms: [3, 20],
             showBuildingBlock: false, // 显示高德自带地图块
-            mapStyle:"amap://styles/darkblue", // 初始化地图样式
-            center: [114.30443, 30.591613], //初始化地图中心点位置
+            mapStyle: "amap://styles/darkblue", // 初始化地图样式
+            center: mapPosition, //初始化地图中心点位置
             showLabel: false //取消文字标注
           });
           var scale = new AMap.Scale(); // 添加比例尺控件
@@ -56,17 +63,13 @@ export default {
           var toolbar = new AMap.ToolBar(); // 缩放工具条
           map.addControl(toolbar);
 
-          var camera;
-          var renderer;
-          var scene;
+
           // 数据转换工具
-          var customCoords = map.customCoords;
+          customCoords = map.customCoords;
           // 数据使用转换工具进行转换，这个操作必须要提前执行（在获取镜头参数 函数之前执行），否则将会获得一个错误信息。
-          // var data = customCoords.lngLatsToCoords([
-          //     [116.271363, 39.992414],
-          // ]);
-          var object;
-          var objPosition = [114.281454, 30.59925]; // 模型放置点
+          customCoords.lngLatsToCoords([
+            [116.271363, 39.992414],
+          ]);
 
           // 创建 GL 图层
           var gllayer = new AMap.GLCustomLayer({
@@ -85,9 +88,9 @@ export default {
 
               renderer = new THREE.WebGLRenderer({
                 context: gl, // 地图的 gl 上下文
-                // alpha: true,
-                // antialias: true,
-                // canvas: gl.canvas,
+                alpha: true,
+                antialias: true,
+                canvas: gl.canvas,
               });
 
               // 自动清空画布这里必须设置为 false，否则地图底图将无法显示
@@ -101,21 +104,16 @@ export default {
               scene.add(dLight);
               scene.add(aLight);
 
-              initGltf();
+              this.initGltf();
             },
             render: () => {
               // 更新性能监视器数据
               stats.update();
               // 这里必须执行！！重新设置 three 的 gl 上下文状态。
               renderer.resetState();
-              // 重新设置图层的渲染中心点，将模型等物体的渲染中心点重置
-              // 否则和 LOCA 可视化等多个图层能力使用的时候会出现物体位置偏移的问题
+              // 重新设置图层的渲染中心点，将模型等物体的渲染中心点重置, 否则和 LOCA 可视化等多个图层能力使用的时候会出现物体位置偏移的问题
               customCoords.setCenter(objPosition);
-              var { near, far, fov, up, lookAt, position } =
-                customCoords.getCameraParams();
-
-              // 2D 地图下使用的正交相机
-              // var { near, far, top, bottom, left, right, position, rotation } = customCoords.getCameraParams();
+              var { near, far, fov, up, lookAt, position } = customCoords.getCameraParams();
 
               // 这里的顺序不能颠倒，否则可能会出现绘制卡顿的效果。
               camera.near = near;
@@ -126,46 +124,44 @@ export default {
               camera.lookAt(...lookAt);
               camera.updateProjectionMatrix();
 
-              // 2D 地图使用的正交相机参数赋值
-              // camera.top = top;
-              // camera.bottom = bottom;
-              // camera.left = left;
-              // camera.right = right;
-              // camera.position.set(...position);
-              // camera.updateProjectionMatrix();
               height += 1;
-              if(height>200)
-              {
-                height=0.0
+              if (height > 200) {
+                height = 0.0
               }
+
               renderer.render(scene, camera);
               // 这里必须执行！！重新设置 three 的 gl 上下文状态。
               renderer.resetState();
             },
           });
           map.add(gllayer);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
 
-          function initGltf() {
-            const loader = new GLTFLoader();
-            loader.load("wuhan_new.gltf", (gltf) => {
-              gltf.scene.traverse((model) => {
-                if (model.isMesh){
-                        // 添加边框线
-                  const edges = new THREE.EdgesGeometry(model.geometry);
-                  const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
-                    color: 0xffffff
-                  }));
-                  model.add(line);
-                  const shaderMaterial = new THREE.ShaderMaterial({
-                    uniforms: {
-                      height: height,
-                      uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
-                      uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
-                      uFlowColor: {
-                        value: new THREE.Color("#5588aa"),
-                      },
-                    },
-                    vertexShader: `
+    initGltf() {
+      const loader = new GLTFLoader();
+      loader.load("wuhan.gltf", (gltf) => {
+        gltf.scene.traverse((model) => {
+          if (model.isMesh) {
+            // 添加边框线
+            const edges = new THREE.EdgesGeometry(model.geometry);
+            const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
+              color: 0xffffff
+            }));
+            model.add(line);
+            const shaderMaterial = new THREE.ShaderMaterial({
+              uniforms: {
+                height: height,
+                uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
+                uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
+                uFlowColor: {
+                  value: new THREE.Color("#5588aa"),
+                },
+              },
+              vertexShader: `
                       uniform float uHeight;
                       varying float vPosition;
                       varying vec3 vPoint;
@@ -175,7 +171,7 @@ export default {
                         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                       }
                     `,
-                    fragmentShader: `
+              fragmentShader: `
                       varying vec3 vPoint;
                       uniform vec3 uColor;
                       uniform float height;
@@ -194,60 +190,47 @@ export default {
                         // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
                       }
                     `,
-                    transparent: true,
-                  });
-                  model.material = shaderMaterial;
-                }
-              });
-              scene.add(gltf.scene);
-              object = gltf.scene;
-              object.scale.set(30, 30, 30);
-              setRotation({
-                x: 90,
-                y: 0,
-                z: 0,
-              });
-              setPosition(objPosition);
-              scene.add(object);
-            });         
+              transparent: true,
+            });
+            model.material = shaderMaterial;
           }
-
-          function setRotation(rotation) {
-            var x = (Math.PI / 180) * (rotation.x || 0);
-            var y = (Math.PI / 180) * (rotation.y || 0);
-            var z = (Math.PI / 180) * (rotation.z || 0);
-            object.rotation.set(x, y, z);
-          }
-
-          function setPosition(lnglat) {
-            // 设置x、y、z缩放信息
-            object.scale.set(1, 1, 1);
-            // 对模型的经纬度进行转换
-            var position = customCoords.lngLatsToCoords([lnglat])[0];
-            object.position.setX(position[0]);
-            object.position.setY(position[1]);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
         });
-        // data() {
-        //   return {
-        //     height: {
-        //       value: 0,
-        //     },
-        //   };
-        // };
+        scene.add(gltf.scene);
+        object = gltf.scene;
+        object.scale.set(30, 30, 30);
+        this.setRotation({
+          x: 90,
+          y: 0,
+          z: 0,
+        });
+        this.setPosition();
+        scene.add(object);
+      });
     },
-    
+
+    setRotation(rotation) {
+      var x = (Math.PI / 180) * (rotation.x || 0);
+      var y = (Math.PI / 180) * (rotation.y || 0);
+      var z = (Math.PI / 180) * (rotation.z || 0);
+      object.rotation.set(x, y, z);
+    },
+
+    setPosition() {
+      // 设置x、y、z缩放信息
+      object.scale.set(1, 1, 1);
+      // 对模型的经纬度进行转换
+      var position = customCoords.lngLatsToCoords(objPosition)[0];
+      object.position.setX(position[0]);
+      object.position.setY(position[1]);
+    },
   },
   data() {
-      return {
-        height: {
-          value: 0,
-        },
-      };
-    },
+    return {
+      height: {
+        value: 0,
+      },
+    };
+  },
 };
 </script>
 
