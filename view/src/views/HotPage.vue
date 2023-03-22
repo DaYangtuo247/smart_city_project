@@ -1,0 +1,19 @@
+<template>
+  <div class="com-page">
+    <hot></hot>
+  </div>
+</template>
+
+<script>
+import Hot from "components/report/Hot"
+export default {
+  name: 'HotPage',
+  components:{
+    Hot
+  }
+}
+</script>
+
+<style lang="less" scoped>
+  
+</style>

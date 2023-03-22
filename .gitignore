@@ -1,7 +1,8 @@
 .DS_Store
-node_modules
-public/wuhan.gltf
-public/wuhan_new.gltf
+view/node_modules
+server/node_modules
+view/public/wuhan.gltf
+view/public/demo.gltf
 /dist
 
 # local env files

@@ -1,24 +1,36 @@
-# smart-city-demo
+参考链接[01_课程介绍_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1bh41197p8?p=1&vd_source=bc4fa866e16a93e8322d340eefe71de3)
 
-## Project setup
+## 技术栈
+
+该项目主要使用 `Vue`搭配`Echarts`采用组件化的方式开发完成,此外项目中陆续使用有
+
+- VueRouter
+- VueX
+- WebSocket
+- axios
+- webpack
+- ES6+
+- less
+
+## 如何运行该项目？
+
+```bash
+# 首先你应当克隆该项目
+git clone https://github.com/DaYangtuo247/smart_city_project
 ```
+
+### 启动前端工程
+
+```bash
+cd view
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### 启动后端工程
 
-### Lints and fixes files
+```bash
+cd server
+npm install
+node app.js
 ```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
