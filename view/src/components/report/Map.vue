@@ -164,7 +164,7 @@ export default {
         },
         initGltf() {
             const loader = new GLTFLoader();
-            loader.load("demo.gltf", (gltf) => {
+            loader.load("wuhan_update.gltf", (gltf) => {
                 gltf.scene.traverse((model) => {
                     if (model.isMesh) {
                         // 添加边框线
@@ -179,7 +179,7 @@ export default {
                                 uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
                                 uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
                                 uFlowColor: {
-                                    value: new THREE.Color("#5588aa"),
+                                    value: new THREE.Color("#FFFFFF"),
                                 },
                             },
                             vertexShader: `
@@ -205,7 +205,9 @@ export default {
                           float topY = vPoint.z + 5.0;
                           if (height > vPoint.z && height < topY) {
                               // 颜色渐变 
-                              distColor = uFlowColor; 
+                              float dIndex = sin((height - vPoint.z) / 10.0 * 3.14);
+                              distColor = mix(uFlowColor, distColor, 1.0-dIndex);
+                            //   distColor = uFlowColor; 
                           }
                           gl_FragColor = vec4(distColor, 0.8); 
                           // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
