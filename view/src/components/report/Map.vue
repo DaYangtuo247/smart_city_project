@@ -155,8 +155,8 @@ export default {
                 });
         },
         change() {
-            this.height.value += 0.1;
-            if (this.height.value > 50) {
+            this.height.value += 0.3;
+            if (this.height.value > 75) {
                 this.height.value = 0.0
             }
             // map.render();
@@ -164,7 +164,7 @@ export default {
         },
         initGltf() {
             const loader = new GLTFLoader();
-            loader.load("wuhan_update.gltf", (gltf) => {
+            loader.load("wuhan.gltf", (gltf) => {
                 gltf.scene.traverse((model) => {
                     if (model.isMesh) {
                         // 添加边框线
@@ -205,7 +205,7 @@ export default {
                           float topY = vPoint.z + 5.0;
                           if (height > vPoint.z && height < topY) {
                               // 颜色渐变 
-                              float dIndex = sin((height - vPoint.z) / 10.0 * 3.14);
+                              float dIndex = sin((height - vPoint.z) / 5.0 * 3.14);
                               distColor = mix(uFlowColor, distColor, 1.0-dIndex);
                             //   distColor = uFlowColor; 
                           }
