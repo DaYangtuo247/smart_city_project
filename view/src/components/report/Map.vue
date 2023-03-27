@@ -5,11 +5,11 @@
         </div>
     </div>
 </template>
-
+<script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
 <script>
 // 原项目本身包含的，留着是为了防止出现神奇的bug
 // import { getProvinceMapInfo } from '@/utils/map_utils';
-// import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import AMapLoader from "@amap/amap-jsapi-loader"; // 高德地图
@@ -26,14 +26,23 @@ let mapPosition = [114.30443, 30.591613]; // 地图放置点
 let customCoords;
 let map;
 export default {
+    computed: {
+       ...mapState(['theme']),
+    },
+	watch: {
+		theme() {
+			this.changeTheme()
+		},
+    },
     mounted() {
         //DOM初始化完成进行地图初始化
         this.initMap();
-        // this.initGltf();
         this.change();
-        // this.render();
     },
     methods: {
+        changeTheme(){
+            map.setMapStyle('amap://styles/normal'); // 设置地图样式
+        },
         initMap() {
             // 添加性能监视器
             var stats = new Stats();
