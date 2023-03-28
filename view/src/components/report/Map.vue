@@ -9,7 +9,7 @@
 <script>
 // 原项目本身包含的，留着是为了防止出现神奇的bug
 // import { getProvinceMapInfo } from '@/utils/map_utils';
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import AMapLoader from "@amap/amap-jsapi-loader"; // 高德地图
@@ -27,12 +27,12 @@ let customCoords;
 let map;
 export default {
     computed: {
-       ...mapState(['theme']),
+        ...mapState(["theme"])
     },
-	watch: {
-		theme() {
-			this.changeTheme()
-		},
+    watch: {
+        theme() {
+            this.changeTheme();
+        }
     },
     mounted() {
         //DOM初始化完成进行地图初始化
@@ -40,8 +40,12 @@ export default {
         this.change();
     },
     methods: {
-        changeTheme(){
-            map.setMapStyle('amap://styles/normal'); // 设置地图样式
+        changeTheme() {
+            if (this.theme == "chalk") {
+                map.setMapStyle("amap://styles/darkblue"); // 设置地图样式
+            } else {
+                map.setMapStyle("amap://styles/normal"); // 设置地图样式
+            }
         },
         initMap() {
             // 添加性能监视器
@@ -54,13 +58,13 @@ export default {
                 plugins: ["AMap.ToolBar", "AMap.Scale"], // 插件列表
                 AMapUI: {
                     version: "1.1",
-                    plugins: ["overlay/SimpleMarker"],
+                    plugins: ["overlay/SimpleMarker"]
                 },
                 Loca: {
-                    version: "2.0",
-                },
+                    version: "2.0"
+                }
             })
-                .then((AMap) => {
+                .then(AMap => {
                     map = new AMap.Map("MapContainer", {
                         resizeEnable: true, //监控地图容器尺寸变化
                         rotateEnable: true, //控制地图是否可以旋转
@@ -81,29 +85,22 @@ export default {
                     // 数据转换工具
                     customCoords = map.customCoords;
                     // 数据使用转换工具进行转换，这个操作必须要提前执行（在获取镜头参数 函数之前执行），否则将会获得一个错误信息。
-                    customCoords.lngLatsToCoords([
-                        [116.271363, 39.992414],
-                    ]);
+                    customCoords.lngLatsToCoords([[116.271363, 39.992414]]);
                     // map.setMapStyle('amap://styles/normal'); // 设置地图样式
                     // 创建 GL 图层
                     var gllayer = new AMap.GLCustomLayer({
                         // 图层的层级
                         zIndex: 10,
                         // 初始化的操作，创建图层过程中执行一次。
-                        init: (gl) => {
+                        init: gl => {
                             // 这里我们的地图模式是 3D，所以创建一个透视相机，相机的参数初始化可以随意设置，因为在 render 函数中，每一帧都需要同步相机参数，因此这里变得不那么重要。
                             // 如果你需要 2D 地图（viewMode: '2D'），那么你需要创建一个正交相机
-                            camera = new THREE.PerspectiveCamera(
-                                60,
-                                window.innerWidth / window.innerHeight,
-                                100,
-                                1 << 30
-                            );
+                            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 100, 1 << 30);
                             renderer = new THREE.WebGLRenderer({
                                 context: gl, // 地图的 gl 上下文
                                 alpha: true,
                                 antialias: true,
-                                canvas: gl.canvas,
+                                canvas: gl.canvas
                             });
                             // 自动清空画布这里必须设置为 false，否则地图底图将无法显示
                             renderer.autoClear = false;
@@ -114,7 +111,6 @@ export default {
                             dLight.position.set(1000, -100, 900);
                             scene.add(dLight);
                             scene.add(aLight);
-
                         },
                         render: () => {
                             // 更新性能监视器数据
@@ -136,7 +132,7 @@ export default {
                             renderer.render(scene, camera);
                             // 这里必须执行！！重新设置 three 的 gl 上下文状态。
                             renderer.resetState();
-                        },
+                        }
                     });
                     map.add(gllayer);
 
@@ -159,28 +155,31 @@ export default {
                     // change();
                     this.initGltf();
                 })
-                .catch((e) => {
+                .catch(e => {
                     console.log(e);
                 });
         },
         change() {
             this.height.value += 0.3;
             if (this.height.value > 75) {
-                this.height.value = 0.0
+                this.height.value = 0.0;
             }
             // map.render();
             requestAnimationFrame(this.change);
         },
         initGltf() {
             const loader = new GLTFLoader();
-            loader.load("wuhan.gltf", (gltf) => {
-                gltf.scene.traverse((model) => {
+            loader.load("wuhan.gltf", gltf => {
+                gltf.scene.traverse(model => {
                     if (model.isMesh) {
                         // 添加边框线
                         const edges = new THREE.EdgesGeometry(model.geometry);
-                        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
-                            color: 0xffffff
-                        }));
+                        const line = new THREE.LineSegments(
+                            edges,
+                            new THREE.LineBasicMaterial({
+                                color: 0xffffff
+                            })
+                        );
                         model.add(line);
                         const shaderMaterial = new THREE.ShaderMaterial({
                             uniforms: {
@@ -188,8 +187,8 @@ export default {
                                 uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
                                 uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
                                 uFlowColor: {
-                                    value: new THREE.Color("#FFFFFF"),
-                                },
+                                    value: new THREE.Color("#FFFFFF")
+                                }
                             },
                             vertexShader: `
                         uniform float uHeight;
@@ -222,7 +221,7 @@ export default {
                           // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
                         }
                       `,
-                            transparent: true,
+                            transparent: true
                         });
                         model.material = shaderMaterial;
                     }
@@ -233,7 +232,7 @@ export default {
                 this.setRotation({
                     x: 90,
                     y: 0,
-                    z: 0,
+                    z: 0
                 });
                 this.setPosition();
                 scene.add(object);
@@ -252,15 +251,15 @@ export default {
             var position = customCoords.lngLatsToCoords(objPosition)[0];
             object.position.setX(position[0]);
             object.position.setY(position[1]);
-        },
+        }
     },
     data() {
         return {
             height: {
-                value: 0,
-            },
+                value: 0
+            }
         };
-    },
+    }
 };
 </script>
 
