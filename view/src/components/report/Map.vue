@@ -42,7 +42,7 @@ export default {
     methods: {
         changeTheme() {
             if (this.theme == "chalk") {
-                map.setMapStyle("amap://styles/darkblue"); // 设置地图样式
+                map.setMapStyle("amap://styles/normal"); // 设置地图样式
             } else {
                 map.setMapStyle("amap://styles/normal"); // 设置地图样式
             }
@@ -76,7 +76,7 @@ export default {
                         showBuildingBlock: false, // 显示高德自带地图块
                         mapStyle: "amap://styles/darkblue", // 初始化地图样式
                         center: mapPosition, //初始化地图中心点位置
-                        showLabel: false //取消文字标注
+                        showLabel: true //取消文字标注
                     });
                     var scale = new AMap.Scale(); // 添加比例尺控件
                     map.addControl(scale);
@@ -141,18 +141,6 @@ export default {
                         requestAnimationFrame(alive);
                     }
                     alive();
-
-                    // map.render();
-                    // function change(){
-                    //     this.height.value += 1;
-                    //     if (this.height.value > 200) {
-                    //       this.height.value = 0.0
-                    //     }
-                    //     // console.log(this.height.value);
-                    //     map.render();
-                    //     requestAnimationFrame(change);
-                    // }
-                    // change();
                     this.initGltf();
                 })
                 .catch(e => {
@@ -164,7 +152,6 @@ export default {
             if (this.height.value > 75) {
                 this.height.value = 0.0;
             }
-            // map.render();
             requestAnimationFrame(this.change);
         },
         initGltf() {
@@ -172,58 +159,8 @@ export default {
             loader.load("wuhan.gltf", gltf => {
                 gltf.scene.traverse(model => {
                     if (model.isMesh) {
-                        // 添加边框线
-                        const edges = new THREE.EdgesGeometry(model.geometry);
-                        const line = new THREE.LineSegments(
-                            edges,
-                            new THREE.LineBasicMaterial({
-                                color: 0xffffff
-                            })
-                        );
-                        model.add(line);
-                        const shaderMaterial = new THREE.ShaderMaterial({
-                            uniforms: {
-                                height: this.height,
-                                uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
-                                uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
-                                uFlowColor: {
-                                    value: new THREE.Color("#FFFFFF")
-                                }
-                            },
-                            vertexShader: `
-                        uniform float uHeight;
-                        varying float vPosition;
-                        varying vec3 vPoint;
-                        void main() {
-                          vPosition = position.y / uHeight;
-                          vPoint = vec3(position.x, -position.z, position.y);
-                          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                        }
-                      `,
-                            fragmentShader: `
-                        varying vec3 vPoint;
-                        uniform vec3 uColor;
-                        uniform float height;
-                        uniform vec3 uFlowColor;
-                        varying float vPosition;
-                        void main() {
-                          // 计算模型的基础颜色
-                          vec3 distColor = mix(vec3(0.0, 0.4, 1.0), uColor, vPosition);
-                          // 计算流动范围当前点z的高度加上流动线的高度
-                          float topY = vPoint.z + 5.0;
-                          if (height > vPoint.z && height < topY) {
-                              // 颜色渐变 
-                              float dIndex = sin((height - vPoint.z) / 5.0 * 3.14);
-                              distColor = mix(uFlowColor, distColor, 1.0-dIndex);
-                            //   distColor = uFlowColor; 
-                          }
-                          gl_FragColor = vec4(distColor, 0.8); 
-                          // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
-                        }
-                      `,
-                            transparent: true
-                        });
-                        model.material = shaderMaterial;
+                        this.city_line(model);
+                        this.black_city(model);
                     }
                 });
                 scene.add(gltf.scene);
@@ -237,6 +174,120 @@ export default {
                 this.setPosition();
                 scene.add(object);
             });
+        },
+        city_line(model){
+            // 添加边框线
+            const edges = new THREE.EdgesGeometry(model.geometry);
+            const line = new THREE.LineSegments(
+                edges,
+                new THREE.LineBasicMaterial({
+                    color: 0xBDBDBD
+                })
+            );
+            model.add(line);
+        },
+        shadow_city(model){
+            // 添加阴影
+            const shadow = new THREE.Mesh(
+                model.geometry,
+                new THREE.MeshBasicMaterial({
+                    color: 0x000000,
+                    transparent: true,
+                    opacity: 0.3
+                })
+            );
+            shadow.position.y = -0.1;
+            shadow.rotation.x = -Math.PI / 2;
+            model.add(shadow);
+        },
+        white_city(model){
+            const shaderMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    height: this.height,
+                    uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
+                    uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
+                    uFlowColor: {
+                        value: new THREE.Color("#FFFFFF")
+                    }
+                },
+            vertexShader: `
+            uniform float uHeight;
+            varying float vPosition;
+            varying vec3 vPoint;
+            void main() {
+                vPosition = position.y / uHeight;
+                vPoint = vec3(position.x, -position.z, position.y);
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+            `,
+            fragmentShader: `
+            varying vec3 vPoint;
+            uniform vec3 uColor;
+            uniform float height;
+            uniform vec3 uFlowColor;
+            varying float vPosition;
+            void main() {
+                // 计算模型的基础颜色
+                vec3 distColor = mix(vec3(0.97, 0.99, 1.0), uColor, vPosition);
+                // 计算流动范围当前点z的高度加上流动线的高度
+                float topY = vPoint.z + 5.0;
+                if (height > vPoint.z && height < topY) {
+                    // 颜色渐变 
+                    float dIndex = sin((height - vPoint.z) / 5.0 * 3.14);
+                    distColor = mix(uFlowColor, distColor, 1.0-dIndex);
+                //   distColor = uFlowColor; 
+                }
+                gl_FragColor = vec4(distColor, 0.8); 
+                // gl_FragColor = vec4(mix(vec3(0.97, 0.99, 1.0), uColor, vPosition), 1.0); // 通过mix函数混合两个颜色，达到渐变效果
+            }
+            `
+            });
+            model.material = shaderMaterial;
+        },
+        black_city(model){
+            const shaderMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    height: this.height,
+                    uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
+                    uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
+                    uFlowColor: {
+                        value: new THREE.Color("#FFFFFF")
+                    }
+                },
+                vertexShader: `
+            uniform float uHeight;
+            varying float vPosition;
+            varying vec3 vPoint;
+            void main() {
+                vPosition = position.y / uHeight;
+                vPoint = vec3(position.x, -position.z, position.y);
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+            `,
+                fragmentShader: `
+            varying vec3 vPoint;
+            uniform vec3 uColor;
+            uniform float height;
+            uniform vec3 uFlowColor;
+            varying float vPosition;
+            void main() {
+                // 计算模型的基础颜色
+                vec3 distColor = mix(vec3(0.0, 0.4, 1.0), uColor, vPosition);
+                // 计算流动范围当前点z的高度加上流动线的高度
+                float topY = vPoint.z + 5.0;
+                if (height > vPoint.z && height < topY) {
+                    // 颜色渐变 
+                    float dIndex = sin((height - vPoint.z) / 5.0 * 3.14);
+                    distColor = mix(uFlowColor, distColor, 1.0-dIndex);
+                //   distColor = uFlowColor; 
+                }
+                gl_FragColor = vec4(distColor, 0.8); 
+                // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
+            }
+            `,
+                transparent: true
+            });
+            model.material = shaderMaterial;
         },
         setRotation(rotation) {
             var x = (Math.PI / 180) * (rotation.x || 0);
