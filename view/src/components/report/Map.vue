@@ -7,8 +7,6 @@
 </template>
 <script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
 <script>
-// 原项目本身包含的，留着是为了防止出现神奇的bug
-// import { getProvinceMapInfo } from '@/utils/map_utils';
 import { mapState } from "vuex";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -41,8 +39,8 @@ export default {
     },
     methods: {
         changeTheme() {
-            if (this.theme == "chalk") {
-                map.setMapStyle("amap://styles/normal"); // 设置地图样式
+            if (this.theme == "darkTheme") {
+                map.setMapStyle("amap://styles/darkblue"); // 设置地图样式
             } else {
                 map.setMapStyle("amap://styles/normal"); // 设置地图样式
             }
@@ -74,10 +72,10 @@ export default {
                         viewMode: "3D", //是否为3D地图模式
                         zooms: [3, 20],
                         showBuildingBlock: false, // 显示高德自带地图块
-                        mapStyle: "amap://styles/darkblue", // 初始化地图样式
                         center: mapPosition, //初始化地图中心点位置
                         showLabel: true //取消文字标注
                     });
+                    this.changeTheme(); // 跟随全局主题设置
                     var scale = new AMap.Scale(); // 添加比例尺控件
                     map.addControl(scale);
                     var toolbar = new AMap.ToolBar(); // 缩放工具条
@@ -86,7 +84,6 @@ export default {
                     customCoords = map.customCoords;
                     // 数据使用转换工具进行转换，这个操作必须要提前执行（在获取镜头参数 函数之前执行），否则将会获得一个错误信息。
                     customCoords.lngLatsToCoords([[116.271363, 39.992414]]);
-                    // map.setMapStyle('amap://styles/normal'); // 设置地图样式
                     // 创建 GL 图层
                     var gllayer = new AMap.GLCustomLayer({
                         // 图层的层级

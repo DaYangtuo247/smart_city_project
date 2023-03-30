@@ -28,7 +28,7 @@ export default {
   methods: {
     // 初始化图表的方法
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.trendRef, "chalk");
+      this.chartInstance = this.$echarts.init(this.$refs.trendRef, "darkTheme");
       const initOption = {};
       this.chartInstance.setOption(initOption);
     },

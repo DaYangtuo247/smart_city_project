@@ -1,16 +1,14 @@
 // 这是项目发布阶段需要用到的插件
-const prodPlugins = []
-if(process.env.NODE_ENV === 'production'){
-  prodPlugins.push('transform-remove-console')
+const prodPlugins = [];
+if (process.env.NODE_ENV === "production") {
+    prodPlugins.push("transform-remove-console");
 }
 
 module.exports = {
-  presets: [
-    '@vue/cli-plugin-babel/preset'
-  ],
-  plugins: [
-    // 发布模式时，使用到的插件
-    ...prodPlugins,
-    "@babel/plugin-syntax-dynamic-import"
-  ]
-}
+    presets: ["@vue/cli-plugin-babel/preset"],
+    plugins: [
+        // 发布模式时，使用到的插件
+        ...prodPlugins,
+        "@babel/plugin-syntax-dynamic-import"
+    ]
+};
