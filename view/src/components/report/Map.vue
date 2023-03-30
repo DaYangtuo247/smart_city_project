@@ -321,8 +321,6 @@ body,
     height: 100%;
     position: absolute;
     top: 0%;
-    border-radius: 20px;
-    overflow: hidden;
 }
 </style>
 

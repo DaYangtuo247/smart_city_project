@@ -1,31 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>smart_city.svg">
     <!-- <title><%= htmlWebpackPlugin.options.title %></title> -->
-    <title><%= htmlWebpackPlugin.options.isProd ? '' : 'dev-' %>智慧城市大屏</title>
+    <title>
+        <%= htmlWebpackPlugin.options.isProd ? '' : 'dev-' %>智慧城市大屏
+    </title>
     <% if(htmlWebpackPlugin.options.isProd){%>
-      <!-- CDN JS -->
-      <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"></script>
-      <script src="https://cdn.bootcdn.net/ajax/libs/vue-router/3.2.0/vue-router.min.js"></script>
-      <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
-      <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
-      <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts.min.js"></script>
-    <% } %>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
+        <!-- CDN JS -->
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue-router/3.2.0/vue-router.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts.min.js"></script>
+        <% } %>
+</head>
+
+<body>
     <div id="app"></div>
-    <!-- echarts -->
-    <!-- <script src="./static/lib/echarts.min.js"></script> -->
-    
-    <!-- echarts  theme -->
-    <!-- <script src="./static/theme/darkTheme.js"></script>
-    <script src="./static/theme/vintage.js"></script> -->
-  </body>
+</body>
+
 </html>

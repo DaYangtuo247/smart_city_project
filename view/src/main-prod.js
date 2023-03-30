@@ -17,7 +17,7 @@ import "./assets/font/iconfont.css";
 // Vue.prototype.$socket = SocketService.Instance
 
 // axios 配置接口默认路径
-axios.defaults.baseURL = "http://127.0.0.1:8801/api"; // 使用接口数据 可把后端仓库拉下来 改成 http://127.0.0.1:8801/api
+axios.defaults.baseURL = "http://127.0.0.1:8080/api";
 Vue.prototype.$http = axios;
 
 // 把echarts挂载到 Vue原型上，以便在全局访问

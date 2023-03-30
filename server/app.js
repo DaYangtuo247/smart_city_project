@@ -20,8 +20,8 @@ const respDataMiddleware = require('./middleware/koa_response_data')
 app.use(respDataMiddleware)
 
 // 3.监听端口
-app.listen(8801, () => {
-  console.log("Server Start Complete: http://localhost:8801");
+app.listen(8080, () => {
+  console.log("Server Start Complete: http://localhost:8080");
 })
 
 // const WebSocketService = require('./service/web_socket_service')

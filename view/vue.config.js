@@ -1,9 +1,8 @@
 module.exports = {
-    publicPath: "/vue2/data-view", // 根据情况自行修改
-    // publicPath: '/',
-    outputDir: "data-view",
+    publicPath: "/smart-city",
+    outputDir: "smart-city",
     devServer: {
-        port: 8999, //端口号
+        port: 8888,
         open: true //自动打开浏览器
     },
     configureWebpack: {
@@ -22,7 +21,6 @@ module.exports = {
     chainWebpack: config => {
         // 发布模式
         config.when(process.env.NODE_ENV === "production", cofnig => {
-            // 根据当前是什么模式 来判断使用那个 入口文件
             config
                 .entry("app")
                 .clear()
@@ -36,8 +34,6 @@ module.exports = {
                 lodash: "_",
                 echarts: "echarts"
             });
-            // 在 public下的 index.html 中可以通过 以下命令拿到当前设置的值
-            // <%= htmlWebpackPlugin.options.isProd ? '' : 'dev-'%>
             config.plugin("html").tap(args => {
                 args[0].isProd = true;
                 return args;
