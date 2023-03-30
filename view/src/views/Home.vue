@@ -2,14 +2,11 @@
     <div class="screen-container" :style="containerStyle">
         <header class="screen-header">
             <div>
-                <!-- <img :src="headerSrc" alt=""> -->
                 <img v-show="theme == 'darkTheme'" src="~@/assets/images/header_border_dark.png" alt="" />
                 <img v-show="theme != 'darkTheme'" src="~@/assets/images/header_border_light.png" alt="" />
             </div>
-            <span class="logo"> <a :style="titleColor" href="https://www.bookbook.cc" title="去bookbook.cc主站" target="_blank">bookbook.cc</a> </span>
             <span class="title">智慧城市</span>
             <div class="title-right">
-                <!-- <img :src="themeSrc" class="qiehuan" @click="handleChangeTheme" alt="切换主题" title="切换主题"> -->
                 <img
                     v-show="theme == 'darkTheme'"
                     src="~@/assets/images/qiehuan_dark.png"
@@ -268,15 +265,6 @@ export default {
     .datetime {
         font-size: 15px;
         margin-left: 10px;
-    }
-    .logo {
-        position: absolute;
-        left: 0px;
-        top: 50%;
-        transform: translateY(-80%);
-        a {
-            text-decoration: none;
-        }
     }
 }
 .screen-body {

@@ -5,7 +5,6 @@
         </div>
     </div>
 </template>
-<script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
 <script>
 import { mapState } from "vuex";
 import * as THREE from "three";
@@ -77,6 +76,7 @@ export default {
                     });
                     this.changeTheme(); // 跟随全局主题设置
                     var scale = new AMap.Scale(); // 添加比例尺控件
+                    stats.domElement.classList.add('my-stats');
                     map.addControl(scale);
                     var toolbar = new AMap.ToolBar(); // 缩放工具条
                     map.addControl(toolbar);
