@@ -82,7 +82,7 @@ export default {
 
       const initOption = {
         title: {
-          text: '▎热销商品占比',
+          text: '▎城市交通运力分析',
           left: 20,
           top: 20,
         },
@@ -104,9 +104,11 @@ export default {
             })
             // 显示的文本
             let showStr = ''
+            // 更改显示的文本为值而不是占比
             thirdCategory.forEach(item => {
+              // ${item.name}：${_.round((item.value / total) * 100, 2)}% <br/>
               showStr += `
-                ${item.name}：${_.round((item.value / total) * 100, 2)}% <br/>
+                ${item.name}：${_.round(item.value, 2)}
               `
             })
             return showStr

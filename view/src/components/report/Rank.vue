@@ -8,7 +8,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  // 地区销量排行
+  // 地区GDP排行
   name: 'Rank',
   data() {
     return {
@@ -67,7 +67,7 @@ export default {
 
       const initOption = {
         title: {
-          text: '▎地区销售排行',
+          text: '▎地区GDP排行',
           left: 20,
           top: 20
         },
@@ -157,9 +157,9 @@ export default {
               color: arg => {
                 let targetColorArr = null
 
-                if (arg.value > 300) {
+                if (arg.value > 1500) {
                   targetColorArr = colorArr[0]
-                } else if (arg.value > 200) {
+                } else if (arg.value > 1000) {
                   targetColorArr = colorArr[1]
                 } else {
                   targetColorArr = colorArr[2]

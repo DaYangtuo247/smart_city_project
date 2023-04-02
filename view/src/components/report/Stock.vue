@@ -8,7 +8,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  // 库存和销量分析
+  // 城市空气质量分析
   name: 'Stock',
   data() {
     return {
@@ -80,7 +80,7 @@ export default {
       this.chartInstance = this.$echarts.init(this.$refs.stockRef, this.theme)
       const initOption = {
         title: {
-          text: '▎库存和销量分析',
+          text: '▎城市空气质量分析',
           left: 20,
           top: 20,
         },
@@ -140,7 +140,7 @@ export default {
               },
               // 内部的提示框 c数值 d百分比
               tooltip: {
-                formatter: `${item.name} <br/>销量：{c} <br/>占比：{d}%`,
+                formatter: `${item.name} <br/>含量：{c} <br/>占比：{d}%`,
               },
             },
             // 库存
@@ -150,8 +150,11 @@ export default {
                 color: '#bbb',
               },
               // 内部的提示框
+              // tooltip: {
+              //   formatter: `${item.name} <br/>总量：{c} <br>占比：{d}%`,
+              // },
               tooltip: {
-                formatter: `${item.name} <br/>库存：{c} <br>占比：{d}%`,
+                formatter: `总量：{c}`,
               },
             },
           ],

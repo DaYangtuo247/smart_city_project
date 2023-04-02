@@ -9,7 +9,7 @@ import { mapState } from 'vuex'
 import { getThemeValue } from 'utils/theme_utils'
 
 export default {
-  // 商家销售统计
+  // 城市车流量统计
   name: 'Seller',
   data() {
     return {
@@ -76,7 +76,7 @@ export default {
       // 对图表初始化的配置
       const initOption = {
         title: {
-          text: '▎商家销售统计',
+          text: '▎城市车流量统计',
           left: 20,
           top: 20,
         },

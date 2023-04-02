@@ -19,7 +19,7 @@ import { mapState } from 'vuex'
 import { getThemeValue } from 'utils/theme_utils'
 
 export default {
-  // 地区销量趋势
+  // 城市温度趋势变化及空调和供暖数据使用情况
   name: 'Trend',
   data() {
     return {
