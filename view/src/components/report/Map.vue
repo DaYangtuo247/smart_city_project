@@ -35,11 +35,13 @@ export default {
         //DOM初始化完成进行地图初始化
         this.initMap();
         this.change();
+        // this.clickOn();
     },
     methods: {
         changeTheme() {
             if (this.theme == "darkTheme") {
-                map.setMapStyle("amap://styles/darkblue"); // 设置地图样式
+                map.setMapStyle("amap://styles/grey"); // 设置地图样式
+                // map.setMapStyle("amap://styles/darkblue"); // 设置地图样式
             } else {
                 map.setMapStyle("amap://styles/normal"); // 设置地图样式
             }
@@ -72,7 +74,7 @@ export default {
                         zooms: [3, 20],
                         showBuildingBlock: false, // 显示高德自带地图块
                         center: mapPosition, //初始化地图中心点位置
-                        showLabel: true //取消文字标注
+                        showLabel: true //设置文字标注
                     });
                     this.changeTheme(); // 跟随全局主题设置
                     var scale = new AMap.Scale(); // 添加比例尺控件
@@ -132,6 +134,61 @@ export default {
                         }
                     });
                     map.add(gllayer);
+
+                    var icon = new AMap.Icon({
+                        image: 'lib.png', // 图标的图片
+                        size: new AMap.Size(10, 10), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
+                        imageSize: new AMap.Size(32, 32) // 图标所用图片的大小
+                    });
+
+                    var marker = new AMap.Marker({
+                        map: map,
+                        icon: icon,
+                        position: [114.222138,30.652341]
+                    });
+
+                    var polygonArr = [[114.221782,30.652927],
+                        [114.221731,30.652097],
+                        [114.222575,30.652073],
+                        [114.222625,30.652939]];
+                    var polygon = new AMap.Polygon({
+                        map: map,
+                        path: polygonArr,//设置多边形边界路径
+                        strokeColor: "#FF33FF", //线颜色
+                        strokeOpacity: 0.2, //线透明度
+                        strokeWeight: 3,    //线宽
+                        fillColor: "#1791fc", //填充色
+                        fillOpacity: 0.35//填充透明度
+                    });
+                    map.setFitView();
+
+                    // clickOn();
+
+                    function clickOn() {
+                        // log.success("绑定事件!"); 
+                        console.log("clickOn事件被触发！");
+                        polygon.on('click', showInfoClick);
+                        marker.on('click', showInfoClick);
+                        // this.map.on('mousemove', this.showInfoMove);
+                    }
+
+                    function clickOff() {
+                        // log.success("解绑事件!"); 
+                        console.log("clickOff事件被解除！");
+                        polygon.off('click', showInfoClick);
+                        marker.off('click', showInfoClick);
+                        // this.map.off('mousemove', this.showInfoMove);
+                    }
+
+                    function showInfoClick(e) {
+                        // var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
+                        console.log('您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+ ' ] 的位置单击了地图！');
+                        // document.querySelector("#text").innerText = text;
+                    }
+
+                    // 给按钮绑定事件
+                    document.querySelector("#clickOn").addEventListener("click", clickOn);
+                    document.querySelector("#clickOff").addEventListener("click", clickOff);
 
                     function alive() {
                         map.render();
@@ -299,7 +356,7 @@ export default {
             var position = customCoords.lngLatsToCoords(objPosition)[0];
             object.position.setX(position[0]);
             object.position.setY(position[1]);
-        }
+        },
     },
     data() {
         return {

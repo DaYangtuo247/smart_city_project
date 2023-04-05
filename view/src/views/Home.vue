@@ -50,6 +50,16 @@
                     <div class="resize">
                         <span @click="changeSize('map')" :class="['iconfont', fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
                     </div>
+                    <!-- <div id="MapContainer"></div> -->
+                    <div class="input-card" style="width:16rem">
+                        <h4>地图点击相关事件</h4>
+                        <div>
+                        <div class="input-item">
+                            <button id="clickOn" class="btn" style="margin-right:1rem;">绑定事件</button>
+                            <button id="clickOff" class="btn">解绑事件</button>
+                        </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="middle-bottom" :class="{ fullscreen: fullScreenStatus.rank }">
                     <!-- 地区销量排行图表 -->
@@ -291,6 +301,7 @@ export default {
         margin-left: 1.6%;
         margin-right: 1.6%;
         #middle-top {
+            // 注意，地图长宽比例为 192/95 即可修正模型偏移（只适用于1920*1080分辨率显示屏）
             width: 100%;
             height: 56%;
             position: relative;
