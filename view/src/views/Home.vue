@@ -46,20 +46,21 @@
                 </div>
             </section>
             <section class="screen-middle">
-                <div class="input-card" style="width:16rem">
-                    <h4>地图点击相关事件</h4>
-                    <div>
-                        <div class="input-item">
-                            <button id="clickOn" class="btn" style="margin-right:1rem;">绑定事件</button>
-                            <button id="clickOff" class="btn">解绑事件</button>
-                        </div>
-                    </div>
-                </div>
                 <div id="middle-bottom" :class="{ fullscreen: fullScreenStatus.rank }">
                     <!-- 地区销量排行图表 -->
                     <Rank ref="rank"></Rank>
                     <div class="resize">
                         <span @click="changeSize('rank')" :class="['iconfont', fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
+                    </div>
+                    <!-- 注意这个点击按钮，一定要放在类似于id="middle-bottom"div下，否则会失效 -->
+                    <div class="input-card" style="width:16rem">
+                        <h4>地图点击相关事件</h4>
+                        <div>
+                            <div class="input-item">
+                                <button id="clickOn" class="btn" style="margin-right:1rem;">绑定事件</button>
+                                <button id="clickOff" class="btn">解绑事件</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -295,13 +296,15 @@ export default {
         margin-left: 1.6%;
         margin-right: 1.6%;
         #middle-top {
+            // 下面注释已经不适用，因为已经将地图默认全屏了
             // 注意，地图长宽比例为 192/95 即可修正模型偏移（只适用于1920*1080分辨率显示屏）
             width: 100%;
             height: 56%;
             position: relative;
         }
         #middle-bottom {
-            margin-top: 25px;
+            // 因为地图默认全屏，所以这里的高度需要根据地图的高度进行调整
+            margin-top: 452px;
             width: 100%;
             height: 28%;
             position: relative;

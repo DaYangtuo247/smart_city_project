@@ -132,15 +132,15 @@ export default {
                     map.add(gllayer);
 
                     var icon = new AMap.Icon({
-                        image: "lib.png", // 图标的图片
-                        size: new AMap.Size(10, 10), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
-                        imageSize: new AMap.Size(32, 32) // 图标所用图片的大小
+                        image: "none.png", // 图标的图片
+                        size: new AMap.Size(50, 50), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
+                        imageSize: new AMap.Size(256, 256) // 图标所用图片的大小
                     });
 
                     var marker = new AMap.Marker({
                         map: map,
                         icon: icon,
-                        position: [114.222138, 30.652341]
+                        position: [114.222004,30.6525]
                     });
 
                     var polygonArr = [
