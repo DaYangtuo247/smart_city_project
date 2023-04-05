@@ -1,5 +1,7 @@
 <template>
     <div class="screen-container" :style="containerStyle">
+        <!-- 地图 -->
+        <single-map ref="map"></single-map>
         <header class="screen-header">
             <div>
                 <img v-show="theme == 'darkTheme'" src="~@/assets/images/header_border_dark.png" alt="" />
@@ -44,20 +46,12 @@
                 </div>
             </section>
             <section class="screen-middle">
-                <div id="middle-top" :class="{ fullscreen: fullScreenStatus.map }">
-                    <!-- 中心地图 -->
-                    <single-map ref="map"></single-map>
-                    <div class="resize">
-                        <span @click="changeSize('map')" :class="['iconfont', fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
-                    </div>
-                    <!-- <div id="MapContainer"></div> -->
-                    <div class="input-card" style="width:16rem">
-                        <h4>地图点击相关事件</h4>
-                        <div>
+                <div class="input-card" style="width:16rem">
+                    <h4>地图点击相关事件</h4>
+                    <div>
                         <div class="input-item">
                             <button id="clickOn" class="btn" style="margin-right:1rem;">绑定事件</button>
                             <button id="clickOff" class="btn">解绑事件</button>
-                        </div>
                         </div>
                     </div>
                 </div>

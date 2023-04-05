@@ -1,9 +1,5 @@
 <template>
-    <div class="com-container">
-        <div class="com-chart" ref="mapRef">
-            <div id="MapContainer"></div>
-        </div>
-    </div>
+    <div id="MapContainer"></div>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -136,7 +132,7 @@ export default {
                     map.add(gllayer);
 
                     var icon = new AMap.Icon({
-                        image: 'lib.png', // 图标的图片
+                        image: "lib.png", // 图标的图片
                         size: new AMap.Size(10, 10), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
                         imageSize: new AMap.Size(32, 32) // 图标所用图片的大小
                     });
@@ -144,45 +140,47 @@ export default {
                     var marker = new AMap.Marker({
                         map: map,
                         icon: icon,
-                        position: [114.222138,30.652341]
+                        position: [114.222138, 30.652341]
                     });
 
-                    var polygonArr = [[114.221782,30.652927],
-                        [114.221731,30.652097],
-                        [114.222575,30.652073],
-                        [114.222625,30.652939]];
+                    var polygonArr = [
+                        [114.221782, 30.652927],
+                        [114.221731, 30.652097],
+                        [114.222575, 30.652073],
+                        [114.222625, 30.652939]
+                    ];
                     var polygon = new AMap.Polygon({
                         map: map,
-                        path: polygonArr,//设置多边形边界路径
+                        path: polygonArr, //设置多边形边界路径
                         strokeColor: "#FF33FF", //线颜色
                         strokeOpacity: 0.2, //线透明度
-                        strokeWeight: 3,    //线宽
+                        strokeWeight: 3, //线宽
                         fillColor: "#1791fc", //填充色
-                        fillOpacity: 0.35//填充透明度
+                        fillOpacity: 0.35 //填充透明度
                     });
                     map.setFitView();
 
                     // clickOn();
 
                     function clickOn() {
-                        // log.success("绑定事件!"); 
+                        // log.success("绑定事件!");
                         console.log("clickOn事件被触发！");
-                        polygon.on('click', showInfoClick);
-                        marker.on('click', showInfoClick);
+                        polygon.on("click", showInfoClick);
+                        marker.on("click", showInfoClick);
                         // this.map.on('mousemove', this.showInfoMove);
                     }
 
                     function clickOff() {
-                        // log.success("解绑事件!"); 
+                        // log.success("解绑事件!");
                         console.log("clickOff事件被解除！");
-                        polygon.off('click', showInfoClick);
-                        marker.off('click', showInfoClick);
+                        polygon.off("click", showInfoClick);
+                        marker.off("click", showInfoClick);
                         // this.map.off('mousemove', this.showInfoMove);
                     }
 
                     function showInfoClick(e) {
                         // var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
-                        console.log('您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+ ' ] 的位置单击了地图！');
+                        console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // document.querySelector("#text").innerText = text;
                     }
 
@@ -358,7 +356,7 @@ export default {
             var position = customCoords.lngLatsToCoords(objPosition)[0];
             object.position.setX(position[0]);
             object.position.setY(position[1]);
-        },
+        }
     },
     data() {
         return {
@@ -380,6 +378,7 @@ body,
     height: 100%;
     position: absolute;
     top: 0%;
+    margin-left: -20px;
 }
 </style>
 
