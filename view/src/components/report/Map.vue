@@ -76,11 +76,12 @@ export default {
                     });
                     this.changeTheme(); // 跟随全局主题设置
                     var scale = new AMap.Scale(); // 添加比例尺控件
-                    stats.domElement.classList.add('my-stats');
+                    stats.domElement.classList.add("my-stats");
                     map.addControl(scale);
                     var toolbar = new AMap.ToolBar(); // 缩放工具条
                     map.addControl(toolbar);
                     // 数据转换工具
+
                     customCoords = map.customCoords;
                     // 数据使用转换工具进行转换，这个操作必须要提前执行（在获取镜头参数 函数之前执行），否则将会获得一个错误信息。
                     customCoords.lngLatsToCoords([[116.271363, 39.992414]]);
@@ -125,7 +126,6 @@ export default {
                             camera.up.set(...up);
                             camera.lookAt(...lookAt);
                             camera.updateProjectionMatrix();
-
                             renderer.render(scene, camera);
                             // 这里必须执行！！重新设置 three 的 gl 上下文状态。
                             renderer.resetState();
@@ -160,9 +160,11 @@ export default {
                         this.black_city(model);
                     }
                 });
+                gltf.scene.position.x = mapPosition[0];
+                gltf.scene.position.y = mapPosition[1];
+                gltf.scene.position.z = 10;
                 scene.add(gltf.scene);
                 object = gltf.scene;
-                object.scale.set(30, 30, 30);
                 this.setRotation({
                     x: 90,
                     y: 0,
@@ -172,18 +174,18 @@ export default {
                 scene.add(object);
             });
         },
-        city_line(model){
+        city_line(model) {
             // 添加边框线
             const edges = new THREE.EdgesGeometry(model.geometry);
             const line = new THREE.LineSegments(
                 edges,
                 new THREE.LineBasicMaterial({
-                    color: 0xBDBDBD
+                    color: 0xbdbdbd
                 })
             );
             model.add(line);
         },
-        shadow_city(model){
+        shadow_city(model) {
             // 添加阴影
             const shadow = new THREE.Mesh(
                 model.geometry,
@@ -197,7 +199,7 @@ export default {
             shadow.rotation.x = -Math.PI / 2;
             model.add(shadow);
         },
-        white_city(model){
+        white_city(model) {
             const shaderMaterial = new THREE.ShaderMaterial({
                 uniforms: {
                     height: this.height,
@@ -207,7 +209,7 @@ export default {
                         value: new THREE.Color("#FFFFFF")
                     }
                 },
-            vertexShader: `
+                vertexShader: `
             uniform float uHeight;
             varying float vPosition;
             varying vec3 vPoint;
@@ -217,7 +219,7 @@ export default {
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
             `,
-            fragmentShader: `
+                fragmentShader: `
             varying vec3 vPoint;
             uniform vec3 uColor;
             uniform float height;
@@ -241,7 +243,7 @@ export default {
             });
             model.material = shaderMaterial;
         },
-        black_city(model){
+        black_city(model) {
             const shaderMaterial = new THREE.ShaderMaterial({
                 uniforms: {
                     height: this.height,
