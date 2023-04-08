@@ -1,7 +1,5 @@
 <template>
     <div class="screen-container" :style="containerStyle">
-        <!-- 地图 -->
-        <single-map ref="map"></single-map>
         <header class="screen-header">
             <div>
                 <img v-show="theme == 'darkTheme'" src="~@/assets/images/header_border_dark.png" alt="" />
@@ -46,6 +44,13 @@
                 </div>
             </section>
             <section class="screen-middle">
+                <div id="middle-top" :class="{ fullscreen: fullScreenStatus.map }">
+                    <!-- 中心地图 -->
+                    <single-map ref="map"></single-map>
+                    <div class="resize">
+                        <span @click="changeSize('map')" :class="['iconfont', fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
+                    </div>
+                </div>
                 <div id="middle-bottom" :class="{ fullscreen: fullScreenStatus.rank }">
                     <!-- 地区销量排行图表 -->
                     <Rank ref="rank"></Rank>
@@ -279,7 +284,7 @@ export default {
     margin-top: 10px;
     .screen-left {
         height: 100%;
-        width: 27.6%;
+        width: 20%;
         #left-top {
             height: 53%;
             position: relative;
@@ -292,7 +297,7 @@ export default {
     }
     .screen-middle {
         height: 100%;
-        width: 41.5%;
+        width: 58%;
         margin-left: 1.6%;
         margin-right: 1.6%;
         #middle-top {
@@ -304,7 +309,8 @@ export default {
         }
         #middle-bottom {
             // 因为地图默认全屏，所以这里的高度需要根据地图的高度进行调整
-            margin-top: 452px;
+            // margin-top: 452px;
+            margin-top: 25px;
             width: 100%;
             height: 28%;
             position: relative;
@@ -312,7 +318,7 @@ export default {
     }
     .screen-right {
         height: 100%;
-        width: 27.6%;
+        width: 20%;
         #right-top {
             height: 46%;
             position: relative;

@@ -1,5 +1,9 @@
 <template>
-    <div id="MapContainer"></div>
+    <div class="com-container">
+        <div class="com-chart" ref="mapRef">
+            <div id="MapContainer"></div>
+        </div>
+    </div>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -140,7 +144,7 @@ export default {
                     var marker = new AMap.Marker({
                         map: map,
                         icon: icon,
-                        position: [114.222004,30.6525]
+                        position: [114.222004, 30.6525]
                     });
 
                     var polygonArr = [
@@ -378,7 +382,7 @@ body,
     height: 100%;
     position: absolute;
     top: 0%;
-    margin-left: -20px;
+    /* margin-left: -20px; */
 }
 </style>
 
