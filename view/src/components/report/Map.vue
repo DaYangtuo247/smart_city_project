@@ -77,16 +77,13 @@ export default {
                         showLabel: true //设置文字标注
                     });
                     this.changeTheme(); // 跟随全局主题设置
-                    var scale = new AMap.Scale(); // 添加比例尺控件
-                    stats.domElement.classList.add("my-stats");
-                    map.addControl(scale);
-                    var toolbar = new AMap.ToolBar(); // 缩放工具条
-                    map.addControl(toolbar);
+                    map.addControl(new AMap.Scale()); // 添加比例尺控件
+                    map.addControl(new AMap.ToolBar()); // 缩放工具条
                     // 数据转换工具
 
                     customCoords = map.customCoords;
                     // 数据使用转换工具进行转换，这个操作必须要提前执行（在获取镜头参数 函数之前执行），否则将会获得一个错误信息。
-                    customCoords.lngLatsToCoords([[116.271363, 39.992414]]);
+                    customCoords.lngLatsToCoords([mapPosition]);
                     // 创建 GL 图层
                     var gllayer = new AMap.GLCustomLayer({
                         // 图层的层级
@@ -115,6 +112,8 @@ export default {
                         render: () => {
                             // 更新性能监视器数据
                             stats.update();
+                            //重新设置模型大小，解决地图漂移的问题
+                            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 100, 1 << 30);
                             // 这里必须执行！！重新设置 three 的 gl 上下文状态。
                             renderer.resetState();
                             // 重新设置图层的渲染中心点，将模型等物体的渲染中心点重置, 否则和 LOCA 可视化等多个图层能力使用的时候会出现物体位置偏移的问题
