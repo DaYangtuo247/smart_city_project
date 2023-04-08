@@ -14,7 +14,14 @@
   </div>
 </template>
 
+
 <script>
+// 想要替换数据，在data()return中更改activeName的值，为默认展示的key值。
+// 例如：activeName: 'people'，则默认展示的是人流量
+// 在get_data()中，更改请求的数据，例如：const { data: res } = await this.$http.get('/lib_people_w_e')
+// 就是请求lib_people_w_e的数据
+// 如果图例的颜色不对，可以在updateChart()中更改colorArr1和colorArr2的值，为想要的颜色值
+// 并且colorArr1和colorArr2的值的个数要和图例的个数相同
 import { mapState } from 'vuex'
 import { getThemeValue } from 'utils/theme_utils'
 
@@ -137,9 +144,9 @@ export default {
     // 更新图表配置项
     updateChart() {
       // 半透明的颜色值
-      const colorArr1 = ['rgba(11, 168, 44, 0.5)', 'rgba(44, 110, 255, 0.5)', 'rgba(22, 242, 217, 0.5)', 'rgba(254, 33, 30, 0.5)', 'rgba(250, 105, 0, 0.5)']
+      const colorArr1 = ['rgba(11, 168, 44, 0.5)', 'rgba(44, 110, 255, 0.5)', 'rgba(22, 242, 217, 0.5)', 'rgba(254, 33, 30, 0.5)', 'rgba(250, 105, 0, 0.5)', 'rgba(250, 254, 0, 0.5)', 'rgba(0, 234, 255, 0.5)']
       // 全透明的颜色值
-      const colorArr2 = ['rgba(11, 168, 44, 0)', 'rgba(44, 110, 255, 0)', 'rgba(22, 242, 217, 0)', 'rgba(254, 33, 30, 0)', 'rgba(250, 105, 0, 0)']
+      const colorArr2 = ['rgba(11, 168, 44, 0)', 'rgba(44, 110, 255, 0)', 'rgba(22, 242, 217, 0)', 'rgba(254, 33, 30, 0)', 'rgba(250, 105, 0, 0)', 'rgba(250, 254, 0, 0)', 'rgba(0, 234, 255, 0)']
 
       // x轴数据
       const month = this.allData.common.month
