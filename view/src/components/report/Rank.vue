@@ -185,7 +185,7 @@ export default {
       const adapterOption = {
         title: {
           textStyle: {
-            fontSize: titleFontSzie
+            fontSize: titleFontSzie / 3.6 * 1.5
           }
         },
         series: [

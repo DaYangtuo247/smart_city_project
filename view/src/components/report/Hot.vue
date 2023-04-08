@@ -169,7 +169,7 @@ export default {
       const adapterOption = {
         title: {
           textStyle: {
-            fontSize: this.titleFontSize,
+            fontSize: this.titleFontSize * 1.2,
           },
         },
         legend: {

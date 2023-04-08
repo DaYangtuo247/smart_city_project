@@ -205,7 +205,7 @@ export default {
       const adapterOption = {
         title: {
           textStyle: {
-            fontSize: titleFontSize,
+            fontSize: titleFontSize * 1.2,
           },
         },
         tooltip: {
