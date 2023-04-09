@@ -1,109 +1,109 @@
 [
     {
-      "name": "城市客运完成情况（月/万人次）",
+      "name": "图书馆年级借阅书目统计（册）",
       "children": [
         {
-          "name": "公共气电车",
-          "value": 2442.5,
+          "name": "2018级",
+          "value": 3297,
           "children": [
             {
-              "name": "公共汽车",
-              "value": 2442.5
+              "name": "2018级",
+              "value": 3297
             }
           ]
         },
         {
-          "name": "轨道交通",
-          "value": 4465.4,
+          "name": "2019级",
+          "value": 6923,
           "children": [
             {
-              "name": "轨道交通",
-              "value": 4465.4
+              "name": "2019级",
+              "value": 6923
             }
           ]
         },
         {
-          "name": "出租汽车",
-          "value": 1280.1,
+          "name": "2020级",
+          "value": 6207,
           "children": [
             {
-              "name": "出租汽车",
-              "value": 1280.1
+              "name": "2020级",
+              "value": 6207
             }
           ]
         },
         {
-          "name": "客运轮渡",
-          "value": 9.2,
+          "name": "2021级",
+          "value": 6839,
           "children": [
             {
-              "name": "客运轮渡",
-              "value": 9.2
+              "name": "2021级",
+              "value": 6839
+            }
+          ]
+        },
+        {
+          "name": "2022级",
+          "value": 7535,
+          "children": [
+            {
+              "name": "2022级",
+              "value": 7535
             }
           ]
         }
       ]
     },
     {
-      "name": "城市道路交通建设情况（公里）",
+      "name": "纸质图书节约分类统计（册）",
       "children": [
         {
-          "name": "高速公路",
-          "value": 920,
+          "name": "文学",
+          "value": 11311,
           "children": [
             {
-              "name": "高速公路",
-              "value": 920
+              "name": "文学",
+              "value": 11311
             }
           ]
         },
         {
-          "name": "城市快速路",
-          "value": 135.3,
+          "name": "工业技术",
+          "value": 8772,
           "children": [
             {
-              "name": "城市快速路",
-              "value": 135.3
+              "name": "工业技术",
+              "value": 8772
             }
           ]
         },
         {
-          "name": " 城市主干道",
-          "value": 905.63,
+          "name": " 历史、地理",
+          "value": 1544,
           "children": [
             {
-              "name": " 城市主干道",
-              "value": 905.63
+              "name": " 历史、地理",
+              "value": 1544
             }
           ]
         },
         {
-          "name": "城市次干道",
-          "value": 758,
+          "name": "经济",
+          "value": 987,
           "children": [
             {
-              "name": "城市次干道",
-              "value": 758
+              "name": "经济",
+              "value": 987
             }
           ]
         },
         {
-          "name": "普通道路",
+          "name": "数理科学和化学",
           "value": 533,
           "children": [
             {
-              "name": "普通道路",
+              "name": "数理科学和化学",
               "value": 533
-            }
-          ]
-        },
-        {
-          "name": "乡村公路",
-          "value": 203,
-          "children": [
-            {
-              "name": "乡村公路",
-              "value": 203
             }
           ]
         },
@@ -114,51 +114,6 @@
             {
               "name": "其他",
               "value": 453
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "城市货物运输情况（万吨）",
-      "children": [
-        {
-          "name": "铁路货运",
-          "value": 11600,
-          "children": [
-            {
-              "name": "铁路货运",
-              "value": 11600
-            }
-          ]
-        },
-        {
-          "name": "公路货运",
-          "value": 7865,
-          "children": [
-            {
-              "name": "公路货运",
-              "value": 7865
-            }
-          ]
-        },
-        {
-          "name": "水路货运",
-          "value": 20978,
-          "children": [
-            {
-              "name": "水路货运",
-              "value": 20978
-            }
-          ]
-        },
-        {
-          "name": "航空货运",
-          "value": 6789,
-          "children": [
-            {
-              "name": "航空货运",
-              "value": 6789
             }
           ]
         }

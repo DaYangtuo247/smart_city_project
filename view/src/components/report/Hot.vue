@@ -135,7 +135,7 @@ export default {
     },
     // 发送请求，获取数据
     async getData() {
-      const { data: res } = await this.$http.get('/hotproduct')
+      const { data: res } = await this.$http.get('/lib_pie_chart')
       this.allData = res
       this.updateChart()
     },
