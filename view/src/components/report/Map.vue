@@ -113,7 +113,10 @@ export default {
                             // 更新性能监视器数据
                             stats.update();
                             //重新设置模型大小，解决地图漂移的问题
-                            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 100, 1 << 30);
+                            var box = document.querySelector(".amap-layer");
+                            var boxWidth = box.offsetWidth,
+                                boxHeight = box.offsetHeight;
+                            camera = new THREE.PerspectiveCamera(60, boxWidth / boxHeight, 100, 1 << 30);
                             // 这里必须执行！！重新设置 three 的 gl 上下文状态。
                             renderer.resetState();
                             // 重新设置图层的渲染中心点，将模型等物体的渲染中心点重置, 否则和 LOCA 可视化等多个图层能力使用的时候会出现物体位置偏移的问题

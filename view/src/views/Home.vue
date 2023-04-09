@@ -304,7 +304,7 @@ export default {
             // 下面注释已经不适用，因为已经将地图默认全屏了
             // 注意，地图长宽比例为 192/95 即可修正模型偏移（只适用于1920*1080分辨率显示屏）
             width: 100%;
-            height: 56%;
+            height: 61%;
             position: relative;
         }
         #middle-bottom {
@@ -312,7 +312,7 @@ export default {
             // margin-top: 452px;
             margin-top: 25px;
             width: 100%;
-            height: 28%;
+            height: 23%;
             position: relative;
         }
     }
