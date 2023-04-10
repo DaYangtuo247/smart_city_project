@@ -18,8 +18,8 @@ let camera; //相机
 let scene; //场景
 let renderer;
 let object; // gltf模型场景
-let objPosition = [114.281454, 30.59925]; // 模型放置点
-let mapPosition = [114.30443, 30.591613]; // 地图放置点
+let map_gltf_model_Position = [114.281454, 30.59925]; // 模型放置点
+let map_init_center = [114.30443, 30.591613]; // 地图放置点
 let customCoords;
 let map;
 export default {
@@ -73,7 +73,7 @@ export default {
                         viewMode: "3D", //是否为3D地图模式
                         zooms: [3, 20],
                         showBuildingBlock: false, // 显示高德自带地图块
-                        center: mapPosition, //初始化地图中心点位置
+                        center: map_init_center, //初始化地图中心点位置
                         showLabel: true //设置文字标注
                     });
                     this.changeTheme(); // 跟随全局主题设置
@@ -83,7 +83,7 @@ export default {
 
                     customCoords = map.customCoords;
                     // 数据使用转换工具进行转换，这个操作必须要提前执行（在获取镜头参数 函数之前执行），否则将会获得一个错误信息。
-                    customCoords.lngLatsToCoords([mapPosition]);
+                    customCoords.lngLatsToCoords([map_init_center]);
                     // 创建 GL 图层
                     var gllayer = new AMap.GLCustomLayer({
                         // 图层的层级
@@ -123,7 +123,7 @@ export default {
                             // 这里必须执行！！重新设置 three 的 gl 上下文状态。
                             renderer.resetState();
                             // 重新设置图层的渲染中心点，将模型等物体的渲染中心点重置, 否则和 LOCA 可视化等多个图层能力使用的时候会出现物体位置偏移的问题
-                            customCoords.setCenter(objPosition);
+                            customCoords.setCenter(map_gltf_model_Position);
                             var { near, far, fov, up, lookAt, position } = customCoords.getCameraParams();
                             // 这里的顺序不能颠倒，否则可能会出现绘制卡顿的效果。
                             camera.near = near;
@@ -225,10 +225,7 @@ export default {
                         this.black_city(model);
                     }
                 });
-                gltf.scene.position.x = mapPosition[0];
-                gltf.scene.position.y = mapPosition[1];
                 gltf.scene.position.z = 10;
-                scene.add(gltf.scene);
                 object = gltf.scene;
                 this.setRotation({
                     x: 90,
@@ -238,6 +235,20 @@ export default {
                 this.setPosition();
                 scene.add(object);
             });
+        },
+        setRotation(rotation) {
+            var x = (Math.PI / 180) * (rotation.x || 0);
+            var y = (Math.PI / 180) * (rotation.y || 0);
+            var z = (Math.PI / 180) * (rotation.z || 0);
+            object.rotation.set(x, y, z);
+        },
+        setPosition() {
+            // 设置x、y、z缩放信息
+            object.scale.set(1, 1, 1);
+            // 对模型的经纬度进行转换
+            var position = customCoords.lngLatsToCoords(map_gltf_model_Position)[0];
+            object.position.setX(position[0]);
+            object.position.setY(position[1]);
         },
         city_line(model) {
             // 添加边框线
@@ -352,20 +363,6 @@ export default {
                 transparent: true
             });
             model.material = shaderMaterial;
-        },
-        setRotation(rotation) {
-            var x = (Math.PI / 180) * (rotation.x || 0);
-            var y = (Math.PI / 180) * (rotation.y || 0);
-            var z = (Math.PI / 180) * (rotation.z || 0);
-            object.rotation.set(x, y, z);
-        },
-        setPosition() {
-            // 设置x、y、z缩放信息
-            object.scale.set(1, 1, 1);
-            // 对模型的经纬度进行转换
-            var position = customCoords.lngLatsToCoords(objPosition)[0];
-            object.position.setX(position[0]);
-            object.position.setY(position[1]);
         },
         create_loca() {
             var loca = new Loca.Container({
