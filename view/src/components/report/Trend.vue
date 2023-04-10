@@ -24,6 +24,7 @@
   
   import { mapState } from 'vuex'
   import { getThemeValue } from 'utils/theme_utils'
+  import EventBus from '@/event-bus';
   
   export default {
     // 城市温度趋势变化及空调和供暖数据使用情况
@@ -40,7 +41,8 @@
         activeName: 'people',
         // 指明标题的字体大小
         titleFontSize: 0,
-        value: ''
+        value: '',
+        url:'/trend'
       }
     },
     created() {
@@ -83,6 +85,16 @@
     mounted() {
       this.initChart()
       this.getData()
+      EventBus.$on('change-data-url', (url) => {
+        if (this.url === url) 
+        {
+          this.url = '/trend';
+        }
+        else this.url = url;
+        console.log('get data');
+        this.initChart();
+        this.getData();
+      });
       // websocket 请求数据
       // this.$socket.send({
       //   action: 'getData',
@@ -93,6 +105,8 @@
       window.addEventListener('resize', this.screenAdapter)
       // 主动触发 响应式配置
       this.screenAdapter()
+      // console.log(EventBus._events); // 输出事件监听器列表
+      // console.log(EventBus);
     },
     destroyed() {
       window.removeEventListener('resize', this.screenAdapter)
@@ -136,9 +150,17 @@
       },
       // 发送请求，获取数据  //websocket： realData 服务端发送给客户端需要的数据
       async getData() {
-        const { data: res } = await this.$http.get('/lib_people_w_e')
-        this.allData = res
-  
+        this.chartInstance.dispose();
+        this.initChart();
+        this.screenAdapter()
+        this.allData = null;
+        const { data: res } = await this.$http.get(this.url)
+        // console.log(this.url)
+        this.allData = res;
+        // 我想知道res的size
+        // console.log(res)
+        // console.log(res.data)
+        console.log(this.allData[this.activeName].data)
         this.updateChart()
       },
       // 更新图表配置项
@@ -153,7 +175,6 @@
         // y轴数据 series下的数据
         const valueArr = this.allData[this.activeName].data
   
-        // 疑似更改key为people
         const seriesArr = valueArr.map((item, index) => {
           return {
             // 图例的数据需要和series的name匹配

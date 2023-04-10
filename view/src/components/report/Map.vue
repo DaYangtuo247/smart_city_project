@@ -6,11 +6,13 @@
     </div>
 </template>
 <script>
+
 import { mapState } from "vuex";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import AMapLoader from "@amap/amap-jsapi-loader"; // 高德地图
 import Stats from "three/examples/jsm/libs/stats.module"; // 性能监视器
+import EventBus from '@/event-bus';
 //  gltf-pipeline 压缩gltf文件失败，会导致精度丢失，但仍保留该注释，以保日后需要
 // import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 // let height = 0.0;
@@ -187,6 +189,8 @@ export default {
                     function showInfoClick(e) {
                         // var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
                         console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
+                        // 触发一个名为'change-data-url'的自定义事件
+                        EventBus.$emit('change-data-url', '/lib_people_w_e');
                         // document.querySelector("#text").innerText = text;
                     }
 
