@@ -20,8 +20,8 @@ let camera; //相机
 let scene; //场景
 let renderer;
 let object; // gltf模型场景
-let objPosition = [114.281454, 30.59925]; // 模型放置点
-let mapPosition = [114.30443, 30.591613]; // 地图放置点
+let map_gltf_model_Position = [114.281454, 30.59925]; // 模型放置点
+let map_init_center = [114.30443, 30.591613]; // 地图放置点
 let customCoords;
 let map;
 export default {
@@ -75,7 +75,7 @@ export default {
                         viewMode: "3D", //是否为3D地图模式
                         zooms: [3, 20],
                         showBuildingBlock: false, // 显示高德自带地图块
-                        center: mapPosition, //初始化地图中心点位置
+                        center: map_init_center, //初始化地图中心点位置
                         showLabel: true //设置文字标注
                     });
                     this.changeTheme(); // 跟随全局主题设置
@@ -85,7 +85,7 @@ export default {
 
                     customCoords = map.customCoords;
                     // 数据使用转换工具进行转换，这个操作必须要提前执行（在获取镜头参数 函数之前执行），否则将会获得一个错误信息。
-                    customCoords.lngLatsToCoords([mapPosition]);
+                    customCoords.lngLatsToCoords([map_init_center]);
                     // 创建 GL 图层
                     var gllayer = new AMap.GLCustomLayer({
                         // 图层的层级
@@ -115,14 +115,17 @@ export default {
                             // 更新性能监视器数据
                             stats.update();
                             //重新设置模型大小，解决地图漂移的问题
-                            var box = document.querySelector(".amap-layer");
-                            var boxWidth = box.offsetWidth,
-                                boxHeight = box.offsetHeight;
-                            camera = new THREE.PerspectiveCamera(60, boxWidth / boxHeight, 100, 1 << 30);
+                            var map_father_box = document.querySelector(".amap-layer");
+                            // 确保获取到地图父盒子
+                            if (map_father_box && map_father_box.offsetWidth) {
+                                var boxWidth = map_father_box.offsetWidth,
+                                    boxHeight = map_father_box.offsetHeight;
+                                camera = new THREE.PerspectiveCamera(60, boxWidth / boxHeight, 100, 1 << 30);
+                            }
                             // 这里必须执行！！重新设置 three 的 gl 上下文状态。
                             renderer.resetState();
                             // 重新设置图层的渲染中心点，将模型等物体的渲染中心点重置, 否则和 LOCA 可视化等多个图层能力使用的时候会出现物体位置偏移的问题
-                            customCoords.setCenter(objPosition);
+                            customCoords.setCenter(map_gltf_model_Position);
                             var { near, far, fov, up, lookAt, position } = customCoords.getCameraParams();
                             // 这里的顺序不能颠倒，否则可能会出现绘制卡顿的效果。
                             camera.near = near;
@@ -204,6 +207,7 @@ export default {
                     }
                     alive();
                     this.initGltf();
+                    this.create_loca();
                 })
                 .catch(e => {
                     console.log(e);
@@ -225,10 +229,7 @@ export default {
                         this.black_city(model);
                     }
                 });
-                gltf.scene.position.x = mapPosition[0];
-                gltf.scene.position.y = mapPosition[1];
                 gltf.scene.position.z = 10;
-                scene.add(gltf.scene);
                 object = gltf.scene;
                 this.setRotation({
                     x: 90,
@@ -238,6 +239,20 @@ export default {
                 this.setPosition();
                 scene.add(object);
             });
+        },
+        setRotation(rotation) {
+            var x = (Math.PI / 180) * (rotation.x || 0);
+            var y = (Math.PI / 180) * (rotation.y || 0);
+            var z = (Math.PI / 180) * (rotation.z || 0);
+            object.rotation.set(x, y, z);
+        },
+        setPosition() {
+            // 设置x、y、z缩放信息
+            object.scale.set(1, 1, 1);
+            // 对模型的经纬度进行转换
+            var position = customCoords.lngLatsToCoords(map_gltf_model_Position)[0];
+            object.position.setX(position[0]);
+            object.position.setY(position[1]);
         },
         city_line(model) {
             // 添加边框线
@@ -353,19 +368,191 @@ export default {
             });
             model.material = shaderMaterial;
         },
-        setRotation(rotation) {
-            var x = (Math.PI / 180) * (rotation.x || 0);
-            var y = (Math.PI / 180) * (rotation.y || 0);
-            var z = (Math.PI / 180) * (rotation.z || 0);
-            object.rotation.set(x, y, z);
-        },
-        setPosition() {
-            // 设置x、y、z缩放信息
-            object.scale.set(1, 1, 1);
-            // 对模型的经纬度进行转换
-            var position = customCoords.lngLatsToCoords(objPosition)[0];
-            object.position.setX(position[0]);
-            object.position.setY(position[1]);
+        create_loca() {
+            var loca = new Loca.Container({
+                map
+            });
+
+            loca.ambLight = {
+                intensity: 0.3,
+                color: "#fff"
+            };
+            loca.dirLight = {
+                intensity: 1.2,
+                color: "#fff",
+                target: [0, 1, 0],
+                position: [0, -1, 1]
+            };
+            loca.pointLight = {
+                color: "rgb(100,100,100)",
+                position: [114.2517, 30.552128, 20000],
+                intensity: 1.6,
+                // 距离表示从光源到光照强度为 0 的位置，0 就是光不会消失。
+                distance: 100000
+            };
+
+            var geo = new Loca.GeoJSONSource({
+                url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/wh_car.json"
+            });
+
+            var ll = new Loca.GridLayer({
+                // loca,
+                zIndex: 0,
+                opacity: 0.5,
+                visible: true,
+                zooms: [2, 22],
+                acceptLight: true,
+                shinniness: 0,
+                cullface: "none",
+                depth: true,
+                hasSide: true
+            });
+
+            var colors = ["#FAE200", "#D27E37", "#C53634", "#C12B6E", "#A92E9A", "#67238A", "#211A50", "#18244E"].reverse();
+            var heights = [100, 200, 400, 600, 800, 1400, 1800, 4000];
+            ll.setSource(geo);
+            ll.setStyle({
+                unit: "meter",
+                radius: 66,
+                gap: 0,
+                altitude: 100,
+                height: function(index, feature) {
+                    var ranks = (feature.coordinates && feature.coordinates.length) || 0;
+                    return ranks < 5
+                        ? heights[0]
+                        : ranks < 10
+                        ? heights[1]
+                        : ranks < 20
+                        ? heights[2]
+                        : ranks < 30
+                        ? heights[3]
+                        : ranks < 50
+                        ? heights[4]
+                        : ranks < 80
+                        ? heights[5]
+                        : ranks < 100
+                        ? heights[6]
+                        : heights[7];
+                },
+                topColor: function(index, feature) {
+                    var ranks = (feature.coordinates && feature.coordinates.length) || 0;
+                    return ranks < 5
+                        ? colors[0]
+                        : ranks < 10
+                        ? colors[1]
+                        : ranks < 20
+                        ? colors[2]
+                        : ranks < 30
+                        ? colors[3]
+                        : ranks < 50
+                        ? colors[4]
+                        : ranks < 80
+                        ? colors[5]
+                        : ranks < 100
+                        ? colors[6]
+                        : colors[7];
+                },
+                sideTopColor: function(index, feature) {
+                    var ranks = (feature.coordinates && feature.coordinates.length) || 0;
+                    return ranks < 5
+                        ? colors[0]
+                        : ranks < 10
+                        ? colors[1]
+                        : ranks < 20
+                        ? colors[2]
+                        : ranks < 30
+                        ? colors[3]
+                        : ranks < 50
+                        ? colors[4]
+                        : ranks < 80
+                        ? colors[5]
+                        : ranks < 100
+                        ? colors[6]
+                        : colors[7];
+                },
+                sideBottomColor: function(index, feature) {
+                    var ranks = (feature.coordinates && feature.coordinates.length) || 0;
+                    return ranks < 5
+                        ? colors[0]
+                        : ranks < 10
+                        ? colors[1]
+                        : ranks < 20
+                        ? colors[2]
+                        : ranks < 30
+                        ? colors[3]
+                        : ranks < 50
+                        ? colors[4]
+                        : ranks < 80
+                        ? colors[5]
+                        : ranks < 100
+                        ? colors[6]
+                        : colors[7];
+                }
+            });
+            loca.add(ll);
+
+            // 围栏
+            var outLayer = new Loca.PolygonLayer({
+                zIndex: 120,
+                cullface: "none",
+                shininess: 1,
+                hasBottom: false,
+                blockHide: false,
+                hasSide: true,
+                hasTop: false,
+                depth: true
+            });
+            var outGeo = new Loca.GeoJSONSource({
+                url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_out.json"
+            });
+            outLayer.setSource(outGeo);
+            outLayer.setStyle({
+                topColor: function(index, feature) {
+                    return "rgba(217,104,104,0.1)";
+                },
+                sideTopColor: function(index, feature) {
+                    return "rgba(217,104,104,0.1)";
+                },
+                sideBottomColor: function(index, feature) {
+                    return "rgba(237,87,87,1)";
+                },
+                height: 100,
+                altitude: 0
+            });
+            loca.add(outLayer);
+
+            // 图例
+            var lengend = new Loca.Legend({
+                loca: loca,
+                title: {
+                    label: "车辆密度(辆)",
+                    fontColor: "rgba(255,255,255,0.4)",
+                    fontSize: "16px"
+                },
+                style: {
+                    backgroundColor: "rgba(255,255,255,0.1)",
+                    left: "20px",
+                    bottom: "40px",
+                    fontSize: "12px"
+                },
+                dataMap: [
+                    { label: 100, color: colors[7] },
+                    { label: 80, color: colors[6] },
+                    { label: 50, color: colors[5] },
+                    { label: 40, color: colors[4] },
+                    { label: 30, color: colors[3] },
+                    { label: 20, color: colors[2] },
+                    { label: 10, color: colors[1] },
+                    { label: 5, color: colors[0] }
+                ]
+            });
+
+            // 控制条
+            var dat = new Loca.Dat();
+            dat.addLight(loca.ambLight, loca, "环境光");
+            dat.addLight(loca.dirLight, loca, "平行光");
+            dat.addLight(loca.pointLight, loca, "点光");
+            dat.addLayer(ll, "车辆图层");
         }
     },
     data() {
@@ -388,7 +575,6 @@ body,
     height: 100%;
     position: absolute;
     top: 0%;
-    /* margin-left: -20px; */
 }
 </style>
 
