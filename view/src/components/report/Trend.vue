@@ -85,14 +85,12 @@
     mounted() {
       this.initChart()
       this.getData()
-      EventBus.$on('change-data-url', (url) => {
+      EventBus.$on('change-data-url-lib-p-w-e', (url) => {
         if (this.url === url) 
         {
           this.url = '/trend';
         }
         else this.url = url;
-        console.log('get data');
-        this.initChart();
         this.getData();
       });
       // websocket 请求数据
@@ -150,17 +148,16 @@
       },
       // 发送请求，获取数据  //websocket： realData 服务端发送给客户端需要的数据
       async getData() {
+        // 销毁原表
         this.chartInstance.dispose();
+        // 初始化表格
         this.initChart();
+        // 检测分辨率，如果触发前后窗口大小不变可不进行
         this.screenAdapter()
         this.allData = null;
         const { data: res } = await this.$http.get(this.url)
-        // console.log(this.url)
         this.allData = res;
-        // 我想知道res的size
-        // console.log(res)
-        // console.log(res.data)
-        console.log(this.allData[this.activeName].data)
+        // 更新数据
         this.updateChart()
       },
       // 更新图表配置项

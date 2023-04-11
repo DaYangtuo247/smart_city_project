@@ -191,9 +191,11 @@ export default {
 
                     function showInfoClick(e) {
                         // var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
-                        console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
-                        // 触发一个名为'change-data-url'的自定义事件
-                        EventBus.$emit('change-data-url', '/lib_people_w_e');
+                        // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
+                        // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
+                        EventBus.$emit('change-data-url-lib-p-w-e', '/lib_people_w_e');
+                        // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
+                        EventBus.$emit('change-data-url-p-c', '/lib_pie_chart');
                         // document.querySelector("#text").innerText = text;
                     }
 

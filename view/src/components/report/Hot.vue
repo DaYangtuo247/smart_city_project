@@ -11,6 +11,7 @@
 import { mapState } from 'vuex'
 import { getThemeValue } from 'utils/theme_utils'
 import _ from 'lodash'
+import EventBus from '@/event-bus';
 
 export default {
   name: 'Hot',
@@ -24,6 +25,8 @@ export default {
       currentIndex: 0,
       // 字体响应式大小
       titleFontSize: null,
+      url: '/hotproduct',
+      tit: '▎城市交通运力分析'
     }
   },
   created() {
@@ -61,6 +64,19 @@ export default {
   mounted() {
     this.initChart()
     this.getData()
+    EventBus.$on('change-data-url-p-c', (url) => {
+      if (this.url === url) 
+      {
+        this.url = '/hotproduct';
+        this.tit = '▎城市交通运力分析';
+      }
+      else 
+      {
+        this.url = url;
+        this.tit = '▎图书馆数据分析';
+      }
+      this.getData();
+    });
     // this.$socket.send({
     //   action: 'getData',
     //   socketType: 'hotData',
@@ -82,7 +98,7 @@ export default {
 
       const initOption = {
         title: {
-          text: '▎城市交通运力分析',
+          text: this.tit,
           left: 20,
           top: 20,
         },
@@ -135,8 +151,16 @@ export default {
     },
     // 发送请求，获取数据
     async getData() {
-      const { data: res } = await this.$http.get('/lib_pie_chart')
-      this.allData = res
+      // 销毁原表
+      this.chartInstance.dispose();
+      // 初始化表格
+      this.initChart();
+      // 检测分辨率，如果触发前后窗口大小不变可不进行
+      this.screenAdapter()
+      this.allData = null;
+      const { data: res } = await this.$http.get(this.url)
+      this.allData = res;
+      // 更新数据
       this.updateChart()
     },
     // 更新图表配置项
