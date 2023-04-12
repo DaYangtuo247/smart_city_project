@@ -57,16 +57,6 @@
                     <div class="resize">
                         <span @click="changeSize('rank')" :class="['iconfont', fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
                     </div>
-                    <!-- 注意这个点击按钮，一定要放在类似于id="middle-bottom"div下，否则会失效 -->
-                    <div class="input-card" style="width:16rem">
-                        <h4>地图点击相关事件</h4>
-                        <div>
-                            <div class="input-item">
-                                <button id="clickOn" class="btn" style="margin-right:1rem;">绑定事件</button>
-                                <button id="clickOff" class="btn">解绑事件</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
             <section class="screen-right">

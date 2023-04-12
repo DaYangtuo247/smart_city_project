@@ -24,6 +24,8 @@ let map_gltf_model_Position = [114.281454, 30.59925]; // 模型放置点
 let map_init_center = [114.30443, 30.591613]; // 地图放置点
 let customCoords;
 let map;
+let st = false;
+let pol;
 export default {
     computed: {
         ...mapState(["theme"])
@@ -141,7 +143,8 @@ export default {
                         }
                     });
                     map.add(gllayer);
-
+                    
+                    // 隐藏按钮的添加（实际上是添加了个透明的图标，供人点击）
                     var icon = new AMap.Icon({
                         image: "none.png", // 图标的图片
                         size: new AMap.Size(50, 50), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
@@ -154,54 +157,71 @@ export default {
                         position: [114.222004, 30.6525]
                     });
 
+                    // 鼠标点击范围的设置
                     var polygonArr = [
                         [114.221782, 30.652927],
                         [114.221731, 30.652097],
                         [114.222575, 30.652073],
                         [114.222625, 30.652939]
                     ];
-                    var polygon = new AMap.Polygon({
-                        map: map,
-                        path: polygonArr, //设置多边形边界路径
-                        strokeColor: "#FF33FF", //线颜色
-                        strokeOpacity: 0.2, //线透明度
-                        strokeWeight: 3, //线宽
-                        fillColor: "#1791fc", //填充色
-                        fillOpacity: 0.35 //填充透明度
-                    });
                     map.setFitView();
 
-                    // clickOn();
+                    pol = new AMap.Polygon({
+                            map: map,
+                            path: polygonArr, //设置多边形边界路径
+                            strokeColor: "#FF33FF", //线颜色
+                            strokeOpacity: 0.2, //线透明度
+                            strokeWeight: 3, //线宽
+                            fillColor: "#1791fc", //填充色
+                            fillOpacity: 0.35 //填充透明度
+                        });
+                    
+                    map.remove(pol);
+                    
+                    marker.on("click", showInfoClick);
 
-                    function clickOn() {
-                        // log.success("绑定事件!");
-                        console.log("clickOn事件被触发！");
-                        polygon.on("click", showInfoClick);
-                        marker.on("click", showInfoClick);
-                        // this.map.on('mousemove', this.showInfoMove);
-                    }
+                    // function clickOn() {
+                    //     // log.success("绑定事件!");
+                    //     console.log("clickOn事件被触发！");
+                    //     // polygon.on("click", showInfoClick);
+                    //     marker.on("click", showInfoClick);
+                    //     // this.map.on('mousemove', this.showInfoMove);
+                    // }
 
-                    function clickOff() {
-                        // log.success("解绑事件!");
-                        console.log("clickOff事件被解除！");
-                        polygon.off("click", showInfoClick);
-                        marker.off("click", showInfoClick);
-                        // this.map.off('mousemove', this.showInfoMove);
-                    }
+                    // function clickOff() {
+                    //     // log.success("解绑事件!");
+                    //     console.log("clickOff事件被解除！");
+                    //     // polygon.off("click", showInfoClick);
+                    //     marker.off("click", showInfoClick);
+                    //     // this.map.off('mousemove', this.showInfoMove);
+                    // }
 
                     function showInfoClick(e) {
-                        // var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
                         // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
                         EventBus.$emit('change-data-url-lib-p-w-e', '/lib_people_w_e');
                         // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
                         EventBus.$emit('change-data-url-p-c', '/lib_pie_chart');
-                        // document.querySelector("#text").innerText = text;
+                        
+                        change_polygon();
+                    }
+                    
+                    // 控制图书馆附近的多边形是否显示
+                    function change_polygon() {
+                        if (st == false) {
+                            map.add(pol);
+                            st = true;
+                        }
+                        else
+                        {
+                            st = false;
+                            map.remove(pol);
+                        }
                     }
 
-                    // 给按钮绑定事件
-                    document.querySelector("#clickOn").addEventListener("click", clickOn);
-                    document.querySelector("#clickOff").addEventListener("click", clickOff);
+                    // // 给按钮绑定事件
+                    // document.querySelector("#clickOn").addEventListener("click", clickOn);
+                    // document.querySelector("#clickOff").addEventListener("click", clickOff);
 
                     function alive() {
                         map.render();
@@ -561,7 +581,9 @@ export default {
         return {
             height: {
                 value: 0
-            }
+            },
+            color: "#1791fc",
+            opacity: 0,
         };
     }
 };
