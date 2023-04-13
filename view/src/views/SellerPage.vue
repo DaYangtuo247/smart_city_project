@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Seller from "components/report/Seller";
+import Seller from "components/Seller";
 export default {
     // Seller 商家销量
     name: "SellerPage",

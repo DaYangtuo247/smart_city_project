@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Stock from "components/report/Stock";
+import Stock from "components/Stock";
 export default {
     name: "StockPage",
     components: {

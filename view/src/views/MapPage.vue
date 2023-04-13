@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Map from "components/report/Map";
+import Map from "components/Map";
 
 export default {
     // 商家地图分布图表

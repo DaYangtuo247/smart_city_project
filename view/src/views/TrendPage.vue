@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Trend from "components/report/Trend";
+import Trend from "components/Trend";
 
 export default {
     // trend 销量趋势

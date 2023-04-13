@@ -6,7 +6,7 @@ def random_coordinate(start, end):
     return round(random.uniform(start, end), 6)
 
 # 读取point.json文件
-with open("view//src//components//report//point.json", "r") as f:
+with open("view//src//components//point.json", "r") as f:
     data = json.load(f)
 
 # 遍历features列表，修改每个geometry的coordinates值
@@ -22,5 +22,5 @@ for feature in data["features"]:
 print(f'修改成功的数据量：{num}')
 
 # 将修改后的数据写入point.json文件
-with open("view//src//components//report//change_point.json", "w") as f:
+with open("view//src//components//change_point.json", "w") as f:
     json.dump(data, f)

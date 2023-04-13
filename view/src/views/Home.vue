@@ -80,12 +80,12 @@
 </template>
 
 <script>
-import Hot from "@/components/report/Hot.vue";
-import Map from "@/components/report/Map.vue";
-import Rank from "@/components/report/Rank.vue";
-import Seller from "@/components/report/Seller.vue";
-import Stock from "@/components/report/Stock.vue";
-import Trend from "@/components/report/Trend.vue";
+import Hot from "@/components/Hot.vue";
+import Map from "@/components/Map.vue";
+import Rank from "@/components/Rank.vue";
+import Seller from "@/components/Seller.vue";
+import Stock from "@/components/Stock.vue";
+import Trend from "@/components/Trend.vue";
 
 import { mapState } from "vuex";
 // 导入自己定义的主题工具函数 用于返回不同主题下的配置对象

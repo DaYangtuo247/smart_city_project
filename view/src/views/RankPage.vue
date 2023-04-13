@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Rank from "components/report/Rank";
+import Rank from "components/Rank";
 
 export default {
     name: "RankPage",
