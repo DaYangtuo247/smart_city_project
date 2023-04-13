@@ -27,14 +27,14 @@ export default class SocketService {
         // 连接服务器
         if (!window.WebSocket) return console.log("您的浏览器不支持 WebSocket");
 
-        if (process.env.NODE_ENV === "development") {
-            this.ws = new WebSocket("ws://101.34.160.195:9998");
-        } else {
-            this.ws = new WebSocket("wss://101.34.160.195:9998");
-        }
+        // if (process.env.NODE_ENV === "development") {
+        //     this.ws = new WebSocket("ws://101.34.160.195:9998");
+        // } else {
+        //     this.ws = new WebSocket("wss://101.34.160.195:9998");
+        // }
 
         // 使用接口地址
-        // this.ws = new WebSocket('ws://101.34.160.195:9998')
+        // this.ws = new WebSocket('ws://192.168.0.110:8888')
 
         // 连接成功的事件
         this.ws.onopen = () => {
