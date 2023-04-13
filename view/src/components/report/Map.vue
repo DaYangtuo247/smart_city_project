@@ -177,6 +177,7 @@ export default {
                         });
                     
                     map.remove(pol);
+
                     
                     marker.on("click", showInfoClick);
 
@@ -218,6 +219,306 @@ export default {
                             map.remove(pol);
                         }
                     }
+
+                    var loca = new Loca.Container({
+                        map,
+                    });
+
+                    var geo = new Loca.GeoJSONSource({
+                        data:{
+                            "type": "FeatureCollection",
+                            "features": [{
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [114.222131, 30.652322]
+                                },
+                                "properties": {
+                                    "name": "武汉轻工大学图书馆",
+                                    "price": 55000,
+                                    "count": 92
+                                }
+                            }]
+                        }
+                    })
+
+                     // 文字主体图层
+                    var zMarker = new Loca.ZMarkerLayer({
+                        loca: loca,
+                        zIndex: 120,
+                        depth: false,
+                    });
+                    zMarker.setSource(geo);
+                    zMarker.setStyle({
+                        content: (i, feat) => {
+                            var props = feat.properties;
+                            var leftColor = props.price < 60000 ? 'rgba(0, 28, 52, 0.6)' : 'rgba(33,33,33,0.6)';
+                            var rightColor = props.price < 60000 ? '#038684' : 'rgba(172, 137, 51, 0.3)';
+                            var borderColor = props.price < 60000 ? '#038684' : 'rgba(172, 137, 51, 1)';
+                            return (
+                                '<div style="width: 490px; height: 228px; padding: 0 0;">' +
+                                '<p style="display: block; height:80px; line-height:80px;font-size:40px;background-image: linear-gradient(to right, '
+                                + leftColor + ',' + leftColor + ',' + rightColor + ',rgba(0,0,0,0.4)); border:4px solid '
+                                + borderColor + '; color:#fff; border-radius: 15px; text-align:center; margin:0; padding:5px;">' +
+                                props['name'] +
+                                '</p><span style="width: 130px; height: 130px; margin: 0 auto; display: block; background: url(https://a.amap.com/Loca/static/loca-v2/demos/images/prism_'
+                                + (props['price'] < 60000 ? 'blue' : 'yellow') + '.png);"></span></div>'
+                            );
+                        },
+                        unit: 'meter',
+                        rotation: 0,
+                        alwaysFront: true,
+                        size: [490/2, 222/2],
+                        altitude: 0,
+                    });
+
+                    // 浮动三角
+                    var triangleZMarker = new Loca.ZMarkerLayer({
+                        loca: loca,
+                        zIndex: 119,
+                        depth: false,
+                    });
+                    triangleZMarker.setSource(geo);
+                    triangleZMarker.setStyle({
+                        content: (i, feat) => {
+                            return (
+                                '<div style="width: 120px; height: 120px; background: url(https://a.amap.com/Loca/static/loca-v2/demos/images/triangle_'
+                                + (feat.properties.price < 60000 ? 'blue' : 'yellow')
+                                + '.png);"></div>'
+                            );
+                        },
+                        unit: 'meter',
+                        rotation: 0,
+                        alwaysFront: true,
+                        size: [60, 60],
+                        altitude: 15,
+                    });
+                    triangleZMarker.addAnimate({
+                        key: 'altitude',
+                        value: [0, 1],
+                        random: true,
+                        transform: 1000,
+                        delay: 2000,
+                        yoyo: true,
+                        repeat: 999999,
+                    });
+
+                    // 呼吸点 蓝色
+                    var scatterBlue = new Loca.ScatterLayer({
+                        loca,
+                        zIndex: 110,
+                        opacity: 1,
+                        visible: true,
+                        zooms: [2, 26],
+                        depth: false,
+                    });
+
+                    scatterBlue.setSource(geo);
+                    scatterBlue.setStyle({
+                        unit: 'meter',
+                        size: function (i, feat) {
+                            return feat.properties.price < 60000 ? [90, 90] : [0, 0];
+                        },
+                        texture: 'https://a.amap.com/Loca/static/loca-v2/demos/images/scan_blue.png',
+                        altitude: 20,
+                        duration: 2000,
+                        animate: true,
+                    });
+
+                    // 呼吸点 金色
+                    var scatterYellow = new Loca.ScatterLayer({
+                        loca,
+                        zIndex: 110,
+                        opacity: 1,
+                        visible: true,
+                        zooms: [2, 26],
+                        depth: false
+                    });
+
+                    scatterYellow.setSource(geo);
+                    scatterYellow.setStyle({
+                        unit: 'meter',
+                        size: function (i, feat) {
+                            return feat.properties.price > 60000 ? [90, 90] : [0, 0];
+                        },
+                        texture: 'https://a.amap.com/Loca/static/loca-v2/demos/images/scan_yellow.png',
+                        altitude: 20,
+                        duration: 2000,
+                        animate: true,
+                    });
+
+                    var layer = new Loca.LaserLayer({
+                        zIndex: 130,
+                        opacity: 1,
+                        visible: true,
+                        depth: true,
+                        zooms: [2, 26],
+                    });
+
+                    var heightFactor = 9;
+
+                    var pointGeo = new Loca.GeoJSONSource({
+                        data: {"type": "FeatureCollection", "features": [{"geometry": {"coordinates": [114.219429, 30.652739], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.22288, 30.655313], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.219813, 30.655191], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.224208, 30.65229], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.219991, 30.65527], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.223909, 30.651597], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.220475, 30.654434], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.221352, 30.655939], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.22398, 30.656456], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.219654, 30.654095], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.222668, 30.651227], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.222933, 30.653538], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.220661, 30.656649], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.223264, 30.650992], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.223116, 30.653767], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220482, 30.652794], "type": "Point"}, "type": "Feature", "properties": {"h": 130}}, {"geometry": {"coordinates": [114.224844, 30.656648], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.219688, 30.655572], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.223688, 30.65615], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.220671, 30.65226], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.224935, 30.654313], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.222847, 30.653438], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220218, 30.654016], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.225059, 30.65077], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.221368, 30.653451], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.224302, 30.655997], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.222514, 30.65618], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.222906, 30.655799], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.219984, 30.655806], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220394, 30.65724], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.219598, 30.655183], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.223376, 30.655321], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.223282, 30.653629], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.222593, 30.652207], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.219344, 30.652305], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.224662, 30.656822], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.223221, 30.652681], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.219511, 30.651425], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.224459, 30.65438], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.221084, 30.653471], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.22453, 30.657142], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.221712, 30.650727], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.220382, 30.654546], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.222012, 30.65514], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.219547, 30.653829], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.221745, 30.653275], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.222477, 30.656329], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.220493, 30.656345], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.21975, 30.652852], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.224716, 30.650927], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220008, 30.653819], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.220754, 30.656307], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.224293, 30.652949], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220831, 30.657369], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.224178, 30.656483], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.221415, 30.65717], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.221812, 30.655787], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.22024, 30.656371], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.222333, 30.654557], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.22447, 30.653513], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.221716, 30.654696], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.223084, 30.656689], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.222604, 30.654025], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220447, 30.651048], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.22114, 30.654917], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.223647, 30.654498], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.222295, 30.652073], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.219661, 30.657233], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.221287, 30.655917], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.221101, 30.65223], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.223849, 30.651194], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.224183, 30.655005], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.220097, 30.657354], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.224153, 30.653957], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.224673, 30.65389], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.221297, 30.657026], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.224314, 30.654795], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.224451, 30.654565], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.224866, 30.656558], "type": "Point"}, "type": "Feature", "properties": {"h": 170}}, {"geometry": {"coordinates": [114.219438, 30.656082], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.224397, 30.65583], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.22078, 30.653432], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.224736, 30.656857], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220651, 30.657075], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.222826, 30.651206], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.220683, 30.652358], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.221114, 30.651229], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.22183, 30.656067], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.221779, 30.653243], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.222389, 30.65493], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.224893, 30.65228], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.224269, 30.656881], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.21945, 30.653252], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.222811, 30.656713], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.221959, 30.65442], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.222104, 30.651849], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.221462, 30.654296], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220479, 30.6556], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.224519, 30.656816], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.222978, 30.654094], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.222582, 30.651154], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.220295, 30.652581], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.221556, 30.657163], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.223633, 30.654406], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.222095, 30.657177], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.224148, 30.655999], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.221929, 30.655276], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.222644, 30.653693], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.222274, 30.653926], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.222187, 30.655438], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.222473, 30.652941], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.222993, 30.654517], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.224445, 30.653092], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.224962, 30.656724], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.223381, 30.654384], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.220572, 30.652159], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.220623, 30.651445], "type": "Point"}, "type": "Feature", "properties": {"h": 150}}, {"geometry": {"coordinates": [114.221548, 30.655971], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.224844, 30.652943], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.224312, 30.65333], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.220524, 30.657177], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.222713, 30.652776], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.223652, 30.655646], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.222438, 30.651576], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.219462, 30.656676], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.224695, 30.651439], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.221758, 30.650932], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.220861, 30.657234], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.21964, 30.65135], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.222851, 30.652572], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.219948, 30.651259], "type": "Point"}, "type": "Feature", "properties": {"h": 84}}, {"geometry": {"coordinates": [114.223885, 30.651978], "type": "Point"}, "type": "Feature", "properties": {"h": 102}}, {"geometry": {"coordinates": [114.224647, 30.652493], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.224918, 30.655026], "type": "Point"}, "type": "Feature", "properties": {"h": 108}}, {"geometry": {"coordinates": [114.221571, 30.654266], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.225039, 30.653347], "type": "Point"}, "type": "Feature", "properties": {"h": 120}}, {"geometry": {"coordinates": [114.223734, 30.653608], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.223554, 30.652732], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.221314, 30.656594], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.220922, 30.651848], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.223765, 30.652583], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}, {"geometry": {"coordinates": [114.223193, 30.652528], "type": "Point"}, "type": "Feature", "properties": {"h": 110}}, {"geometry": {"coordinates": [114.224675, 30.651188], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.224253, 30.65689], "type": "Point"}, "type": "Feature", "properties": {"h": 90}}, {"geometry": {"coordinates": [114.2205, 30.653615], "type": "Point"}, "type": "Feature", "properties": {"h": 96}}]}
+                        // url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_point.json',
+                    });
+                    layer.setSource(pointGeo, {
+                        unit: 'meter',
+                        height: (index, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                        color: (index, feat) => {
+                            return ['#FF6F47', '#4FDDC7', '#4FDDC7'][index % 3];
+                        },
+                        lineWidth: 12,
+                        trailLength: 600,
+                        angle: 0,
+                        duration: 1500,
+                        interval: 1000,
+                        repeat: Infinity,
+                        delay: () => {
+                            return Math.random() * 2000;
+                        },
+                    });
+
+                    var geo = new Loca.GeoJSONSource({
+                        url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_soho.json',
+                    });
+
+                
+                    loca.add(layer);
+
+
+                    // 围栏
+                    var outLayer = new Loca.PolygonLayer({
+                        zIndex: 120,
+                        cullface: 'none',
+                        shininess: 1,
+                        hasBottom: false,
+                        blockHide: false,
+                        hasSide: true,
+                        hasTop: false,
+                        depth: true,
+                    });
+
+                    var outGeo = new Loca.GeoJSONSource({
+                        url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_out.json',
+                    });
+                    outLayer.setSource(outGeo);
+                    outLayer.setStyle({
+                        topColor: function (index, feature) {
+                            return 'rgba(217,104,104,0.1)';
+                        },
+                        sideTopColor: function (index, feature) {
+                            return 'rgba(217,104,104,0.1)';
+                        },
+                        sideBottomColor: function (index, feature) {
+                            return 'rgba(237,87,87,1)';
+                        },
+                        height: 100,
+                        altitude: 0,
+                    });
+                    loca.add(outLayer);
+
+                    var top5 = new Loca.GeoJSONSource({
+                        data: {
+                            type: 'FeatureCollection',
+                            features: [
+                                {
+                                    'geometry': {
+                                        'coordinates': [116.467041, 39.997771],
+                                        'type': 'Point',
+                                    },
+                                    'type': 'Feature',
+                                    'properties': {
+                                        'h': 110,
+                                    },
+                                },
+                                {
+                                    'geometry': {
+                                        'coordinates': [116.45981, 39.992648],
+                                        'type': 'Point',
+                                    },
+                                    'type': 'Feature',
+                                    'properties': {
+                                        'h': 130,
+                                    },
+                                },
+                                {
+                                    'geometry': {
+                                        'coordinates': [116.48469, 39.998533],
+                                        'type': 'Point',
+                                    },
+                                    'type': 'Feature',
+                                    'properties': {
+                                        'h': 170,
+                                    },
+                                },
+                                {
+                                    'geometry': {
+                                        'coordinates': [116.497672, 39.992139],
+                                        'type': 'Point',
+                                    },
+                                    'type': 'Feature',
+                                    'properties': {
+                                        'h': 150,
+                                    },
+                                },
+                                {
+                                    'geometry': {
+                                        'coordinates': [116.504495, 39.97537],
+                                        'type': 'Point',
+                                    },
+                                    'type': 'Feature',
+                                    'properties': {
+                                        'h': 120,
+                                    },
+                                },
+                            ],
+                        },
+                    });
+                    var zMarker = new Loca.ZMarkerLayer({
+                        zIndex: 120,
+                        loca,
+                    });
+                    zMarker.setSource(top5);
+                    zMarker.setStyle({
+                        content: (i, feat) => {
+                            var height = feat.properties.h * heightFactor;
+                            return `<div>
+                                <p style="width: 400px; height: 80px; line-height: 80px; font-size: 40px; background-image:linear-gradient(to right,rgba(30,215,196,0.4),rgba(30, 215, 196, 0.3),rgba(0,0,0,0.4)); border:4px solid rgba(30, 215, 196, 0.9); color:#fff; border-radius: 20px; text-align:center; margin:0;padding:0;">
+                                高度: ${height}
+                                </p>
+                            </div>
+                            `;
+                        },
+                        unit: 'meter',
+                        rotation: 0,
+                        alwaysFront: true,
+                        size: [400 * 2, 80 * 2],
+                        altitude: (i, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                    });
+                    var pole = new Loca.LaserLayer({
+                        zIndex: 120,
+                        loca,
+                        depth: false,
+                    });
+                    pole.setSource(top5, {
+                        unit: 'meter',
+                        height: (i, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                        color: 'rgba(30,215,196, 1)',
+                        lineWidth: 15,
+                        trailLength: 50000,
+                        repeat: 0,
+                    });
+
+                    loca.animate.start();
+                    loca.pointLight.intensity = 0;
+                    loca.ambLight.intensity = 1;
+
 
                     // // 给按钮绑定事件
                     // document.querySelector("#clickOn").addEventListener("click", clickOn);
