@@ -1,6 +1,5 @@
 .DS_Store
-view/node_modules
-server/node_modules
+**/node_modules/
 view/public/wuhan.gltf
 view/public/demo.gltf
 /dist
