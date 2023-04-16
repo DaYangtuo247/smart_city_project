@@ -25,7 +25,9 @@ let map_init_center = [114.30443, 30.591613]; // 地图放置点
 let customCoords;
 let map;
 let st = false;
-let pol;
+let st1 = false;
+let pol_lib;
+let pol_market;
 export default {
     computed: {
         ...mapState(["theme"])
@@ -150,25 +152,83 @@ export default {
                         size: new AMap.Size(50, 50), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
                         imageSize: new AMap.Size(256, 256) // 图标所用图片的大小
                     });
-
-                    var marker = new AMap.Marker({
+                    
+                    // 图书馆的标记点
+                    var marker_lib = new AMap.Marker({
                         map: map,
                         icon: icon,
                         position: [114.222004, 30.6525]
                     });
+                    
+                    // 商场的标记点
+                    var marker_market = new AMap.Marker({
+                        map: map,
+                        icon: icon,
+                        position: [ 114.237741,30.650317 ]
+                    });
 
-                    // 鼠标点击范围的设置
-                    var polygonArr = [
-                        [114.221782, 30.652927],
-                        [114.221731, 30.652097],
-                        [114.222575, 30.652073],
-                        [114.222625, 30.652939]
+                    // 图书馆鼠标点击范围的设置
+                    var polygonArr_lib = [
+                    [ 114.222285,30.653019 ],
+                    [ 114.222279,30.652661 ],
+                    [ 114.222309,30.652662 ],
+                    [ 114.222308,30.652517 ],
+                    [ 114.22168,30.652521 ],
+                    [ 114.221683,30.652347 ], 
+                    [ 114.221645,30.652348 ],
+                    [ 114.221652,30.652295 ] ,
+                    [ 114.221763,30.652291 ],
+                    [ 114.221764,30.652333 ],
+                    [ 114.221804,30.652332 ],
+                    [ 114.221814,30.652259 ],
+                    [ 114.221859,30.65217 ],
+                    [ 114.221936,30.652123 ], 
+                    [ 114.222063,30.652089 ],
+                    [ 114.222168,30.652108 ],
+                    [ 114.222276,30.652162 ],
+                    [ 114.222306,30.652231 ],
+                    [ 114.222448,30.652227 ],
+                    [ 114.222461,30.652007 ],
+                    [ 114.222563,30.652007 ],
+                    [ 114.222559,30.652762 ],
+                    [ 114.222574,30.652807 ],
+                    [ 114.222566,30.652873 ],
+                    [ 114.222513,30.652928 ],
+                    [ 114.222517,30.653012 ],
+                    [ 114.222285,30.653019 ],
                     ];
+
+                    // 商场鼠标点击范围的设置
+                    var polygonArr_market = [
+                    [ 114.235541,30.650994 ],
+                    [ 114.23545,30.649432 ],
+                    [ 114.237969,30.649387 ], 
+                    [ 114.238093,30.649393 ] ,
+                    [ 114.239844,30.649785 ] ,
+                    [ 114.240469,30.649975 ],
+                    [ 114.239935,30.651459 ],
+                    [ 114.238743,30.651151 ] ,
+                    [ 114.238086,30.651028 ],
+                    [ 114.237363,30.650966 ],
+                    [ 114.236517,30.650983 ] ,
+                    [ 114.235541,30.650994 ] ,
+                    ];
+
                     map.setFitView();
 
-                    pol = new AMap.Polygon({
+                    pol_market = new AMap.Polygon({
                             map: map,
-                            path: polygonArr, //设置多边形边界路径
+                            path: polygonArr_market, //设置多边形边界路径
+                            strokeColor: "#FF33FF", //线颜色
+                            strokeOpacity: 0.2, //线透明度
+                            strokeWeight: 3, //线宽
+                            fillColor: "#1791fc", //填充色
+                            fillOpacity: 0.35 //填充透明度
+                        });
+
+                    pol_lib = new AMap.Polygon({
+                            map: map,
+                            path: polygonArr_lib, //设置多边形边界路径
                             strokeColor: "#FF33FF", //线颜色
                             strokeOpacity: 0.2, //线透明度
                             strokeWeight: 3, //线宽
@@ -176,10 +236,12 @@ export default {
                             fillOpacity: 0.35 //填充透明度
                         });
                     
-                    map.remove(pol);
+                    map.remove(pol_lib);
+                    map.remove(pol_market);
 
                     
-                    marker.on("click", showInfoClick);
+                    marker_lib.on("click", showInfoClick);
+                    marker_market.on("click", showInfoClick1);
 
                     // function clickOn() {
                     //     // log.success("绑定事件!");
@@ -196,7 +258,8 @@ export default {
                     //     marker.off("click", showInfoClick);
                     //     // this.map.off('mousemove', this.showInfoMove);
                     // }
-
+                    
+                    // 图书馆触发事件
                     function showInfoClick(e) {
                         // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
@@ -213,13 +276,40 @@ export default {
                     // 控制图书馆附近的多边形是否显示
                     function change_polygon() {
                         if (st == false) {
-                            map.add(pol);
+                            map.add(pol_lib);
                             st = true;
                         }
                         else
                         {
                             st = false;
-                            map.remove(pol);
+                            map.remove(pol_lib);
+                        }
+                    }
+
+                    // 商场的触发事件
+                    function showInfoClick1(e) {
+                        // // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
+                        // // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
+                        // EventBus.$emit('change-data-url-lib-p-w-e', '/market_people_w_e');
+                        // // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
+                        // EventBus.$emit('change-data-url-p-c', '/market_pie_chart');
+                        // // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源
+                        // EventBus.$emit('change-data-url-s', '/market_seller');
+                        // // 触发一个名为'change-data-url-huan'的自定义事件，用于更换环形图的数据源
+                        // EventBus.$emit('change-data-url-huan', '/market_stock');
+                        change_polygon1();
+                    }
+
+                    // 控制商场附近的多边形是否显示
+                    function change_polygon1() {
+                        if (st1 == false) {
+                            map.add(pol_market);
+                            st1 = true;
+                        }
+                        else
+                        {
+                            st1 = false;
+                            map.remove(pol_market);
                         }
                     }
 
@@ -241,7 +331,19 @@ export default {
                                     "price": 55000,
                                     "count": 92
                                 }
-                            }]
+                            },{
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [ 114.237858,30.650277 ]
+                                },
+                                "properties": {
+                                    "name": "永旺梦乐城",
+                                    "price": 65000,
+                                    "count": 92
+                                }
+                            }
+                        ]
                         }
                     })
 
