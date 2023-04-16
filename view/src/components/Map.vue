@@ -203,7 +203,10 @@ export default {
                         EventBus.$emit('change-data-url-lib-p-w-e', '/lib_people_w_e');
                         // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
                         EventBus.$emit('change-data-url-p-c', '/lib_pie_chart');
-                        
+                        // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源
+                        EventBus.$emit('change-data-url-s', '/lib_seller');
+                        // 触发一个名为'change-data-url-huan'的自定义事件，用于更换环形图的数据源
+                        EventBus.$emit('change-data-url-huan', '/lib_stock');
                         change_polygon();
                     }
                     

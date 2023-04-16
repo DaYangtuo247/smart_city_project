@@ -6,6 +6,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import EventBus from '@/event-bus';
 
 export default {
   // 城市空气质量分析
@@ -36,6 +37,8 @@ export default {
         ['#5052EE', '#AB6EE5'],
         ['#23E5E5', '#2E72BF'],
       ],
+      url: '/stock',
+      tit: '▎城市空气质量分析',
     }
   },
   created() {
@@ -65,6 +68,19 @@ export default {
     //   chartName: 'stock',
     //   value: '',
     // })
+    EventBus.$on('change-data-url-huan', (url) => {
+      if (this.url === url) 
+      {
+        this.url = '/stock';
+        this.tit = '▎城市空气质量分析';
+      }
+      else 
+      {
+        this.url = url;
+        this.tit = '▎图书馆使用量分析'
+      }
+      this.getData();
+    });
     window.addEventListener('resize', this.screenAdapter)
     // 主动触发 响应式配置
     this.screenAdapter()
@@ -80,7 +96,7 @@ export default {
       this.chartInstance = this.$echarts.init(this.$refs.stockRef, this.theme)
       const initOption = {
         title: {
-          text: '▎城市空气质量分析',
+          text: this.tit,
           left: 20,
           top: 20,
         },
@@ -94,7 +110,13 @@ export default {
     },
     // 发送请求，获取数据
     async getData() {
-      const { data: res } = await this.$http.get('/stock')
+      // 销毁原表
+      this.chartInstance.dispose();
+      // 初始化表格
+      this.initChart();
+      // 检测分辨率，如果触发前后窗口大小不变可不进行
+      this.screenAdapter()
+      const { data: res } = await this.$http.get(this.url)
       this.allData = res
 
       this.updateChart()

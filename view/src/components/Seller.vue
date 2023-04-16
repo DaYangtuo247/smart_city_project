@@ -7,9 +7,10 @@
 <script>
 import { mapState } from 'vuex'
 import { getThemeValue } from 'utils/theme_utils'
+import EventBus from '@/event-bus';
 
 export default {
-  // 城市车流量统计
+  // 城市人流量统计
   name: 'Seller',
   data() {
     return {
@@ -25,6 +26,8 @@ export default {
       timerId: null,
       // 当鼠标移入axis(坐标轴)时展示 底层的背景色
       PointerColor: this.axisPointerColor,
+      url: '/seller',
+      tit:'▎周均人流量统计（千人次/周）',
     }
   },
   created() {
@@ -59,6 +62,19 @@ export default {
     //   value: '',
     // })
     // 在界面加载完成时，主动对屏幕进行适配
+    EventBus.$on('change-data-url-s', (url) => {
+      if (this.url === url) 
+      {
+        this.url = '/seller';
+        this.tit = '▎周均人流量统计（千人次/周）';
+      }
+      else 
+      {
+        this.url = url;
+        this.tit = '▎图书借阅量统计（次）'
+      }
+      this.getData();
+    });
     this.screenAdapter()
     window.addEventListener('resize', this.screenAdapter)
   },
@@ -76,7 +92,7 @@ export default {
       // 对图表初始化的配置
       const initOption = {
         title: {
-          text: '▎城市车流量统计',
+          text: this.tit,
           left: 20,
           top: 20,
         },
@@ -145,7 +161,14 @@ export default {
     // 获取服务器数据
     async getData() {
       // http://101.34.160.195:8888/api/seller
-      const { data: res } = await this.$http.get('/seller')
+      // 销毁原表
+      this.chartInstance.dispose();
+      // 初始化表格
+      this.initChart();
+      // 检测分辨率，如果触发前后窗口大小不变可不进行
+      this.screenAdapter()
+      this.allData = null;
+      const { data: res } = await this.$http.get(this.url)
 
       this.allData = res
       // 对数组排序 从小到大进行排序
