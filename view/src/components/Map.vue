@@ -6,7 +6,6 @@
     </div>
 </template>
 <script>
-
 import { mapState } from "vuex";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -700,9 +699,9 @@ export default {
             // 设置x、y、z缩放信息
             object.scale.set(1, 1, 1);
             // 对模型的经纬度进行转换
-            var position = customCoords.lngLatsToCoords(map_gltf_model_Position)[0];
-            object.position.setX(position[0]);
-            object.position.setY(position[1]);
+            // var position = customCoords.lngLatsToCoords(map_gltf_model_Position)[0];
+            // object.position.setX(position[0]);
+            // object.position.setY(position[1]);
         },
         city_line(model) {
             // 添加边框线
@@ -940,36 +939,6 @@ export default {
                 }
             });
             loca.add(ll);
-
-            // 围栏
-            var outLayer = new Loca.PolygonLayer({
-                zIndex: 120,
-                cullface: "none",
-                shininess: 1,
-                hasBottom: false,
-                blockHide: false,
-                hasSide: true,
-                hasTop: false,
-                depth: true
-            });
-            var outGeo = new Loca.GeoJSONSource({
-                url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_out.json"
-            });
-            outLayer.setSource(outGeo);
-            outLayer.setStyle({
-                topColor: function(index, feature) {
-                    return "rgba(217,104,104,0.1)";
-                },
-                sideTopColor: function(index, feature) {
-                    return "rgba(217,104,104,0.1)";
-                },
-                sideBottomColor: function(index, feature) {
-                    return "rgba(237,87,87,1)";
-                },
-                height: 100,
-                altitude: 0
-            });
-            loca.add(outLayer);
 
             // 图例
             var lengend = new Loca.Legend({
