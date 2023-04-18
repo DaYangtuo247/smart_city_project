@@ -7,7 +7,8 @@
             </div>
             <span class="title">智慧城市</span>
             <div class="title-right">
-                <a href="https://www.qweather.com/" target="_blank" class="weather"><div id="he-plugin-simple"></div></a>
+                <!-- 打开天气插件会导致地图缩放和无法加载模型，尚不清楚原因 -->
+                <!-- <a href="https://www.qweather.com/" target="_blank" class="weather-plug"><div id="he-plugin-simple"></div></a> -->
                 <img
                     v-show="theme == 'darkTheme'"
                     src="~@/assets/images/qiehuan_dark.png"
@@ -47,7 +48,7 @@
             <section class="screen-middle">
                 <div id="middle-top" :class="{ fullscreen: fullScreenStatus.map }">
                     <!-- 中心地图 -->
-                    <dv-border-box-1><single-map ref="map"></single-map></dv-border-box-1>
+                    <single-map ref="map"></single-map>
                     <div class="resize">
                         <span @click="changeSize('map')" :class="['iconfont', fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
                     </div>

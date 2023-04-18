@@ -4,7 +4,9 @@
             <div id="MapContainer"></div>
             <div class="input-card" style="width: auto;">
                 <div class="input-item">
-                    <button class="btn" @click="toggle()">显示/隐藏实时路况</button>
+                    <button class="btn" @click="show_road_condition()">实时路况</button>
+                    <button class="btn" @click="show_3D_map()">3D模型</button>
+                    <button class="btn" @click="show_people_out()">人口流出</button>
                 </div>
             </div>
         </div>
@@ -34,8 +36,10 @@ let pol_lib;
 let pol_market;
 let zMarker1;
 let ii = 0;
-let show_road_condition = false;
-let trafficLayer;
+let trafficLayer, buildingLayer; // 路况, 3D地图 对象
+let show_road_condition_var = false,
+    show_3D_map_exist = false,
+    show_people_out_var = false; // 路况信息是否存在
 export default {
     computed: {
         ...mapState(["theme"])
@@ -86,7 +90,7 @@ export default {
                         pitch: 40, //摄像机视角
                         viewMode: "3D", //是否为3D地图模式
                         zooms: [3, 20],
-                        showBuildingBlock: false, // 显示高德自带地图块
+                        showBuildingBlock: true, // 显示高德自带地图块
                         center: map_init_center, //初始化地图中心点位置
                         showLabel: true //设置文字标注
                     });
@@ -95,8 +99,11 @@ export default {
                     map.addControl(scale); // 添加比例尺控件
                     var ToolBar = new AMap.ToolBar();
                     map.addControl(ToolBar); // 缩放工具条
-                    trafficLayer = new AMap.TileLayer.Traffic({ zIndex: 10 });
+
+                    // 路况信息
+                    trafficLayer = new AMap.TileLayer.Traffic();
                     trafficLayer.setMap(map);
+                    trafficLayer.hide();
 
                     // 数据转换工具
                     customCoords = map.customCoords;
@@ -843,7 +850,7 @@ export default {
                         repeat: 0
                     });
 
-                    // 呼吸点
+                                        // 呼吸点
                     // var scatter = new Loca.ScatterLayer({
                     //     loca,
                     //     zIndex: 10,
@@ -952,6 +959,31 @@ export default {
                 this.setPosition();
                 scene.add(object);
             });
+            show_3D_map_exist = true;
+        },
+        removeGltf() {
+            if(object){
+                scene.remove(object); // 从场景中移除模型
+                THREE.Cache.clear(); // 手动回收内存
+                object.traverse(node => {
+                    if (node.geometry) {
+                        node.geometry.dispose(); // 释放模型中的 Geometry 对象
+                    }
+                    if (node.material) {
+                        if (Array.isArray(node.material)) {
+                            // 如果模型有多个材质，则需要遍历释放每个材质
+                            node.material.forEach(m => {
+                                m.dispose();
+                            });
+                        } else {
+                            // 如果模型只有一个材质，则直接释放该材质
+                            node.material.dispose();
+                        }
+                    }
+                });
+                object = null; // 将 object 设置为 null，释放内存
+                show_3D_map_exist = false;
+            }
         },
         setRotation(rotation) {
             var x = (Math.PI / 180) * (rotation.x || 0);
@@ -1237,14 +1269,26 @@ export default {
             dat.addLight(loca.pointLight, loca, "点光");
             dat.addLayer(ll, "车辆图层");
         },
-        toggle() {
-            if (show_road_condition) {
+        show_road_condition() {
+            if (show_road_condition_var) {
                 trafficLayer.hide();
-                show_road_condition = false;
+                show_road_condition_var = false;
             } else {
                 trafficLayer.show();
-                show_road_condition = true;
+                show_road_condition_var = true;
             }
+        },
+        show_3D_map() {
+            if (show_3D_map_exist) {
+                this.removeGltf();
+            } else {
+                this.initGltf();
+            }
+        },
+        show_people_out() {
+            // if(show_people_out_var){
+            // } else {
+            // }
         }
     },
     data() {
