@@ -43,13 +43,13 @@
 				请输入 API Key：
 			</div>
 			<div class="flex">
-				<input
+				<textarea
 					class="input"
 					:type="isConfig ? 'password' : 'text'"
 					:placeholder="isConfig ? 'sk-xxxxxxxxxx' : '请输入'"
 					v-model="messageContent"
 					@keydown.enter="isTalking || sendOrSave()"
-				/>
+				></textarea>
 				<button class="btn" :disabled="isTalking" @click="sendOrSave()">
 					{{ isConfig ? "保存" : "发送" }}
 				</button>

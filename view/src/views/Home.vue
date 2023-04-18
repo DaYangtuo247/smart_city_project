@@ -237,6 +237,7 @@ export default {
     height: 64px;
     font-size: 20px;
     position: relative;
+    font-family: 'nav-font' !important;
     > div {
         img {
             width: 100%;
