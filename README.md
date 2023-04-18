@@ -1,5 +1,3 @@
-参考链接[01_课程介绍_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1bh41197p8?p=1&vd_source=bc4fa866e16a93e8322d340eefe71de3)
-
 ## 技术栈
 
 该项目主要使用 `Vue`搭配`Echarts`采用组件化的方式开发完成,此外项目中陆续使用有
@@ -34,3 +32,11 @@ cd server
 npm install
 node app.js
 ```
+
+### 启动ai
+    
+ ```bash
+ cd chatgpt
+ npm install 
+ npm run ai
+ ```

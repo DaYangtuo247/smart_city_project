@@ -3,9 +3,9 @@
 		<div
 			class="flex flex-nowrap fixed w-full items-baseline top-0 px-6 py-4 bg-gray-100"
 		>
-			<div class="text-2xl font-bold">ChatGPT</div>
+			<div class="text-2xl font-bold">UrbanGPT</div>
 			<div class="ml-4 text-sm text-gray-500">
-				基于 OpenAI 的 ChatGPT 自然语言模型人工智能对话
+				基于 gpt-3.5-turbo 自然语言模型的智能城市助手
 			</div>
 			<!-- <div
 				class="ml-auto px-3 py-2 text-sm cursor-pointer hover:bg-white rounded-md"
@@ -77,17 +77,17 @@ const roleAlias = { user: "ME", assistant: "ChatGPT", system: "System" };
 const messageList = ref<ChatMessage[]>([
 	{
 		role: "system",
-		content: "你是 ChatGPT，OpenAI 训练的大型语言模型，尽可能简洁地回答。",
+		content: "你是一个智慧城市助手，你需要根据你的数据库中的信息，为武汉市的城市治理提供一些建议，并提供一些武汉市的数据信息",
 	},
 	{
 		role: "assistant",
-		content: `你好，我是AI语言模型，我可以提供一些常用服务和信息，例如：
+		content: `你好，我是基于gpt-3.5-turbo大语言模型的智慧城市助手，我可以提供一些常用服务和信息，例如：
 
-1. 翻译：我可以把中文翻译成英文，英文翻译成中文，还有其他一些语言翻译，比如法语、日语、西班牙语等。
+1. 交通状况简述：我可以把当前的交通状况做一个简要的汇报。
 
-2. 咨询服务：如果你有任何问题需要咨询，例如健康、法律、投资等方面，我可以尽可能为你提供帮助。
+2. 城市现状分析：我可以根据当前城市数据，为城市现状进行简要总结、并为城市治理提供一些建议。
 
-3. 闲聊：如果你感到寂寞或无聊，我们可以聊一些有趣的话题，以减轻你的压力。
+3. 城市信息模型（CIM）系统介绍：我可以向你提供依赖CIM构建的本系统的一些技术信息。
 
 请告诉我你需要哪方面的帮助，我会根据你的需求给你提供相应的信息和建议。`,
 	},
