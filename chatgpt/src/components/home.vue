@@ -2,6 +2,7 @@
 	<div class="flex flex-col h-screen dark:bg-dark_bg">
 		<div
 			class="flex flex-nowrap fixed w-full items-baseline top-0 px-6 py-4 bg-gray-100 dark:bg-dark_bg_nav"
+            style="height: 74px;"
 		>
 			<div class="text-2xl font-bold dark:text-dark_text_title1_color">
 				UrbanGPT

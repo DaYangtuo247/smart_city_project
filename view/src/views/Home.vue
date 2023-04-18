@@ -358,6 +358,7 @@ export default {
     width: 115px;
     height: 24px;
     margin-right: 10px;
+    text-decoration: none;
     cursor: pointer;
 }
 .weather:active{
