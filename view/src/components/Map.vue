@@ -5,6 +5,7 @@
             <div class="input-card" style="width: auto;">
                 <div class="input-item">
                     <button class="btn" @click="show_road_condition()">实时路况</button>
+                    <button class="btn" @click="show_average_traffic_flow()">日均车流</button>
                     <button class="btn" @click="show_3D_map()">3D模型</button>
                     <button class="btn" @click="show_people_out()">人口流出</button>
                 </div>
@@ -36,10 +37,12 @@ let pol_lib;
 let pol_market;
 let zMarker1;
 let ii = 0;
+let avg_tf_loca;
 let trafficLayer, buildingLayer; // 路况, 3D地图 对象
 let show_road_condition_var = false,
     show_3D_map_exist = false,
-    show_people_out_var = false; // 路况信息是否存在
+    show_people_out_exist = false, // 路况信息是否存在
+    show_average_traffic_flow_exist = false; // 车流
 export default {
     computed: {
         ...mapState(["theme"])
@@ -850,7 +853,7 @@ export default {
                         repeat: 0
                     });
 
-                                        // 呼吸点
+                    // 呼吸点
                     // var scatter = new Loca.ScatterLayer({
                     //     loca,
                     //     zIndex: 10,
@@ -927,7 +930,7 @@ export default {
                     }
                     alive();
                     // this.initGltf();
-                    // this.create_loca();
+                    // this.create_avg_traffic_flow_loca();
                 })
                 .catch(e => {
                     console.log(e);
@@ -1056,12 +1059,12 @@ export default {
                 // 计算流动范围当前点z的高度加上流动线的高度
                 float topY = vPoint.z + 5.0;
                 if (height > vPoint.z && height < topY) {
-                    // 颜色渐变 
+                    // 颜色渐变
                     float dIndex = sin((height - vPoint.z) / 5.0 * 3.14);
                     distColor = mix(uFlowColor, distColor, 1.0-dIndex);
-                //   distColor = uFlowColor; 
+                //   distColor = uFlowColor;
                 }
-                gl_FragColor = vec4(distColor, 0.8); 
+                gl_FragColor = vec4(distColor, 0.8);
                 // gl_FragColor = vec4(mix(vec3(0.97, 0.99, 1.0), uColor, vPosition), 1.0); // 通过mix函数混合两个颜色，达到渐变效果
             }
             `
@@ -1100,12 +1103,12 @@ export default {
                 // 计算流动范围当前点z的高度加上流动线的高度
                 float topY = vPoint.z + 5.0;
                 if (height > vPoint.z && height < topY) {
-                    // 颜色渐变 
+                    // 颜色渐变
                     float dIndex = sin((height - vPoint.z) / 5.0 * 3.14);
                     distColor = mix(uFlowColor, distColor, 1.0-dIndex);
-                //   distColor = uFlowColor; 
+                //   distColor = uFlowColor;
                 }
-                gl_FragColor = vec4(distColor, 0.8); 
+                gl_FragColor = vec4(distColor, 0.8);
                 // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
             }
             `,
@@ -1113,22 +1116,22 @@ export default {
             });
             model.material = shaderMaterial;
         },
-        create_loca() {
-            var loca = new Loca.Container({
+        create_avg_traffic_flow_loca() {
+            avg_tf_loca = new Loca.Container({
                 map
             });
 
-            loca.ambLight = {
+            avg_tf_loca.ambLight = {
                 intensity: 0.3,
                 color: "#fff"
             };
-            loca.dirLight = {
+            avg_tf_loca.dirLight = {
                 intensity: 1.2,
                 color: "#fff",
                 target: [0, 1, 0],
                 position: [0, -1, 1]
             };
-            loca.pointLight = {
+            avg_tf_loca.pointLight = {
                 color: "rgb(100,100,100)",
                 position: [114.2517, 30.552128, 20000],
                 intensity: 1.6,
@@ -1234,11 +1237,11 @@ export default {
                         : colors[7];
                 }
             });
-            loca.add(ll);
+            avg_tf_loca.add(ll);
 
             // 图例
             var lengend = new Loca.Legend({
-                loca: loca,
+                loca: avg_tf_loca,
                 title: {
                     label: "车辆密度(辆)",
                     fontColor: "rgba(255,255,255,0.4)",
@@ -1246,8 +1249,8 @@ export default {
                 },
                 style: {
                     backgroundColor: "rgba(255,255,255,0.1)",
-                    left: "20px",
-                    bottom: "40px",
+                    left: "15px",
+                    bottom: "60px",
                     fontSize: "12px"
                 },
                 dataMap: [
@@ -1261,13 +1264,16 @@ export default {
                     { label: 5, color: colors[0] }
                 ]
             });
-
+            show_average_traffic_flow_exist = true;
             // 控制条
-            var dat = new Loca.Dat();
-            dat.addLight(loca.ambLight, loca, "环境光");
-            dat.addLight(loca.dirLight, loca, "平行光");
-            dat.addLight(loca.pointLight, loca, "点光");
-            dat.addLayer(ll, "车辆图层");
+            // var dat = new Loca.Dat();
+            // dat.addLight(loca.ambLight, loca, "环境光");
+            // dat.addLight(loca.dirLight, loca, "平行光");
+            // dat.addLight(loca.pointLight, loca, "点光");
+            // dat.addLayer(ll, "车辆图层");
+        },
+        create_people_out(){
+
         },
         show_road_condition() {
             if (show_road_condition_var) {
@@ -1278,6 +1284,14 @@ export default {
                 show_road_condition_var = true;
             }
         },
+        show_average_traffic_flow(){
+            if(show_average_traffic_flow_exist){
+                avg_tf_loca.destroy();
+                show_average_traffic_flow_exist = false;
+            } else {
+                this.create_avg_traffic_flow_loca();
+            }
+        },
         show_3D_map() {
             if (show_3D_map_exist) {
                 this.removeGltf();
@@ -1286,9 +1300,12 @@ export default {
             }
         },
         show_people_out() {
-            // if(show_people_out_var){
-            // } else {
-            // }
+            if(show_people_out_exist){
+                loca.destroy();
+                show_people_out_exist = false;
+            } else {
+                // this.
+            }
         }
     },
     data() {
@@ -1313,6 +1330,16 @@ body,
     height: 100%;
     position: absolute;
     top: 0%;
+}
+.input-item{
+    margin-right: 60px;
+    margin-bottom: 5px;
+}
+.input-item button {
+    margin-right: 8px;
+}
+.input-item button:last-child{
+    margin-right: 0px;
 }
 </style>
 
