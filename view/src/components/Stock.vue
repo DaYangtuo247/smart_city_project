@@ -81,6 +81,19 @@ export default {
       }
       this.getData();
     });
+    EventBus.$on('change-data-url-m-sk', (url) => {
+      if (this.url === url) 
+      {
+        this.url = '/stock';
+        this.tit = '▎城市空气质量分析';
+      }
+      else 
+      {
+        this.url = url;
+        this.tit = '▎商场收入分析'
+      }
+      this.getData();
+    });
     window.addEventListener('resize', this.screenAdapter)
     // 主动触发 响应式配置
     this.screenAdapter()

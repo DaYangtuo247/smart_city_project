@@ -75,6 +75,19 @@ export default {
       }
       this.getData();
     });
+    EventBus.$on('change-data-url-m_s', (url) => {
+      if (this.url === url) 
+      {
+        this.url = '/seller';
+        this.tit = '▎周均人流量统计（千人次/周）';
+      }
+      else 
+      {
+        this.url = url;
+        this.tit = '▎商场广告投放收益统计（万元/周）'
+      }
+      this.getData();
+    });
     this.screenAdapter()
     window.addEventListener('resize', this.screenAdapter)
   },

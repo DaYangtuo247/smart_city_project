@@ -1,0 +1,192 @@
+[
+    {
+    "name": "商场衣物品牌消费占比",
+    "children": [
+        {
+        "name": "UNIQLO",
+        "value": 0.13,
+        "children":[
+            {
+                "name": "UNIQLO",
+                "value": 0.13
+            }
+        ]
+        },
+        {
+        "name": "ZARA",
+        "value": 0.11,
+        "children":[
+            {
+                "name": "ZARA",
+                "value": 0.11
+            }
+        ]
+        },
+        {
+        "name": "HM",
+        "value": 0.09,
+        "children":[
+            {
+                "name": "HM",
+                "value": 0.09
+            }
+        ]
+        },
+        {
+        "name": "优衣库",
+        "value": 0.08,
+        "children":[
+            {
+                "name": "优衣库",
+                "value": 0.08
+            }
+        ]
+        },
+        {
+        "name": "ONLY",
+        "value": 0.05,
+        "children":[
+            {
+                "name": "ONLY",
+                "value": 0.05
+            }
+        ]
+        },
+        {
+        "name": "C&A",
+        "value": 0.04,
+        "children":[
+            {
+                "name": "C&A",
+                "value": 0.04
+            }
+        ]
+        },
+        {
+        "name": "MANGO",
+        "value": 0.03,
+        "children":[
+            {
+                "name": "MANGO",
+                "value": 0.03
+            }
+        ]
+        },
+        {
+        "name": "GXG",
+        "value": 0.03,
+        "children":[
+            {
+                "name": "GXG",
+                "value": 0.03
+            }
+        ]
+        },
+        {
+        "name": "太平鸟",
+        "value": 0.02,
+        "children":[
+            {
+                "name": "太平鸟",
+                "value": 0.02
+            }
+        ]
+        },
+        {
+        "name": "GAP",
+        "value": 0.02,
+        "children":[
+            {
+                "name": "GAP",
+                "value": 0.02
+            }
+        ]
+        },
+        {
+        "name": "其他品牌",
+        "value": 0.2,
+        "children":[
+            {
+                "name": "其他品牌",
+                "value": 0.2
+            }
+        ]
+        }
+    ]
+    },
+    {
+        "name": "商场餐饮品牌消费占比",
+        "children": [
+          {
+            "name": "星巴克",
+            "value": 25,
+            "children": [
+              {
+                "name": "星巴克",
+                "value": 25
+              }
+            ]
+          },
+          {
+            "name": "麦当劳",
+            "value": 15,
+            "children": [
+              {
+                "name": "麦当劳",
+                "value": 15
+              }
+            ]
+          },
+          {
+            "name": "肯德基",
+            "value": 12,
+            "children": [
+              {
+                "name": "肯德基",
+                "value": 12
+              }
+            ]
+          },
+          {
+            "name": "汉堡王",
+            "value": 5,
+            "children": [
+              {
+                "name": "汉堡王",
+                "value":5
+              }
+            ]
+          },
+          {
+            "name": "必胜客",
+            "value": 4,
+            "children": [
+              {
+                "name": "必胜客",
+                "value": 4
+              }
+            ]
+          },
+          {
+            "name": "茶颜悦色",
+            "value": 3,
+            "children": [
+              {
+                "name": "茶颜悦色",
+                "value": 3
+              }
+            ]
+          },
+            {
+                "name": "其他餐饮",
+                "value": 17,
+                "children": [
+                {
+                    "name": "其他餐饮",
+                    "value": 17
+                }
+                ]
+            }
+        ]
+      }
+]

@@ -287,15 +287,15 @@ export default {
 
                     // 商场的触发事件
                     function showInfoClick1(e) {
-                        // // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
-                        // // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
-                        // EventBus.$emit('change-data-url-lib-p-w-e', '/market_people_w_e');
-                        // // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
-                        // EventBus.$emit('change-data-url-p-c', '/market_pie_chart');
-                        // // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源
-                        // EventBus.$emit('change-data-url-s', '/market_seller');
-                        // // 触发一个名为'change-data-url-huan'的自定义事件，用于更换环形图的数据源
-                        // EventBus.$emit('change-data-url-huan', '/market_stock');
+                        // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
+                        // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
+                        EventBus.$emit('change-data-url-mar', '/market_people_w_e');
+                        // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
+                        EventBus.$emit('change-data-url-chat', '/market_pie_chart');
+                        // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源
+                        EventBus.$emit('change-data-url-m_s', '/market_seller');
+                        // 触发一个名为'change-data-url-huan'的自定义事件，用于更换环形图的数据源
+                        EventBus.$emit('change-data-url-m-sk', '/market_stock');
                         change_polygon1();
                     }
 
@@ -656,7 +656,7 @@ export default {
                     }
                     alive();
                     this.initGltf();
-                    this.create_loca();
+                    // this.create_loca();
                 })
                 .catch(e => {
                     console.log(e);

@@ -77,6 +77,19 @@ export default {
       }
       this.getData();
     });
+    EventBus.$on('change-data-url-chat', (url) => {
+      if (this.url === url) 
+      {
+        this.url = '/hotproduct';
+        this.tit = '▎城市交通运力分析';
+      }
+      else 
+      {
+        this.url = url;
+        this.tit = '▎商场品牌数据分析';
+      }
+      this.getData();
+    });
     // this.$socket.send({
     //   action: 'getData',
     //   socketType: 'hotData',
