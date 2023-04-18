@@ -7,6 +7,7 @@
             </div>
             <span class="title">智慧城市</span>
             <div class="title-right">
+                <a href="https://www.qweather.com/" target="_blank" class="weather"><div id="he-plugin-simple"></div></a>
                 <img
                     v-show="theme == 'darkTheme'"
                     src="~@/assets/images/qiehuan_dark.png"
@@ -349,5 +350,17 @@ export default {
     right: 20px;
     top: 20px;
     cursor: pointer;
+}
+
+.weather {
+    display: block;
+    overflow: hidden;
+    width: 115px;
+    height: 24px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.weather:active{
+    text-decoration: none;
 }
 </style>

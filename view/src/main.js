@@ -29,11 +29,6 @@ import "./assets/lib/theme/lightTheme";
 
 Vue.config.productionTip = false;
 
-
-import dataV from '@jiaminghi/data-view'
-Vue.use(dataV)
-
-
 new Vue({
     router,
     store,
