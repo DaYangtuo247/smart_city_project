@@ -46,7 +46,7 @@
             <section class="screen-middle">
                 <div id="middle-top" :class="{ fullscreen: fullScreenStatus.map }">
                     <!-- 中心地图 -->
-                    <single-map ref="map"></single-map>
+                    <dv-border-box-1><single-map ref="map"></single-map></dv-border-box-1>
                     <div class="resize">
                         <span @click="changeSize('map')" :class="['iconfont', fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
                     </div>

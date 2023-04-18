@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "@amap/amap-jsapi-loader": "^1.0.1",
+        "@jiaminghi/data-view": "^2.10.0",
         "axios": "^0.21.0",
         "core-js": "^3.6.5",
         "echarts": "^4.8.0",
