@@ -187,7 +187,30 @@ export default {
         },
         // 主题切换事件
         handleChangeTheme() {
+            //切换地图主题
             this.$store.commit("changeTheme");
+            // 切换AI主题
+            // if (this.theme == "darkTheme") {
+            //     const myAi = document.getElementById("myAI");
+            //     if (myAi) {
+            //         myAi.classList.add("dark");
+            //         const items = myAi.getElementsByTagName("li");
+            //         for (let i = 0; i < items.length; i++) {
+            //             items[i].style.color = "white";
+            //         }
+            //     }
+            //     console.log("ai 黑");
+            // } else {
+            //     const myAi = document.getElementById("myAI");
+            //     if (myAi) {
+            //         myAi.classList.remove("dark");
+            //         const items = myAi.getElementsByTagName("li");
+            //         for (let i = 0; i < items.length; i++) {
+            //             items[i].style.color = "#6b7280";
+            //         }
+            //     }
+            //     console.log("ai 白");
+            // }
 
             // this.$socket.send({
             //   action: 'themeChange',
@@ -237,7 +260,7 @@ export default {
     height: 64px;
     font-size: 20px;
     position: relative;
-    font-family: 'nav-font' !important;
+    font-family: "nav-font" !important;
     > div {
         img {
             width: 100%;

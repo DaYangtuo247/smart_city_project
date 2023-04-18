@@ -58,7 +58,7 @@ const copyToClipboard = (content: string = porps.content) => {
       :size="btnConfig.size"
       :fill="btnConfig.fill"
     />
-    <span class="text-xs ml-0.5 text-gray-500 leading-none">{{
+    <span class="text-xs ml-0.5 text-gray-500 leading-none dark:text-dark_text_title2_color">{{
       btnTips[btnStatus]
     }}</span>
   </div>

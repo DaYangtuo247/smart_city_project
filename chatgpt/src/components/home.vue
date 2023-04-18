@@ -1,10 +1,14 @@
 <template>
-	<div class="flex flex-col h-screen">
+	<div class="flex flex-col h-screen dark:bg-dark_bg">
 		<div
-			class="flex flex-nowrap fixed w-full items-baseline top-0 px-6 py-4 bg-gray-100"
+			class="flex flex-nowrap fixed w-full items-baseline top-0 px-6 py-4 bg-gray-100 dark:bg-dark_bg_nav"
 		>
-			<div class="text-2xl font-bold">UrbanGPT</div>
-			<div class="ml-4 text-sm text-gray-500">
+			<div class="text-2xl font-bold dark:text-dark_text_title1_color">
+				UrbanGPT
+			</div>
+			<div
+				class="ml-4 text-sm text-gray-500 dark:text-dark_text_title2_color"
+			>
 				基于 gpt-3.5-turbo 自然语言模型的智能城市助手
 			</div>
 			<!-- <div
@@ -17,11 +21,15 @@
 
 		<div class="flex-1 mx-2 mt-20 mb-2" ref="chatListDom">
 			<div
-				class="group flex flex-col px-4 py-3 hover:bg-slate-100 rounded-lg"
+				class="group flex flex-col px-4 py-3 hover:bg-slate-100 dark:hover:bg-dark_content_hover rounded-lg"
 				v-for="item of messageList.filter((v) => v.role !== 'system')"
 			>
 				<div class="flex justify-between items-center mb-2">
-					<div class="font-bold">{{ roleAlias[item.role] }}：</div>
+					<div
+						class="font-bold dark:text-dark_text_reply_titile_color"
+					>
+						{{ roleAlias[item.role] }}：
+					</div>
 					<Copy
 						class="invisible group-hover:visible"
 						:content="item.content"
@@ -29,7 +37,7 @@
 				</div>
 				<div>
 					<div
-						class="prose text-sm text-slate-600 leading-relaxed"
+						class="prose text-sm text-slate-600 leading-relaxed dark:text-dark_content"
 						v-if="item.content"
 						v-html="md.render(item.content)"
 					></div>
@@ -38,13 +46,15 @@
 			</div>
 		</div>
 
-		<div class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100">
-			<div class="-mt-2 mb-2 text-sm text-gray-500" v-if="isConfig">
+		<div
+			class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100 dark:bg-dark_bg_nav"
+		>
+			<!-- <div class="-mt-2 mb-2 text-sm text-gray-500" v-if="isConfig">
 				请输入 API Key：
-			</div>
+			</div> -->
 			<div class="flex">
 				<textarea
-					class="input"
+					class="input dark:bg-dark_bg_input dark:border-dark_bg_input_border dark:text-dark_bg_input_color"
 					:type="isConfig ? 'password' : 'text'"
 					:placeholder="isConfig ? 'sk-xxxxxxxxxx' : '请输入'"
 					v-model="messageContent"
@@ -53,6 +63,7 @@
 				<button class="btn" :disabled="isTalking" @click="sendOrSave()">
 					{{ isConfig ? "保存" : "发送" }}
 				</button>
+				<button @click="checkTheme()">切换主题</button>
 			</div>
 		</div>
 	</div>
@@ -74,10 +85,12 @@ let messageContent = ref("");
 const chatListDom = ref<HTMLDivElement>();
 const decoder = new TextDecoder("utf-8");
 const roleAlias = { user: "ME", assistant: "ChatGPT", system: "System" };
+let AiTheme = "dark";
 const messageList = ref<ChatMessage[]>([
 	{
 		role: "system",
-		content: "你是一个智慧城市助手，你需要根据你的数据库中的信息，为武汉市的城市治理提供一些建议，并提供一些武汉市的数据信息",
+		content:
+			"你是一个智慧城市助手，你需要根据你的数据库中的信息，为武汉市的城市治理提供一些建议，并提供一些武汉市的数据信息",
 	},
 	{
 		role: "assistant",
@@ -173,6 +186,33 @@ const sendOrSave = () => {
 		clearMessageContent();
 	} else {
 		sendChatMessage();
+	}
+};
+
+// 切换主题
+const checkTheme = () => {
+	if (AiTheme == "light") {
+		document.documentElement.classList.add("dark");
+		const myAi = document.getElementById("myAi");
+		if (myAi) {
+			const items = myAi.getElementsByTagName("li");
+			for (let i = 0; i < items.length; i++) {
+				items[i].style.color = "white";
+			}
+		}
+		AiTheme = "dark";
+		console.log("ai 黑");
+	} else {
+		document.documentElement.classList.remove("dark");
+		const myAi = document.getElementById("myAi");
+		if (myAi) {
+			const items = myAi.getElementsByTagName("li");
+			for (let i = 0; i < items.length; i++) {
+				items[i].style.color = "#6b7280";
+			}
+		}
+		AiTheme = "light";
+		console.log("ai 白");
 	}
 };
 
