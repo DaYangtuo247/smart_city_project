@@ -2,7 +2,7 @@
     <div class="com-container">
         <div class="com-chart" ref="mapRef">
             <div id="MapContainer"></div>
-            <div class="input-card" style="width: auto;">
+            <div class="input-card">
                 <div class="input-item">
                     <button class="btn" @click="show_road_condition()">实时路况</button>
                     <button class="btn" @click="show_average_traffic_flow()">日均车流</button>
@@ -37,20 +37,20 @@ let pol_lib;
 let pol_market;
 let zMarker1;
 let ii = 0;
-let avg_tf_loca;
-let trafficLayer, buildingLayer; // 路况, 3D地图 对象
+let avg_tf_loca, people_out_loca; // 日平均车流, 人口流出情况
+let trafficLayer; // 路况对象
 let show_road_condition_var = false,
     show_3D_map_exist = false,
     show_people_out_exist = false, // 路况信息是否存在
     show_average_traffic_flow_exist = false; // 车流
 export default {
     computed: {
-        ...mapState(["theme"])
+        ...mapState(["theme"]),
     },
     watch: {
         theme() {
             this.changeTheme();
-        }
+        },
     },
     mounted() {
         //DOM初始化完成进行地图初始化
@@ -78,11 +78,11 @@ export default {
                 plugins: ["AMap.ToolBar", "AMap.Scale"], // 插件列表
                 AMapUI: {
                     version: "1.1",
-                    plugins: ["overlay/SimpleMarker"]
+                    plugins: ["overlay/SimpleMarker"],
                 },
                 Loca: {
-                    version: "2.0"
-                }
+                    version: "2.0",
+                },
             })
                 .then(AMap => {
                     map = new AMap.Map("MapContainer", {
@@ -93,9 +93,9 @@ export default {
                         pitch: 40, //摄像机视角
                         viewMode: "3D", //是否为3D地图模式
                         zooms: [3, 20],
-                        showBuildingBlock: true, // 显示高德自带地图块
+                        showBuildingBlock: false, // 显示高德自带地图块
                         center: map_init_center, //初始化地图中心点位置
-                        showLabel: true //设置文字标注
+                        showLabel: true, //设置文字标注
                     });
                     this.changeTheme(); // 跟随全局主题设置
                     var scale = new AMap.Scale();
@@ -125,7 +125,7 @@ export default {
                                 context: gl, // 地图的 gl 上下文
                                 alpha: true,
                                 antialias: true,
-                                canvas: gl.canvas
+                                canvas: gl.canvas,
                             });
                             // 自动清空画布这里必须设置为 false，否则地图底图将无法显示
                             renderer.autoClear = false;
@@ -164,7 +164,7 @@ export default {
                             renderer.render(scene, camera);
                             // 这里必须执行！！重新设置 three 的 gl 上下文状态。
                             renderer.resetState();
-                        }
+                        },
                     });
                     map.add(gllayer);
 
@@ -172,21 +172,21 @@ export default {
                     var icon = new AMap.Icon({
                         image: "none.png", // 图标的图片
                         size: new AMap.Size(50, 50), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
-                        imageSize: new AMap.Size(256, 256) // 图标所用图片的大小
+                        imageSize: new AMap.Size(256, 256), // 图标所用图片的大小
                     });
 
                     // 图书馆的标记点
                     var marker_lib = new AMap.Marker({
                         map: map,
                         icon: icon,
-                        position: [114.222004, 30.6525]
+                        position: [114.222004, 30.6525],
                     });
 
                     // 商场的标记点
                     var marker_market = new AMap.Marker({
                         map: map,
                         icon: icon,
-                        position: [114.237741, 30.650317]
+                        position: [114.237741, 30.650317],
                     });
 
                     // 图书馆鼠标点击范围的设置
@@ -217,7 +217,7 @@ export default {
                         [114.222566, 30.652873],
                         [114.222513, 30.652928],
                         [114.222517, 30.653012],
-                        [114.222285, 30.653019]
+                        [114.222285, 30.653019],
                     ];
 
                     // 商场鼠标点击范围的设置
@@ -233,7 +233,7 @@ export default {
                         [114.238086, 30.651028],
                         [114.237363, 30.650966],
                         [114.236517, 30.650983],
-                        [114.235541, 30.650994]
+                        [114.235541, 30.650994],
                     ];
 
                     map.setFitView();
@@ -245,7 +245,7 @@ export default {
                         strokeOpacity: 0.2, //线透明度
                         strokeWeight: 3, //线宽
                         fillColor: "#1791fc", //填充色
-                        fillOpacity: 0.35 //填充透明度
+                        fillOpacity: 0.35, //填充透明度
                     });
 
                     pol_lib = new AMap.Polygon({
@@ -255,7 +255,7 @@ export default {
                         strokeOpacity: 0.2, //线透明度
                         strokeWeight: 3, //线宽
                         fillColor: "#1791fc", //填充色
-                        fillOpacity: 0.35 //填充透明度
+                        fillOpacity: 0.35, //填充透明度
                     });
 
                     map.remove(pol_lib);
@@ -331,7 +331,7 @@ export default {
                     }
 
                     var loca = new Loca.Container({
-                        map
+                        map,
                     });
 
                     var geo = new Loca.GeoJSONSource({
@@ -342,35 +342,35 @@ export default {
                                     type: "Feature",
                                     geometry: {
                                         type: "Point",
-                                        coordinates: [114.222131, 30.652322]
+                                        coordinates: [114.222131, 30.652322],
                                     },
                                     properties: {
                                         name: "武汉轻工大学图书馆",
                                         price: 55000,
-                                        count: 92
-                                    }
+                                        count: 92,
+                                    },
                                 },
                                 {
                                     type: "Feature",
                                     geometry: {
                                         type: "Point",
-                                        coordinates: [114.237858, 30.650277]
+                                        coordinates: [114.237858, 30.650277],
                                     },
                                     properties: {
                                         name: "永旺梦乐城",
                                         price: 65000,
-                                        count: 92
-                                    }
-                                }
-                            ]
-                        }
+                                        count: 92,
+                                    },
+                                },
+                            ],
+                        },
                     });
 
                     // 文字主体图层
                     var zMarker = new Loca.ZMarkerLayer({
                         loca: loca,
                         zIndex: 120,
-                        depth: false
+                        depth: false,
                     });
                     zMarker.setSource(geo);
                     zMarker.setStyle({
@@ -400,14 +400,14 @@ export default {
                         rotation: 0,
                         alwaysFront: true,
                         size: [490 / 2, 222 / 2],
-                        altitude: 0
+                        altitude: 0,
                     });
 
                     // 浮动三角
                     var triangleZMarker = new Loca.ZMarkerLayer({
                         loca: loca,
                         zIndex: 119,
-                        depth: false
+                        depth: false,
                     });
                     triangleZMarker.setSource(geo);
                     triangleZMarker.setStyle({
@@ -422,7 +422,7 @@ export default {
                         rotation: 0,
                         alwaysFront: true,
                         size: [60, 60],
-                        altitude: 15
+                        altitude: 15,
                     });
                     triangleZMarker.addAnimate({
                         key: "altitude",
@@ -431,7 +431,7 @@ export default {
                         transform: 1000,
                         delay: 2000,
                         yoyo: true,
-                        repeat: 999999
+                        repeat: 999999,
                     });
 
                     // 呼吸点 蓝色
@@ -441,19 +441,19 @@ export default {
                         opacity: 1,
                         visible: true,
                         zooms: [2, 26],
-                        depth: false
+                        depth: false,
                     });
 
                     scatterBlue.setSource(geo);
                     scatterBlue.setStyle({
                         unit: "meter",
-                        size: function(i, feat) {
+                        size: function (i, feat) {
                             return feat.properties.price < 60000 ? [90, 90] : [0, 0];
                         },
                         texture: "https://a.amap.com/Loca/static/loca-v2/demos/images/scan_blue.png",
                         altitude: 20,
                         duration: 2000,
-                        animate: true
+                        animate: true,
                     });
 
                     // 呼吸点 金色
@@ -463,19 +463,19 @@ export default {
                         opacity: 1,
                         visible: true,
                         zooms: [2, 26],
-                        depth: false
+                        depth: false,
                     });
 
                     scatterYellow.setSource(geo);
                     scatterYellow.setStyle({
                         unit: "meter",
-                        size: function(i, feat) {
+                        size: function (i, feat) {
                             return feat.properties.price > 60000 ? [90, 90] : [0, 0];
                         },
                         texture: "https://a.amap.com/Loca/static/loca-v2/demos/images/scan_yellow.png",
                         altitude: 20,
                         duration: 2000,
-                        animate: true
+                        animate: true,
                     });
 
                     // 粒子上升效果
@@ -484,7 +484,7 @@ export default {
                         opacity: 1,
                         visible: true,
                         depth: true,
-                        zooms: [2, 26]
+                        zooms: [2, 26],
                     });
 
                     var heightFactor = 5;
@@ -693,9 +693,9 @@ export default {
                                 { geometry: { coordinates: [114.275064, 30.616315], type: "Point" }, type: "Feature", properties: { h: 108 } },
                                 { geometry: { coordinates: [114.274643, 30.615882], type: "Point" }, type: "Feature", properties: { h: 108 } },
                                 { geometry: { coordinates: [114.276106, 30.616071], type: "Point" }, type: "Feature", properties: { h: 90 } },
-                                { geometry: { coordinates: [114.273684, 30.61618], type: "Point" }, type: "Feature", properties: { h: 108 } }
-                            ]
-                        }
+                                { geometry: { coordinates: [114.273684, 30.61618], type: "Point" }, type: "Feature", properties: { h: 108 } },
+                            ],
+                        },
                         // url: './change_point.geojson',
                     });
                     layer.setSource(pointGeo, {
@@ -714,11 +714,11 @@ export default {
                         repeat: Infinity,
                         delay: () => {
                             return Math.random() * 2000;
-                        }
+                        },
                     });
 
                     var geo = new Loca.GeoJSONSource({
-                        url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_soho.json"
+                        url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_soho.json",
                     });
 
                     loca.add(layer);
@@ -732,7 +732,7 @@ export default {
                         blockHide: false,
                         hasSide: true,
                         hasTop: false,
-                        depth: true
+                        depth: true,
                     });
 
                     var outGeo = new Loca.GeoJSONSource({
@@ -742,8 +742,8 @@ export default {
                             crs: {
                                 type: "name",
                                 properties: {
-                                    name: "urn:ogc:def:crs:OGC:1.3:CRS84"
-                                }
+                                    name: "urn:ogc:def:crs:OGC:1.3:CRS84",
+                                },
                             },
                             features: [
                                 {
@@ -771,28 +771,28 @@ export default {
                                                 [114.274446, 30.621316],
                                                 [114.273509, 30.62327],
                                                 [114.270852, 30.623147],
-                                                [114.268387, 30.622908]
-                                            ]
-                                        ]
-                                    }
-                                }
-                            ]
-                        }
+                                                [114.268387, 30.622908],
+                                            ],
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
                         // url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_out.json',
                     });
                     outLayer.setSource(outGeo);
                     outLayer.setStyle({
-                        topColor: function(index, feature) {
+                        topColor: function (index, feature) {
                             return "rgba(217,104,104,0.1)";
                         },
-                        sideTopColor: function(index, feature) {
+                        sideTopColor: function (index, feature) {
                             return "rgba(217,104,104,0.1)";
                         },
-                        sideBottomColor: function(index, feature) {
+                        sideBottomColor: function (index, feature) {
                             return "rgba(237,87,87,1)";
                         },
                         height: 50,
-                        altitude: 0
+                        altitude: 0,
                     });
                     loca.add(outLayer);
 
@@ -803,20 +803,20 @@ export default {
                                 {
                                     geometry: {
                                         coordinates: [114.271389, 30.618726],
-                                        type: "Point"
+                                        type: "Point",
                                     },
                                     type: "Feature",
                                     properties: {
                                         h: 140,
-                                        p: 460
-                                    }
-                                }
-                            ]
-                        }
+                                        p: 460,
+                                    },
+                                },
+                            ],
+                        },
                     });
                     zMarker1 = new Loca.ZMarkerLayer({
                         zIndex: 120,
-                        loca
+                        loca,
                     });
                     zMarker1.setSource(top5);
                     zMarker1.setStyle({
@@ -835,12 +835,12 @@ export default {
                         size: [200 * 2, 40 * 2],
                         altitude: (i, feat) => {
                             return feat.properties.h * heightFactor;
-                        }
+                        },
                     });
                     var pole = new Loca.LaserLayer({
                         zIndex: 120,
                         loca,
-                        depth: false
+                        depth: false,
                     });
                     pole.setSource(top5, {
                         unit: "meter",
@@ -850,71 +850,8 @@ export default {
                         color: "rgba(30,215,196, 1)",
                         lineWidth: 10,
                         trailLength: 50000,
-                        repeat: 0
+                        repeat: 0,
                     });
-
-                    // 呼吸点
-                    // var scatter = new Loca.ScatterLayer({
-                    //     loca,
-                    //     zIndex: 10,
-                    //     opacity: 0.6,
-                    //     visible: true,
-                    //     zooms: [2, 22],
-                    // });
-
-                    // var pointGeo = new Loca.GeoJSONSource({
-                    //     url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/pulselink-china-city-point.json',
-                    // });
-                    // scatter.setSource(pointGeo);
-                    // scatter.setStyle({
-                    //     unit: 'meter',
-                    //     size: [100000, 100000],
-                    //     borderWidth: 0,
-                    //     texture: 'https://a.amap.com/Loca/static/loca-v2/demos/images/breath_red.png',
-                    //     duration: 2000,
-                    //     animate: true,
-                    // });
-                    // loca.add(scatter);
-
-                    // // 弧线
-                    // var pulseLink = new Loca.PulseLinkLayer({
-                    //     // loca,
-                    //     zIndex: 10,
-                    //     opacity: 1,
-                    //     visible: true,
-                    //     zooms: [2, 22],
-                    //     depth: true,
-                    // });
-
-                    // var geo = new Loca.GeoJSONSource({
-                    //     data: {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"type": 0, "ratio": 0.0369, "lineWidthRatio": 1}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.482331, 38.867657]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.035, "lineWidthRatio": 0.9447674418604651}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.190182, 39.125596]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0189, "lineWidthRatio": 0.47674418604651164}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [121.472644, 31.231706]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0167, "lineWidthRatio": 0.41279069767441856}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.280637, 23.125178]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0148, "lineWidthRatio": 0.35755813953488375}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [106.504962, 29.533155]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0147, "lineWidthRatio": 0.35465116279069764}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.884091, 40.811901]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0137, "lineWidthRatio": 0.32558139534883723}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.746262, 23.046237]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0136, "lineWidthRatio": 0.3226744186046511}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [104.065735, 30.659462]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0134, "lineWidthRatio": 0.3168604651162791}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.502461, 38.045474]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0116, "lineWidthRatio": 0.2645348837209302}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.175393, 39.635113]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.011, "lineWidthRatio": 0.24709302325581392}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.767413, 32.041544]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0108, "lineWidthRatio": 0.24127906976744187}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.153576, 30.287459]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0101, "lineWidthRatio": 0.2209302325581395}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [116.857461, 38.310582]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0097, "lineWidthRatio": 0.20930232558139533}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.939152, 40.976204]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0087, "lineWidthRatio": 0.18023255813953484}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.490686, 36.612273]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0081, "lineWidthRatio": 0.1627906976744186}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.665412, 34.757975]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.008, "lineWidthRatio": 0.15988372093023254}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.085947, 22.547]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0077, "lineWidthRatio": 0.1511627906976744}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.619585, 31.299379]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0074, "lineWidthRatio": 0.14244186046511628}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [108.948024, 34.263161]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0074, "lineWidthRatio": 0.14244186046511628}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.000923, 36.675807]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0071, "lineWidthRatio": 0.13372093023255813}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.508851, 37.0682]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0063, "lineWidthRatio": 0.11046511627906977}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.665993, 37.735097]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.006, "lineWidthRatio": 0.10174418604651163}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.355173, 36.082982]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0055, "lineWidthRatio": 0.08720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [116.307428, 37.453968]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0055, "lineWidthRatio": 0.08720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.982279, 28.19409]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0054, "lineWidthRatio": 0.08430232558139536}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.469381, 35.246531]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0053, "lineWidthRatio": 0.08139534883720931}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.107078, 36.70925]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0051, "lineWidthRatio": 0.07558139534883722}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [123.429096, 41.796767]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0049, "lineWidthRatio": 0.06976744186046512}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.184811, 34.261792]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0049, "lineWidthRatio": 0.06976744186046512}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.549248, 37.857014]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0048, "lineWidthRatio": 0.06686046511627905}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.122717, 23.028762]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0048, "lineWidthRatio": 0.06686046511627905}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.540918, 32.999082]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0048, "lineWidthRatio": 0.06686046511627905}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.649653, 33.620357]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0047, "lineWidthRatio": 0.06395348837209303}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.326443, 35.065282]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0047, "lineWidthRatio": 0.06395348837209303}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.301663, 31.574729]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0047, "lineWidthRatio": 0.06395348837209303}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.283042, 31.86119]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0046, "lineWidthRatio": 0.061046511627906974}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.586579, 39.942531]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0044, "lineWidthRatio": 0.05523255813953489}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.434468, 34.663041]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0044, "lineWidthRatio": 0.05523255813953489}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.980367, 36.456013]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0044, "lineWidthRatio": 0.05523255813953489}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [126.642464, 45.756967]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0044, "lineWidthRatio": 0.05523255813953489}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [121.549792, 29.868388]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0043, "lineWidthRatio": 0.05232558139534883}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.883991, 35.302616]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0043, "lineWidthRatio": 0.05232558139534883}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.295259, 40.09031]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0042, "lineWidthRatio": 0.04941860465116278}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [102.712251, 25.040609]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0042, "lineWidthRatio": 0.04941860465116278}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [116.587245, 35.415393]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0041, "lineWidthRatio": 0.04651162790697675}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.352482, 36.103442]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.004, "lineWidthRatio": 0.0436046511627907}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.075031, 32.123274]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.004, "lineWidthRatio": 0.0436046511627907}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.024736, 32.980169]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.004, "lineWidthRatio": 0.0436046511627907}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.298572, 30.584355]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0039, "lineWidthRatio": 0.04069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.650497, 34.437054]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0039, "lineWidthRatio": 0.04069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.940278, 25.85097]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0038, "lineWidthRatio": 0.0377906976744186}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [125.3245, 43.886841]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0037, "lineWidthRatio": 0.034883720930232565}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.670801, 40.818311]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0036, "lineWidthRatio": 0.031976744186046506}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.819729, 32.896969]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0035, "lineWidthRatio": 0.029069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.517973, 36.08415]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0035, "lineWidthRatio": 0.029069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.864608, 32.016212]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0035, "lineWidthRatio": 0.029069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.956806, 42.275317]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0035, "lineWidthRatio": 0.029069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.736465, 37.696495]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0034, "lineWidthRatio": 0.026162790697674413}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.003957, 35.022778]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.016974, 37.383542]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [121.391382, 37.539297]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.114543, 41.034126]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.649506, 29.089524]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [106.713478, 26.578343]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.892151, 28.676493]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [108.705117, 34.333439]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.879365, 30.447711]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [109.99029, 39.817179]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.672111, 28.000575]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [108.320004, 22.82402]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.129063, 36.194968]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.139998, 33.377631]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.856394, 40.755572]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.412599, 23.079404]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.946973, 31.772752]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.003, "lineWidthRatio": 0.014534883720930232}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.589421, 24.908853]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.003, "lineWidthRatio": 0.014534883720930232}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.132855, 29.37029]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.003, "lineWidthRatio": 0.014534883720930232}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.047648, 36.814939]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.306239, 26.075302]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.607693, 26.900358]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.041299, 35.768234]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [109.502882, 34.499381]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.992811, 29.712034]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.134335, 37.524366]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.341447, 34.797049]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [121.618622, 38.91459]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.826063, 34.022956]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [106.937265, 27.706626]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [87.617733, 43.792818]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.750865, 30.762653]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.307718, 33.735241]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0027, "lineWidthRatio": 0.0058139534883720955}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [103.823557, 36.058039]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0027, "lineWidthRatio": 0.0058139534883720955}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [109.741193, 38.290162]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0027, "lineWidthRatio": 0.0058139534883720955}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.23813, 30.326857]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0026, "lineWidthRatio": 0.0029069767441860417}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.382391, 22.521113]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0025, "lineWidthRatio": 0}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.144146, 32.042426]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0025, "lineWidthRatio": 0}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.113556, 36.191112]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0025, "lineWidthRatio": 0}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.391136, 27.8043]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0025, "lineWidthRatio": 0}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.691347, 29.040225]]}}]},
-                    //     // url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/data-line-out.json',
-                    // });
-
-                    // pulseLink.setSource(geo);
-                    // pulseLink.setStyle({
-                    //     unit: 'meter',
-                    //     dash: [40000, 0, 40000, 0],
-                    //     lineWidth: function () {
-                    //         return [20000, 1000];
-                    //     },
-                    //     height: function (index, feat) {
-                    //         return feat.distance / 3 + 10;
-                    //     },
-                    //     // altitude: 1000,
-                    //     smoothSteps: 30,
-                    //     speed: function (index, prop) {
-                    //         return 1000 + Math.random() * 200000;
-                    //     },
-                    //     flowLength: 100000,
-                    //     lineColors: function (index, feat) {
-                    //         return ['rgb(255,228,105)', 'rgb(255,164,105)', 'rgba(1, 34, 249,1)'];
-                    //     },
-                    //     maxHeightScale: 0.3, // 弧顶位置比例
-                    //     headColor: 'rgba(255, 255, 0, 1)',
-                    //     trailColor: 'rgba(255, 255,0,0)',
-                    // });
-                    // loca.add(pulseLink);
 
                     loca.animate.start();
                     loca.pointLight.intensity = 0;
@@ -929,8 +866,8 @@ export default {
                         requestAnimationFrame(alive);
                     }
                     alive();
-                    // this.initGltf();
-                    // this.create_avg_traffic_flow_loca();
+
+                    this.map_load_comple();
                 })
                 .catch(e => {
                     console.log(e);
@@ -957,7 +894,7 @@ export default {
                 this.setRotation({
                     x: 90,
                     y: 0,
-                    z: 0
+                    z: 0,
                 });
                 this.setPosition();
                 scene.add(object);
@@ -965,7 +902,7 @@ export default {
             show_3D_map_exist = true;
         },
         removeGltf() {
-            if(object){
+            if (object) {
                 scene.remove(object); // 从场景中移除模型
                 THREE.Cache.clear(); // 手动回收内存
                 object.traverse(node => {
@@ -1008,7 +945,7 @@ export default {
             const line = new THREE.LineSegments(
                 edges,
                 new THREE.LineBasicMaterial({
-                    color: 0xbdbdbd
+                    color: 0xbdbdbd,
                 })
             );
             model.add(line);
@@ -1020,7 +957,7 @@ export default {
                 new THREE.MeshBasicMaterial({
                     color: 0x000000,
                     transparent: true,
-                    opacity: 0.3
+                    opacity: 0.3,
                 })
             );
             shadow.position.y = -0.1;
@@ -1034,8 +971,8 @@ export default {
                     uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
                     uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
                     uFlowColor: {
-                        value: new THREE.Color("#FFFFFF")
-                    }
+                        value: new THREE.Color("#FFFFFF"),
+                    },
                 },
                 vertexShader: `
             uniform float uHeight;
@@ -1067,7 +1004,7 @@ export default {
                 gl_FragColor = vec4(distColor, 0.8);
                 // gl_FragColor = vec4(mix(vec3(0.97, 0.99, 1.0), uColor, vPosition), 1.0); // 通过mix函数混合两个颜色，达到渐变效果
             }
-            `
+            `,
             });
             model.material = shaderMaterial;
         },
@@ -1078,8 +1015,8 @@ export default {
                     uColor: { value: new THREE.Color(0xffffff) }, // 初始颜色为白色
                     uHeight: { value: model.geometry.boundingBox.getSize(new THREE.Vector3()).y },
                     uFlowColor: {
-                        value: new THREE.Color("#FFFFFF")
-                    }
+                        value: new THREE.Color("#FFFFFF"),
+                    },
                 },
                 vertexShader: `
             uniform float uHeight;
@@ -1112,35 +1049,35 @@ export default {
                 // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
             }
             `,
-                transparent: true
+                transparent: true,
             });
             model.material = shaderMaterial;
         },
         create_avg_traffic_flow_loca() {
             avg_tf_loca = new Loca.Container({
-                map
+                map,
             });
 
             avg_tf_loca.ambLight = {
                 intensity: 0.3,
-                color: "#fff"
+                color: "#fff",
             };
             avg_tf_loca.dirLight = {
                 intensity: 1.2,
                 color: "#fff",
                 target: [0, 1, 0],
-                position: [0, -1, 1]
+                position: [0, -1, 1],
             };
             avg_tf_loca.pointLight = {
                 color: "rgb(100,100,100)",
                 position: [114.2517, 30.552128, 20000],
                 intensity: 1.6,
                 // 距离表示从光源到光照强度为 0 的位置，0 就是光不会消失。
-                distance: 100000
+                distance: 100000,
             };
 
             var geo = new Loca.GeoJSONSource({
-                url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/wh_car.json"
+                url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/wh_car.json",
             });
 
             var ll = new Loca.GridLayer({
@@ -1153,7 +1090,7 @@ export default {
                 shinniness: 0,
                 cullface: "none",
                 depth: true,
-                hasSide: true
+                hasSide: true,
             });
 
             var colors = ["#FAE200", "#D27E37", "#C53634", "#C12B6E", "#A92E9A", "#67238A", "#211A50", "#18244E"].reverse();
@@ -1164,7 +1101,7 @@ export default {
                 radius: 66,
                 gap: 0,
                 altitude: 100,
-                height: function(index, feature) {
+                height: function (index, feature) {
                     var ranks = (feature.coordinates && feature.coordinates.length) || 0;
                     return ranks < 5
                         ? heights[0]
@@ -1182,7 +1119,7 @@ export default {
                         ? heights[6]
                         : heights[7];
                 },
-                topColor: function(index, feature) {
+                topColor: function (index, feature) {
                     var ranks = (feature.coordinates && feature.coordinates.length) || 0;
                     return ranks < 5
                         ? colors[0]
@@ -1200,7 +1137,7 @@ export default {
                         ? colors[6]
                         : colors[7];
                 },
-                sideTopColor: function(index, feature) {
+                sideTopColor: function (index, feature) {
                     var ranks = (feature.coordinates && feature.coordinates.length) || 0;
                     return ranks < 5
                         ? colors[0]
@@ -1218,7 +1155,7 @@ export default {
                         ? colors[6]
                         : colors[7];
                 },
-                sideBottomColor: function(index, feature) {
+                sideBottomColor: function (index, feature) {
                     var ranks = (feature.coordinates && feature.coordinates.length) || 0;
                     return ranks < 5
                         ? colors[0]
@@ -1235,7 +1172,7 @@ export default {
                         : ranks < 100
                         ? colors[6]
                         : colors[7];
-                }
+                },
             });
             avg_tf_loca.add(ll);
 
@@ -1245,13 +1182,13 @@ export default {
                 title: {
                     label: "车辆密度(辆)",
                     fontColor: "rgba(255,255,255,0.4)",
-                    fontSize: "16px"
+                    fontSize: "16px",
                 },
                 style: {
                     backgroundColor: "rgba(255,255,255,0.1)",
                     left: "15px",
                     bottom: "60px",
-                    fontSize: "12px"
+                    fontSize: "12px",
                 },
                 dataMap: [
                     { label: 100, color: colors[7] },
@@ -1261,8 +1198,8 @@ export default {
                     { label: 30, color: colors[3] },
                     { label: 20, color: colors[2] },
                     { label: 10, color: colors[1] },
-                    { label: 5, color: colors[0] }
-                ]
+                    { label: 5, color: colors[0] },
+                ],
             });
             show_average_traffic_flow_exist = true;
             // 控制条
@@ -1272,8 +1209,73 @@ export default {
             // dat.addLight(loca.pointLight, loca, "点光");
             // dat.addLayer(ll, "车辆图层");
         },
-        create_people_out(){
+        create_people_out_loca() {
+            people_out_loca = new Loca.Container({
+                map,
+            });
+            // 呼吸点
+                    var scatter = new Loca.ScatterLayer({
+                        people_out_loca,
+                        zIndex: 10,
+                        opacity: 0.6,
+                        visible: true,
+                        zooms: [2, 22],
+                    });
 
+                    var pointGeo = new Loca.GeoJSONSource({
+                        url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/pulselink-china-city-point.json',
+                    });
+                    scatter.setSource(pointGeo);
+                    scatter.setStyle({
+                        unit: 'meter',
+                        size: [100000, 100000],
+                        borderWidth: 0,
+                        texture: 'https://a.amap.com/Loca/static/loca-v2/demos/images/breath_red.png',
+                        duration: 2000,
+                        animate: true,
+                    });
+                    people_out_loca.add(scatter);
+
+                    // 弧线
+                    var pulseLink = new Loca.PulseLinkLayer({
+                        // loca,
+                        zIndex: 10,
+                        opacity: 1,
+                        visible: true,
+                        zooms: [2, 22],
+                        depth: true,
+                    });
+
+                    var geo = new Loca.GeoJSONSource({
+                        data: {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"type": 0, "ratio": 0.0369, "lineWidthRatio": 1}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.482331, 38.867657]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.035, "lineWidthRatio": 0.9447674418604651}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.190182, 39.125596]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0189, "lineWidthRatio": 0.47674418604651164}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [121.472644, 31.231706]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0167, "lineWidthRatio": 0.41279069767441856}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.280637, 23.125178]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0148, "lineWidthRatio": 0.35755813953488375}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [106.504962, 29.533155]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0147, "lineWidthRatio": 0.35465116279069764}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.884091, 40.811901]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0137, "lineWidthRatio": 0.32558139534883723}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.746262, 23.046237]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0136, "lineWidthRatio": 0.3226744186046511}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [104.065735, 30.659462]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0134, "lineWidthRatio": 0.3168604651162791}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.502461, 38.045474]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0116, "lineWidthRatio": 0.2645348837209302}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.175393, 39.635113]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.011, "lineWidthRatio": 0.24709302325581392}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.767413, 32.041544]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0108, "lineWidthRatio": 0.24127906976744187}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.153576, 30.287459]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0101, "lineWidthRatio": 0.2209302325581395}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [116.857461, 38.310582]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0097, "lineWidthRatio": 0.20930232558139533}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.939152, 40.976204]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0087, "lineWidthRatio": 0.18023255813953484}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.490686, 36.612273]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0081, "lineWidthRatio": 0.1627906976744186}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.665412, 34.757975]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.008, "lineWidthRatio": 0.15988372093023254}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.085947, 22.547]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0077, "lineWidthRatio": 0.1511627906976744}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.619585, 31.299379]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0074, "lineWidthRatio": 0.14244186046511628}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [108.948024, 34.263161]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0074, "lineWidthRatio": 0.14244186046511628}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.000923, 36.675807]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0071, "lineWidthRatio": 0.13372093023255813}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.508851, 37.0682]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0063, "lineWidthRatio": 0.11046511627906977}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.665993, 37.735097]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.006, "lineWidthRatio": 0.10174418604651163}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.355173, 36.082982]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0055, "lineWidthRatio": 0.08720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [116.307428, 37.453968]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0055, "lineWidthRatio": 0.08720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.982279, 28.19409]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0054, "lineWidthRatio": 0.08430232558139536}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.469381, 35.246531]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0053, "lineWidthRatio": 0.08139534883720931}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.107078, 36.70925]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0051, "lineWidthRatio": 0.07558139534883722}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [123.429096, 41.796767]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0049, "lineWidthRatio": 0.06976744186046512}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.184811, 34.261792]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0049, "lineWidthRatio": 0.06976744186046512}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.549248, 37.857014]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0048, "lineWidthRatio": 0.06686046511627905}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.122717, 23.028762]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0048, "lineWidthRatio": 0.06686046511627905}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.540918, 32.999082]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0048, "lineWidthRatio": 0.06686046511627905}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.649653, 33.620357]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0047, "lineWidthRatio": 0.06395348837209303}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.326443, 35.065282]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0047, "lineWidthRatio": 0.06395348837209303}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.301663, 31.574729]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0047, "lineWidthRatio": 0.06395348837209303}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.283042, 31.86119]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0046, "lineWidthRatio": 0.061046511627906974}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.586579, 39.942531]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0044, "lineWidthRatio": 0.05523255813953489}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.434468, 34.663041]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0044, "lineWidthRatio": 0.05523255813953489}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.980367, 36.456013]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0044, "lineWidthRatio": 0.05523255813953489}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [126.642464, 45.756967]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0044, "lineWidthRatio": 0.05523255813953489}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [121.549792, 29.868388]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0043, "lineWidthRatio": 0.05232558139534883}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.883991, 35.302616]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0043, "lineWidthRatio": 0.05232558139534883}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.295259, 40.09031]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0042, "lineWidthRatio": 0.04941860465116278}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [102.712251, 25.040609]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0042, "lineWidthRatio": 0.04941860465116278}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [116.587245, 35.415393]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0041, "lineWidthRatio": 0.04651162790697675}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.352482, 36.103442]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.004, "lineWidthRatio": 0.0436046511627907}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.075031, 32.123274]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.004, "lineWidthRatio": 0.0436046511627907}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.024736, 32.980169]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.004, "lineWidthRatio": 0.0436046511627907}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.298572, 30.584355]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0039, "lineWidthRatio": 0.04069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.650497, 34.437054]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0039, "lineWidthRatio": 0.04069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.940278, 25.85097]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0038, "lineWidthRatio": 0.0377906976744186}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [125.3245, 43.886841]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0037, "lineWidthRatio": 0.034883720930232565}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.670801, 40.818311]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0036, "lineWidthRatio": 0.031976744186046506}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.819729, 32.896969]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0035, "lineWidthRatio": 0.029069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.517973, 36.08415]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0035, "lineWidthRatio": 0.029069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.864608, 32.016212]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0035, "lineWidthRatio": 0.029069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.956806, 42.275317]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0035, "lineWidthRatio": 0.029069767441860465}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.736465, 37.696495]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0034, "lineWidthRatio": 0.026162790697674413}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.003957, 35.022778]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.016974, 37.383542]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [121.391382, 37.539297]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.114543, 41.034126]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.649506, 29.089524]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0033, "lineWidthRatio": 0.023255813953488372}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [106.713478, 26.578343]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.892151, 28.676493]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [108.705117, 34.333439]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.879365, 30.447711]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [109.99029, 39.817179]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0032, "lineWidthRatio": 0.020348837209302327}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.672111, 28.000575]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [108.320004, 22.82402]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [117.129063, 36.194968]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.139998, 33.377631]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.856394, 40.755572]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.412599, 23.079404]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0031, "lineWidthRatio": 0.017441860465116275}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.946973, 31.772752]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.003, "lineWidthRatio": 0.014534883720930232}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.589421, 24.908853]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.003, "lineWidthRatio": 0.014534883720930232}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.132855, 29.37029]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.003, "lineWidthRatio": 0.014534883720930232}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [118.047648, 36.814939]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [119.306239, 26.075302]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.607693, 26.900358]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.041299, 35.768234]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [109.502882, 34.499381]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [115.992811, 29.712034]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0029, "lineWidthRatio": 0.011627906976744179}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.134335, 37.524366]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.341447, 34.797049]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [121.618622, 38.91459]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.826063, 34.022956]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [106.937265, 27.706626]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [87.617733, 43.792818]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [120.750865, 30.762653]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0028, "lineWidthRatio": 0.008720930232558138}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.307718, 33.735241]]}}, {"type": "Feature", "properties": {"type": 3, "ratio": 0.0027, "lineWidthRatio": 0.0058139534883720955}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [103.823557, 36.058039]]}}, {"type": "Feature", "properties": {"type": 4, "ratio": 0.0027, "lineWidthRatio": 0.0058139534883720955}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [109.741193, 38.290162]]}}, {"type": "Feature", "properties": {"type": 5, "ratio": 0.0027, "lineWidthRatio": 0.0058139534883720955}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.23813, 30.326857]]}}, {"type": "Feature", "properties": {"type": 6, "ratio": 0.0026, "lineWidthRatio": 0.0029069767441860417}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.382391, 22.521113]]}}, {"type": "Feature", "properties": {"type": 7, "ratio": 0.0025, "lineWidthRatio": 0}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [112.144146, 32.042426]]}}, {"type": "Feature", "properties": {"type": 0, "ratio": 0.0025, "lineWidthRatio": 0}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [113.113556, 36.191112]]}}, {"type": "Feature", "properties": {"type": 1, "ratio": 0.0025, "lineWidthRatio": 0}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [114.391136, 27.8043]]}}, {"type": "Feature", "properties": {"type": 2, "ratio": 0.0025, "lineWidthRatio": 0}, "geometry": {"type": "LineString", "coordinates": [[114.256148, 30.615884], [111.691347, 29.040225]]}}]},
+                        // url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/data-line-out.json',
+                    });
+
+                    pulseLink.setSource(geo);
+                    pulseLink.setStyle({
+                        unit: 'meter',
+                        dash: [40000, 0, 40000, 0],
+                        lineWidth: function () {
+                            return [20000, 1000];
+                        },
+                        height: function (index, feat) {
+                            return feat.distance / 3 + 10;
+                        },
+                        // altitude: 1000,
+                        smoothSteps: 30,
+                        speed: function (index, prop) {
+                            return 1000 + Math.random() * 200000;
+                        },
+                        flowLength: 100000,
+                        lineColors: function (index, feat) {
+                            return ['rgb(255,228,105)', 'rgb(255,164,105)', 'rgba(1, 34, 249,1)'];
+                        },
+                        maxHeightScale: 0.3, // 弧顶位置比例
+                        headColor: 'rgba(255, 255, 0, 1)',
+                        trailColor: 'rgba(255, 255,0,0)',
+                    });
+                    people_out_loca.add(pulseLink);
+                    show_people_out_exist = true;
         },
         show_road_condition() {
             if (show_road_condition_var) {
@@ -1284,8 +1286,8 @@ export default {
                 show_road_condition_var = true;
             }
         },
-        show_average_traffic_flow(){
-            if(show_average_traffic_flow_exist){
+        show_average_traffic_flow() {
+            if (show_average_traffic_flow_exist) {
                 avg_tf_loca.destroy();
                 show_average_traffic_flow_exist = false;
             } else {
@@ -1300,23 +1302,35 @@ export default {
             }
         },
         show_people_out() {
-            if(show_people_out_exist){
-                loca.destroy();
+            if (show_people_out_exist) {
+                people_out_loca.destroy();
                 show_people_out_exist = false;
             } else {
-                // this.
+                this.create_people_out_loca();
             }
-        }
+        },
+        // 加载动画
+        async map_load_comple() {
+            map.on("complete", function () {
+                setTimeout(() => {
+                    let progressBarBox = document.getElementsByClassName("progress-bar-box")[0];
+                    progressBarBox.classList.add("fade-out");
+                    setTimeout(() => {
+                        progressBarBox.remove();
+                }, 500);
+                }, 3000);
+            });
+        },
     },
     data() {
         return {
             height: {
-                value: 0
+                value: 0,
             },
             color: "#1791fc",
-            opacity: 0
+            opacity: 0,
         };
-    }
+    },
 };
 </script>
 
@@ -1331,16 +1345,35 @@ body,
     position: absolute;
     top: 0%;
 }
-.input-item{
-    margin-right: 60px;
+.input-card {
+    position: absolute;
+    right: 70px;
+    bottom: 10px;
+    z-index: 9999;
     margin-bottom: 5px;
 }
-.input-item button {
+.input-card button {
     margin-right: 8px;
 }
-.input-item button:last-child{
+.input-card button:last-child {
     margin-right: 0px;
 }
+
+.input-item button.btn{
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: white;
+    font-family: 'nav-font';
+    font-weight: 100;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.input-item button.btn:hover{
+    font-weight: 600;
+    background-color: #f0f0f0;
+}
+
 </style>
 
 <style lang="less" scoped></style>

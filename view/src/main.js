@@ -27,6 +27,10 @@ Vue.prototype.$echarts = echarts;
 import "./assets/lib/theme/darkTheme";
 import "./assets/lib/theme/lightTheme";
 
+
+import KProgress from 'k-progress';
+Vue.component('k-progress', KProgress);
+
 Vue.config.productionTip = false;
 
 new Vue({
