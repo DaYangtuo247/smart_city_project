@@ -57,13 +57,6 @@ export default {
         this.initMap();
         this.change();
         // this.clickOn();
-        const timer = setInterval(() =>{
-        if (this.ifUp) {
-          this.percent = this.percent + 10
-          this.percent == 100 ? this.ifUp = false : this.ifUp = true
-        }
-      }, 1000);
-      this.$once('hook:beforeDestroy', () => clearInterval(timer));
     },
     methods: {
         changeTheme() {
@@ -1321,10 +1314,10 @@ export default {
             map.on("complete", function () {
                 setTimeout(() => {
                     let progressBarBox = document.getElementsByClassName("progress-bar-box")[0];
-                    progressBarBox.classList.add("fade-out");
-                    setTimeout(() => {
-                        progressBarBox.remove();
-                }, 500);
+                    if(progressBarBox){
+                        progressBarBox.classList.add("fade-out");
+                        setTimeout(() => {progressBarBox.remove();}, 500);
+                    }
                 }, 3000);
             });
         },
@@ -1336,8 +1329,6 @@ export default {
             },
             color: "#1791fc",
             opacity: 0,
-            percent: 10,
-            ifUp: true
         };
     },
 };

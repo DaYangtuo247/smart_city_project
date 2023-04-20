@@ -31,7 +31,7 @@ export default {
   },
   created() {
     // this.$socket.registerCallBack('hotData', this.getData)
-    this.getData()
+    // this.getData()
   },
   computed: {
     ...mapState(['theme']),
@@ -52,7 +52,9 @@ export default {
   watch: {
     theme() {
       // 销毁当前的图表
-      this.chartInstance.dispose()
+      if(this.chartInstance != null){
+          this.chartInstance.dispose();
+      }
       // 以最新主题初始化图表对象
       this.initChart()
       // 屏幕适配
@@ -88,7 +90,7 @@ export default {
         this.url = url;
         this.tit = '▎商场品牌数据分析';
       }
-      this.getData();
+      this.getData();       
     });
     // this.$socket.send({
     //   action: 'getData',
@@ -165,7 +167,9 @@ export default {
     // 发送请求，获取数据
     async getData() {
       // 销毁原表
-      this.chartInstance.dispose();
+      if(this.chartInstance != null){
+          this.chartInstance.dispose();
+      }
       // 初始化表格
       this.initChart();
       // 检测分辨率，如果触发前后窗口大小不变可不进行
