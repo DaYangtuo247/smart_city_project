@@ -57,6 +57,13 @@ export default {
         this.initMap();
         this.change();
         // this.clickOn();
+        const timer = setInterval(() =>{
+        if (this.ifUp) {
+          this.percent = this.percent + 10
+          this.percent == 100 ? this.ifUp = false : this.ifUp = true
+        }
+      }, 1000);
+      this.$once('hook:beforeDestroy', () => clearInterval(timer));
     },
     methods: {
         changeTheme() {
@@ -1329,6 +1336,8 @@ export default {
             },
             color: "#1791fc",
             opacity: 0,
+            percent: 10,
+            ifUp: true
         };
     },
 };
@@ -1373,7 +1382,6 @@ body,
     font-weight: 600;
     background-color: #f0f0f0;
 }
-
 </style>
 
 <style lang="less" scoped></style>

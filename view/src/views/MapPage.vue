@@ -8,7 +8,6 @@
 import Map from "components/Map";
 
 export default {
-    // 商家地图分布图表
     name: "MapPage",
     components: {
         "single-map": Map

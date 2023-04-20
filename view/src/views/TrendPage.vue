@@ -8,7 +8,6 @@
 import Trend from "components/Trend";
 
 export default {
-    // trend 销量趋势
     name: "TrendPage",
     components: {
         Trend

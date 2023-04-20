@@ -86,7 +86,7 @@
       this.initChart()
       this.getData()
       EventBus.$on('change-data-url-lib-p-w-e', (url) => {
-        if (this.url === url) 
+        if (this.url === url)
         {
           this.url = '/trend';
         }

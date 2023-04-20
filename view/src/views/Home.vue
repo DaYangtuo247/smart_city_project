@@ -31,14 +31,14 @@
         <div class="screen-body">
             <section class="screen-left">
                 <div id="left-top" :class="{ fullscreen: fullScreenStatus.trend }">
-                    <!-- 销量趋势图表 -->
+                    <!-- 城市相关信息趋势图 -->
                     <Trend ref="trend"></Trend>
                     <div class="resize">
                         <span @click="changeSize('trend')" :class="['iconfont', fullScreenStatus.trend ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
                     </div>
                 </div>
                 <div id="left-bottom" :class="{ fullscreen: fullScreenStatus.seller }">
-                    <!-- 商家销售金额图表 -->
+                    <!-- 人流量统计图 -->
                     <Seller ref="seller"></Seller>
                     <div class="resize">
                         <span @click="changeSize('seller')" :class="['iconfont', fullScreenStatus.seller ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div id="middle-bottom" :class="{ fullscreen: fullScreenStatus.rank }">
-                    <!-- 地区销量排行图表 -->
+                    <!-- UrbanGPT -->
                     <Rank ref="rank"></Rank>
                     <div class="resize">
                         <span @click="changeSize('rank')" :class="['iconfont', fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
@@ -63,14 +63,14 @@
             </section>
             <section class="screen-right">
                 <div id="right-top" :class="{ fullscreen: fullScreenStatus.hot }">
-                    <!-- 热销商品占比图表 -->
+                    <!-- 城市交通分析 -->
                     <Hot ref="hot"></Hot>
                     <div class="resize">
                         <span @click="changeSize('hot')" :class="['iconfont', fullScreenStatus.hot ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
                     </div>
                 </div>
                 <div id="right-bottom" :class="{ fullscreen: fullScreenStatus.stock }">
-                    <!-- 库存销量分析图表 -->
+                    <!-- 城市空气质量分析 -->
                     <Stock ref="stock"></Stock>
                     <div class="resize">
                         <span @click="changeSize('stock')" :class="['iconfont', fullScreenStatus.stock ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
@@ -164,16 +164,6 @@ export default {
             this.$nextTick(() => {
                 this.$refs[chartName].screenAdapter();
             });
-
-            // 一端操作多端同步效果
-            // 将事件发送给服务端，让服务端广播事件 true全屏，false取消全屏
-            // const targetValue = !this.fullScreenStatus[chartName]
-            // this.$socket.send({
-            //   action: 'fullScreen',
-            //   socketType: 'fullScreen',
-            //   chartName: chartName,
-            //   value: targetValue,
-            // })
         },
         // 服务端广播全屏事件的客户端响应
         recvData(data) {
@@ -317,15 +307,11 @@ export default {
         margin-left: 1.6%;
         margin-right: 1.6%;
         #middle-top {
-            // 下面注释已经不适用，因为已经将地图默认全屏了
-            // 注意，地图长宽比例为 192/95 即可修正模型偏移（只适用于1920*1080分辨率显示屏）
             width: 100%;
             height: 61%;
             position: relative;
         }
         #middle-bottom {
-            // 因为地图默认全屏，所以这里的高度需要根据地图的高度进行调整
-            // margin-top: 452px;
             margin-top: 25px;
             width: 100%;
             height: 23%;

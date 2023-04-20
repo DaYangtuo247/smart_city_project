@@ -7,7 +7,6 @@
 <script>
 import Seller from "components/Seller";
 export default {
-    // Seller 商家销量
     name: "SellerPage",
     components: {
         seller: Seller
