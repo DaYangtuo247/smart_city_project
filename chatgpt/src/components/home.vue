@@ -85,7 +85,7 @@ let isTalking = ref(false);
 let messageContent = ref("");
 const chatListDom = ref<HTMLDivElement>();
 const decoder = new TextDecoder("utf-8");
-const roleAlias = { user: "ME", assistant: "ChatGPT", system: "System" };
+const roleAlias = { user: "ME", assistant: "UrbanGPT", system: "System" };
 let AiTheme = "dark";
 const messageList = ref<ChatMessage[]>([
 	{
