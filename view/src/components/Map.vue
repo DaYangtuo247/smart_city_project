@@ -1001,7 +1001,7 @@ export default {
                     distColor = mix(uFlowColor, distColor, 1.0-dIndex);
                 //   distColor = uFlowColor;
                 }
-                gl_FragColor = vec4(distColor, 0.8);
+                gl_FragColor = vec4(distColor, 1);
                 // gl_FragColor = vec4(mix(vec3(0.97, 0.99, 1.0), uColor, vPosition), 1.0); // 通过mix函数混合两个颜色，达到渐变效果
             }
             `,
@@ -1049,7 +1049,7 @@ export default {
                 // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
             }
             `,
-                transparent: true,
+                transparent: false,
             });
             model.material = shaderMaterial;
         },
@@ -1275,6 +1275,7 @@ export default {
                         trailColor: 'rgba(255, 255,0,0)',
                     });
                     people_out_loca.add(pulseLink);
+                    people_out_loca.animate.start();
                     show_people_out_exist = true;
         },
         show_road_condition() {
