@@ -88,6 +88,19 @@ export default {
       }
       this.getData();
     });
+    EventBus.$on('change-data-url-traffic-rank', (url) => {
+      if (this.url === url) 
+      {
+        this.url = '/seller';
+        this.tit = '▎周均人流量统计（千人次/周）';
+      }
+      else 
+      {
+        this.url = url;
+        this.tit = '▎交通枢纽人流量来源分析（人次）'
+      }
+      this.getData();
+    });
     this.screenAdapter()
     window.addEventListener('resize', this.screenAdapter)
   },

@@ -92,6 +92,19 @@ export default {
       }
       this.getData();       
     });
+    EventBus.$on('change-data-url-triffic-chat', (url) => {
+      if (this.url === url) 
+      {
+        this.url = '/hotproduct';
+        this.tit = '▎城市交通运力分析';
+      }
+      else 
+      {
+        this.url = url;
+        this.tit = '▎交通枢纽事件分析';
+      }
+      this.getData();       
+    });
     // this.$socket.send({
     //   action: 'getData',
     //   socketType: 'hotData',

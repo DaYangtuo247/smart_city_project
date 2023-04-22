@@ -1,0 +1,123 @@
+[
+    {
+      "name": "不同交通工具的占比（辆）",
+      "children": [
+        {
+          "name": "小型轿车",
+          "value": 3297,
+          "children": [
+            {
+              "name": "小型轿车",
+              "value": 3297
+            }
+          ]
+        },
+        {
+          "name": "公交车",
+          "value": 907,
+          "children": [
+            {
+              "name": "公交车",
+              "value": 907
+            }
+          ]
+        },
+        {
+          "name": "SUV",
+          "value": 2987,
+          "children": [
+            {
+              "name": "SUV",
+              "value": 2987
+            }
+          ]
+        },
+        {
+          "name": "自行车",
+          "value": 683,
+          "children": [
+            {
+                "name": "自行车",
+                "value": 683
+            }
+          ]
+        },
+        {
+          "name": "货车",
+          "value": 127,
+          "children": [
+            {
+              "name": "货车",
+              "value": 127
+            }
+          ]
+        },
+        {
+            "name": "出租车",
+            "value": 877,
+            "children": [
+              {
+                "name": "出租车",
+                "value": 877
+              }
+            ]
+        }
+      ]
+    },
+    {
+      "name": "发生交通事故的原因（次/月）",
+      "children": [
+        {
+          "name": "司机疏忽",
+          "value": 21,
+          "children": [
+            {
+                "name": "司机疏忽",
+                "value": 21
+            }
+          ]
+        },
+        {
+          "name": "未遵守交通信号",
+          "value": 15,
+          "children": [
+            {
+                "name": "未遵守交通信号",
+                "value": 15
+            }
+          ]
+        },
+        {
+          "name": "恶劣天气",
+          "value": 8,
+          "children": [
+            {
+                "name": "恶劣天气",
+                "value": 8
+            }
+          ]
+        },
+        {
+          "name": "道路状况",
+          "value": 7,
+          "children": [
+            {
+                "name": "道路状况",
+                "value": 7
+            }
+          ]
+        },
+        {
+          "name": "其他",
+          "value": 3,
+          "children": [
+            {
+                "name": "其他",
+                "value": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  

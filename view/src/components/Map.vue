@@ -22,7 +22,7 @@ import Stats from "three/examples/jsm/libs/stats.module"; // 性能监视器
 import EventBus from "@/event-bus";
 //  gltf-pipeline 压缩gltf文件失败，会导致精度丢失，但仍保留该注释，以保日后需要
 // import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-// let height = 0.0;
+// let height = 0.0;    
 let camera; //相机
 let scene; //场景
 let renderer;
@@ -175,6 +175,12 @@ export default {
                         imageSize: new AMap.Size(256, 256), // 图标所用图片的大小
                     });
 
+                    var big_icon = new AMap.Icon({
+                        image: "none.png", // 图标的图片
+                        size: new AMap.Size(200, 200), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
+                        imageSize: new AMap.Size(256, 256), // 图标所用图片的大小
+                    });
+
                     // 图书馆的标记点
                     var marker_lib = new AMap.Marker({
                         map: map,
@@ -187,6 +193,13 @@ export default {
                         map: map,
                         icon: icon,
                         position: [114.237741, 30.650317],
+                    });
+
+                    // 交通枢纽的标记点
+                    var marker_traffic = new AMap.Marker({
+                        map: map,
+                        icon: big_icon,
+                        position: [ 114.270521,30.618645 ],
                     });
 
                     // 图书馆鼠标点击范围的设置
@@ -263,6 +276,7 @@ export default {
 
                     marker_lib.on("click", showInfoClick);
                     marker_market.on("click", showInfoClick1);
+                    marker_traffic.on("click", showInfoClick2);
 
                     // function clickOn() {
                     //     // log.success("绑定事件!");
@@ -328,6 +342,20 @@ export default {
                             st1 = false;
                             map.remove(pol_market);
                         }
+                    }
+
+                    // 交通枢纽的触发事件
+                    function showInfoClick2(e) {
+                        // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
+                        // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
+                        EventBus.$emit("change-data-url-triffic", "/traffic_car_qushi");
+                        // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
+                        EventBus.$emit("change-data-url-triffic-chat", "/traffic_pie_chart");
+                        // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源
+                        EventBus.$emit("change-data-url-traffic-rank", "/traffic_rank");
+                        // 触发一个名为'change-data-url-huan'的自定义事件，用于更换环形图的数据源
+                        EventBus.$emit("change-data-url-traffic-huan", "/traffic_huan");
+                        // change_polygon1();
                     }
 
                     var loca = new Loca.Container({
@@ -1049,7 +1077,7 @@ export default {
                 // gl_FragColor = vec4(mix(vec3(0.0, 0.4, 1.0), uColor, vPosition), 0.9); // 通过mix函数混合两个颜色，达到渐变效果
             }
             `,
-                transparent: false,
+                transparent: true,
             });
             model.material = shaderMaterial;
         },

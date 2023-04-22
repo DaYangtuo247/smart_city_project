@@ -104,6 +104,17 @@
         }
         this.getData();
       });
+      EventBus.$on('change-data-url-triffic', (url) => {
+        if (this.url === url) 
+        {
+          this.url = '/trend';
+        }
+        else 
+        {
+          this.url = url;
+        }
+        this.getData();
+      });
       // websocket 请求数据
       // this.$socket.send({
       //   action: 'getData',
