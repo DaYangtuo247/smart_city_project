@@ -1378,7 +1378,7 @@ body,
     position: absolute;
     right: 70px;
     bottom: 10px;
-    z-index: 9999;
+    z-index: 999;
     margin-bottom: 5px;
 }
 .input-card button {
