@@ -10,26 +10,40 @@
     <title>智慧城市大屏</title>
 </head>
 
-<body style="background-color: #303030;">
+<body style="background-color: #374151;">
     <div class="progress-bar-box">
         <img src="logo.png" alt=""
             style="width: 200px;height: auto;-o-object-fit: cover;object-fit: cover;left: 50%;position: absolute;top: 55%;transform: translate(-50%, -90%);margin: auto;">
-        <h1>here is the title</h1>
         <div class="container">
             <div class="progress progress-striped">
                 <div class="progress-bar"> </div>
             </div>
+            <div class="loading" style="color: transparent;">加载中···</div>
         </div>
+        <div class="author" style="color: transparent;">here is the author</div>
     </div>
     <div id="app"></div>
 </body>
 
 <style>
-    h1 {
+    .progress-bar-box .loading {
         position: absolute;
-        top: 65%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        color: #707070 !important;
+        font-size: 14px;
+        font-family: 'nav-font';
+        font-weight: 200;
+        transform: translate(-40%, 5px);
+    }
+
+    .author {
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translate(-50%, -8px);
+        font-size: 16px;
+        font-family: sans-serif;
+        color: #707070 !important;
     }
 </style>
 
