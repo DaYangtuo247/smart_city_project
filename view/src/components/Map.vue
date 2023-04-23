@@ -1389,18 +1389,23 @@ body,
 }
 
 .input-item button.btn{
-    border: 1px solid #eee;
+    border: 1px solid #2fa1d636;
     border-radius: 4px;
-    background-color: white;
     font-family: 'nav-font';
     font-weight: 100;
     padding: 4px 10px;
+    background-color: transparent;
+    backdrop-filter: blur(6px);
     cursor: pointer;
+    width: 76px;
+    color: #5c5c5c;
+    height: 26px;
 }
 
 .input-item button.btn:hover{
     font-weight: 600;
-    background-color: #f0f0f0;
+    color: #9a9a9a;
+    background-color: #ffffff17;
 }
 </style>
 
