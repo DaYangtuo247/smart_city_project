@@ -4,7 +4,7 @@
 			class="flex flex-nowrap fixed w-full items-baseline top-0 px-6 py-4 bg-gray-100 dark:bg-dark_bg_nav"
             style="height: 74px;"
 		>
-			<div class="text-2xl font-bold dark:text-dark_text_title1_color">
+			<div class="text-2xl font-bold dark:text-dark_text_title1_color" @click="checkTheme()" title="切换主题">
 				UrbanGPT
 			</div>
 			<div
@@ -64,7 +64,6 @@
 				<button class="btn" :disabled="isTalking" @click="sendOrSave()">
 					{{ isConfig ? "保存" : "发送" }}
 				</button>
-				<button @click="checkTheme()">切换主题</button>
 			</div>
 		</div>
 	</div>
