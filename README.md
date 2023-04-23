@@ -1,14 +1,26 @@
 ## 技术栈
 
-该项目主要使用 `Vue`搭配`Echarts`采用组件化的方式开发完成,此外项目中陆续使用有
+该项目主要使用`Vue`搭配`Echarts`采用组件化的方式开发完成,此外项目中陆续使用有
 
 - VueRouter
-- VueX
+
+- Vue
+
 - WebSocket
+
 - axios
+
 - webpack
+
 - ES6+
+
 - less
+
+- Tailwind
+
+- gaode jsapi/loca
+
+    
 
 ## 如何运行该项目？
 
@@ -34,7 +46,7 @@ node app.js
 ```
 
 ### 启动ai
-    
+
  ```bash
  cd chatgpt
  npm install 

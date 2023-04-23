@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col h-screen dark:bg-dark_bg">
+	<div class="flex flex-col dark:bg-dark_bg">
 		<div
 			class="flex flex-nowrap fixed w-full items-baseline top-0 px-6 py-4 bg-gray-100 dark:bg-dark_bg_nav"
             style="height: 74px;"
@@ -20,7 +20,7 @@
 			</div> -->
 		</div>
 
-		<div class="flex-1 mx-2 mt-20 mb-2" ref="chatListDom">
+		<div class="flex-1 mx-2 mt-20 mb-2" ref="chatListDom" style="min-height: 80vh;">
 			<div
 				class="group flex flex-col px-4 py-3 hover:bg-slate-100 dark:hover:bg-dark_content_hover rounded-lg"
 				v-for="item of messageList.filter((v) => v.role !== 'system')"
