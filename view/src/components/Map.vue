@@ -69,9 +69,9 @@ export default {
         },
         initMap() {
             // 添加性能监视器
-            var stats = new Stats();
-            stats.showPanel(0);
-            document.body.appendChild(stats.dom);
+            // var stats = new Stats();
+            // stats.showPanel(0);
+            // document.body.appendChild(stats.dom);
             AMapLoader.load({
                 key: "283d29d48a72af6b61305c99b1f8638c", // 申请好的Web端开发者Key
                 version: "2.0",
@@ -139,7 +139,7 @@ export default {
                         },
                         render: () => {
                             // 更新性能监视器数据
-                            stats.update();
+                            // stats.update();
                             //重新设置模型大小，解决地图漂移的问题
                             var map_father_box = document.querySelector(".amap-layer");
                             // 确保获取到地图父盒子
