@@ -20,7 +20,7 @@
 			</div> -->
 		</div>
 
-		<div class="flex-1 mx-2 mt-20 mb-2" ref="chatListDom" style="min-height: 80vh;">
+		<div class="flex-1 mx-2 mt-20 mb-2" ref="chatListDom" style="min-height: 75vh;">
 			<div
 				class="group flex flex-col px-4 py-3 hover:bg-slate-100 dark:hover:bg-dark_content_hover rounded-lg"
 				v-for="item of messageList.filter((v) => v.role !== 'system')"

@@ -218,12 +218,12 @@ export default {
     },
     // 不同分辨率的响应式
     screenAdapter() {
-      this.titleFontSize = (this.$refs.hotRef.offsetWidth / 100) * 3.6
+      this.titleFontSize = (this.$refs.hotRef.offsetWidth / 100) * 2.8
 
       const adapterOption = {
         title: {
           textStyle: {
-            fontSize: this.titleFontSize * 1.2,
+            fontSize: this.titleFontSize * 1.6,
           },
         },
         legend: {
@@ -232,13 +232,13 @@ export default {
           // 图例的间隔
           itemGap: this.titleFontSize / 2,
           textStyle: {
-            fontSize: this.titleFontSize / 1.2,
+            fontSize: this.titleFontSize / 0.8,
           },
         },
         series: [
           {
             // 饼图的大小 半径
-            radius: this.titleFontSize * 4.5,
+            radius: this.titleFontSize * 5,
             // 控制饼图的位置 x,y
             center: ['50%', '60%'],
           },

@@ -1407,13 +1407,13 @@ body,
     backdrop-filter: blur(6px);
     cursor: pointer;
     width: 76px;
-    color: #5c5c5c;
+    color: #ffffffc4;
     height: 26px;
 }
 
 .input-item button.btn:hover{
     font-weight: 600;
-    color: #9a9a9a;
+    color: #ffffff;
     background-color: #ffffff17;
 }
 </style>
