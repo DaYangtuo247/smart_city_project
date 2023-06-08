@@ -3,78 +3,43 @@
         <header class="screen-header">
             <div>
                 <img v-show="theme == 'darkTheme'" src="~@/assets/images/header_border_dark.png" alt="" />
-                <img v-show="theme != 'darkTheme'" src="~@/assets/images/header_border_light.png" alt="" />
             </div>
             <span class="title">智慧城市</span>
             <div class="title-right">
                 <!-- 打开天气插件会导致地图缩放和无法加载模型，尚不清楚原因 -->
                 <!-- <a href="https://www.qweather.com/" target="_blank" class="weather-plug"><div id="he-plugin-simple"></div></a> -->
-                <img
-                    v-show="theme == 'darkTheme'"
-                    src="~@/assets/images/qiehuan_dark.png"
-                    class="qiehuan"
-                    @click="handleChangeTheme"
-                    alt="切换主题"
-                    title="切换主题"
-                />
-                <img
-                    v-show="theme != 'darkTheme'"
-                    src="~@/assets/images/qiehuan_light.png"
-                    class="qiehuan"
-                    @click="handleChangeTheme"
-                    alt="切换主题"
-                    title="切换主题"
-                />
                 <div class="datetime">{{ systemDateTime }}</div>
             </div>
         </header>
         <div class="screen-body">
             <section class="screen-left">
-                <div id="left-top" :class="{ fullscreen: fullScreenStatus.trend }">
+                <div id="left-top">
                     <!-- 城市相关信息趋势图 -->
                     <Trend ref="trend"></Trend>
-                    <div class="resize">
-                        <span @click="changeSize('trend')" :class="['iconfont', fullScreenStatus.trend ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
-                    </div>
                 </div>
-                <div id="left-bottom" :class="{ fullscreen: fullScreenStatus.seller }">
+                <div id="left-bottom">
                     <!-- 人流量统计图 -->
                     <Seller ref="seller"></Seller>
-                    <div class="resize">
-                        <span @click="changeSize('seller')" :class="['iconfont', fullScreenStatus.seller ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
-                    </div>
                 </div>
             </section>
             <section class="screen-middle">
-                <div id="middle-top" :class="{ fullscreen: fullScreenStatus.map }">
+                <div id="middle-top">
                     <!-- 中心地图 -->
                     <single-map ref="map"></single-map>
-                    <div class="resize">
-                        <span @click="changeSize('map')" :class="['iconfont', fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
-                    </div>
                 </div>
-                <div id="middle-bottom" :class="{ fullscreen: fullScreenStatus.rank }">
+                <div id="middle-bottom">
                     <!-- UrbanGPT -->
                     <Rank ref="rank"></Rank>
-                    <div class="resize">
-                        <span @click="changeSize('rank')" :class="['iconfont', fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
-                    </div>
                 </div>
             </section>
             <section class="screen-right">
-                <div id="right-top" :class="{ fullscreen: fullScreenStatus.hot }">
+                <div id="right-top">
                     <!-- 城市交通分析 -->
                     <Hot ref="hot"></Hot>
-                    <div class="resize">
-                        <span @click="changeSize('hot')" :class="['iconfont', fullScreenStatus.hot ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
-                    </div>
                 </div>
-                <div id="right-bottom" :class="{ fullscreen: fullScreenStatus.stock }">
+                <div id="right-bottom">
                     <!-- 城市空气质量分析 -->
                     <Stock ref="stock"></Stock>
-                    <div class="resize">
-                        <span @click="changeSize('stock')" :class="['iconfont', fullScreenStatus.stock ? 'icon-compress-alt' : 'icon-expand-alt']"></span>
-                    </div>
                 </div>
             </section>
         </div>
@@ -82,16 +47,14 @@
 </template>
 
 <script>
-import Hot from "@/components/Hot.vue";
-import Map from "@/components/Map.vue";
-import Rank from "@/components/Rank.vue";
-import Seller from "@/components/Seller.vue";
-import Stock from "@/components/Stock.vue";
-import Trend from "@/components/Trend.vue";
+import Hot from "@/components/Hot";
+import Map from "@/components/Map";
+import Rank from "@/components/Rank";
+import Seller from "@/components/Seller";
+import Stock from "@/components/Stock";
+import Trend from "@/components/Trend";
 
 import { mapState } from "vuex";
-// 导入自己定义的主题工具函数 用于返回不同主题下的配置对象
-import { getThemeValue } from "utils/theme_utils";
 
 export default {
     name: "ScreenPage",
@@ -105,15 +68,6 @@ export default {
     },
     data() {
         return {
-            // 各组件是否全屏状态
-            fullScreenStatus: {
-                trend: false,
-                seller: false,
-                map: false,
-                rank: false,
-                hot: false,
-                stock: false
-            },
             // 当前的系统时间
             systemDateTime: null,
             // 用于保存当前系统日期的定时器id
@@ -128,26 +82,8 @@ export default {
         this.currentTime();
     },
     computed: {
-        ...mapState(["theme"]),
-        // 头部的边框路径
-        headerSrc() {
-            return "/static/img/" + getThemeValue(this.theme).headerBorderSrc;
-        },
-        // 主题图片的路径
-        themeSrc() {
-            return "/static/img/" + getThemeValue(this.theme).themeSrc;
-        },
-        containerStyle() {
-            return {
-                backgroundColor: getThemeValue(this.theme).backgroundColor,
-                color: getThemeValue(this.theme).titleColor
-            };
-        },
-        titleColor() {
-            return {
-                color: getThemeValue(this.theme).titleColor
-            };
-        }
+        
+        
     },
     destroyed() {
         // 组件销毁时，销毁事件
@@ -156,15 +92,6 @@ export default {
         clearInterval(this.timerID);
     },
     methods: {
-        // 监听全屏事件
-        changeSize(chartName) {
-            // 1.改变fullScreenStatus
-            this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName];
-            // 2.手动调用每个图表中的 screenAdapter 触发响应式
-            this.$nextTick(() => {
-                this.$refs[chartName].screenAdapter();
-            });
-        },
         // 服务端广播全屏事件的客户端响应
         recvData(data) {
             // 取出是那一个图表进行切换
@@ -172,49 +99,10 @@ export default {
             // 判断切换成什么类型[true全屏，false取消全屏]
             const targetValue = data.value;
 
-            this.fullScreenStatus[chartName] = targetValue;
             this.$nextTick(() => {
                 this.$refs[chartName].screenAdapter();
             });
         },
-        // 主题切换事件
-        handleChangeTheme() {
-            //切换地图主题
-            this.$store.commit("changeTheme");
-            // 切换AI主题
-            // if (this.theme == "darkTheme") {
-            //     const myAi = document.getElementById("myAI");
-            //     if (myAi) {
-            //         myAi.classList.add("dark");
-            //         const items = myAi.getElementsByTagName("li");
-            //         for (let i = 0; i < items.length; i++) {
-            //             items[i].style.color = "white";
-            //         }
-            //     }
-            //     console.log("ai 黑");
-            // } else {
-            //     const myAi = document.getElementById("myAI");
-            //     if (myAi) {
-            //         myAi.classList.remove("dark");
-            //         const items = myAi.getElementsByTagName("li");
-            //         for (let i = 0; i < items.length; i++) {
-            //             items[i].style.color = "#6b7280";
-            //         }
-            //     }
-            //     console.log("ai 白");
-            // }
-
-            // this.$socket.send({
-            //   action: 'themeChange',
-            //   socketType: 'themeChange',
-            //   chartName: '',
-            //   value: '',
-            // })
-        },
-        // 接收到服务器切换主题事件
-        // recvThemeChange() {
-        //   this.$store.commit('changeTheme')
-        // },
         currentTime() {
             this.systemDateTime = new Date().toLocaleString();
 

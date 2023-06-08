@@ -11,11 +11,6 @@ import "./assets/css/global.less";
 // 引入字体文件
 import "./assets/font/iconfont.css";
 
-// 引入 socket_service
-// import SocketService from './utils/socket_service'
-// SocketService.Instance.connect()
-// Vue.prototype.$socket = SocketService.Instance
-
 // axios 配置接口默认路径
 axios.defaults.baseURL = "http://127.0.0.1:8080/api";
 
@@ -25,7 +20,6 @@ Vue.prototype.$http = axios;
 Vue.prototype.$echarts = echarts;
 // 引入主题
 import "./assets/lib/theme/darkTheme";
-import "./assets/lib/theme/lightTheme";
 
 Vue.config.productionTip = false;
 

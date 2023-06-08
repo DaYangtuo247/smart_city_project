@@ -6,7 +6,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { getThemeValue } from 'utils/theme_utils'
 import EventBus from '@/event-bus';
 
 export default {
@@ -36,7 +35,7 @@ export default {
   computed: {
     ...mapState(['theme']),
     axisPointerColor() {
-      return getThemeValue(this.theme).sellerAxisPointerColor
+    //   return getThemeValue(this.theme).sellerAxisPointerColor
     },
   },
   watch: {

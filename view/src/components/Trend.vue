@@ -23,7 +23,6 @@
   // 并且colorArr1和colorArr2的值的个数要和图例的个数相同
   
   import { mapState } from 'vuex'
-  import { getThemeValue } from 'utils/theme_utils'
   import EventBus from '@/event-bus';
   
   export default {
@@ -66,7 +65,7 @@
       comStyle() {
         return {
           fontSize: this.titleFontSize + 'px',
-          color: getThemeValue(this.theme).titleColor
+        //   color: getThemeValue(this.theme).titleColor
         }
       }
     },

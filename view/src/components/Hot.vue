@@ -9,7 +9,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { getThemeValue } from 'utils/theme_utils'
 import _ from 'lodash'
 import EventBus from '@/event-bus';
 
@@ -41,11 +40,11 @@ export default {
     },
     themeStyle() {
       if (!this.titleFontSize) {
-        return { color: getThemeValue(this.theme).titleColor }
+        // return { color: getThemeValue(this.theme).titleColor }
       }
       return {
         fontSize: this.titleFontSize + 'px',
-        color: getThemeValue(this.theme).titleColor,
+        // color: getThemeValue(this.theme).titleColor,
       }
     },
   },
