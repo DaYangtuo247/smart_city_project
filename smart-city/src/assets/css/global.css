@@ -1,11 +1,54 @@
-html,
+/* 重置常用元素的默认样式 */
 body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+dl,
+dd,
+ol,
+ul,
+figure,
+fieldset,
+legend,
+button,
+input,
+textarea,
+select {
+    margin: 0;
+    padding: 0;
+}
+
+/* 重置标题的字体样式和间距 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* 重置列表样式 */
+ul,
+ol {
+    list-style: none;
+}
+
+/* 重置超链接样式 */
+a {
+    text-decoration: none;
+}
+
 #app {
     width: 100%;
     height: 100%;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
 }
 
 .container {
@@ -13,13 +56,6 @@ body,
     height: 100%;
     overflow: hidden;
     position: relative;
-}
-
-/* 地图logo隐藏 */
-.amap-logo *,
-.amap-copyright *,
-.amap-copyright {
-    display: none !important;
 }
 
 @font-face {
@@ -45,7 +81,6 @@ body {
     z-index: 9999999999999;
     left: 50%;
     top: 50%;
-    /* background-color: #303030; */
     background-color: #374151;
     transform: translate(-50%, -50%);
 }

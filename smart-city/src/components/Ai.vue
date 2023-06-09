@@ -12,10 +12,8 @@ export default {
     },
     methods: {
         //3.定义一个init函数，通过设置detailVisible值为true来让弹窗弹出，这个函数会在父组件的方法中被调用
-        init(data) {
+        init() {
             this.detailVisible = true;
-            //data是父组件弹窗传递过来的值，我们可以打印看看
-            console.log(data);
         },
     },
 };
@@ -24,11 +22,12 @@ export default {
 <style>
 .wind {
     position: absolute;
-    width: 200px;
-    height: 200px;
+    width: 440px;
+    height: 700px;
     background: white;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    right: 105px;
+    bottom: 150px;
+    border-radius: 30px;
+    box-shadow: 0px 0px 10px #1972f5;
 }
 </style>

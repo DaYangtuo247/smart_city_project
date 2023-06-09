@@ -1,0 +1,120 @@
+header {
+    position: absolute;
+    z-index: 999999;
+    width: 100%;
+}
+header .header-bg {
+    width: 100%;
+    user-select: none;
+}
+header .nav-left {
+    position: absolute;
+    font-family: "Alibaba";
+    left: 16px;
+    top: 18px;
+    height: 40px;
+    color: white;
+}
+
+header .nav-left li {
+    float: left;
+    line-height: 40px;
+    height: 40px;
+}
+header .nav-left li:nth-child(n + 2) {
+    border-right: 1px solid #7a7a7a;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+header .nav-left li p.head {
+    line-height: 0;
+    font-size: 10px;
+    margin-top: 10px;
+    text-align: left;
+    color: #7a7a7a;
+}
+
+header .nav-left li p.content {
+    font-size: 14px;
+    margin-top: 0px;
+    text-align: right;
+}
+
+header .nav-left img {
+    width: 46px;
+}
+
+header .nav-left span {
+    line-height: 50px;
+}
+
+header .nav-right {
+    font-family: "Alibaba";
+    position: absolute;
+    right: 35px;
+    top: 18px;
+    color: white;
+}
+
+header .date {
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+header .time {
+    font-size: 20px;
+}
+
+.bottom-bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    user-select: none;
+    margin-left: -12px;
+}
+
+.ai-btn {
+    position: absolute;
+    right: 50px;
+    bottom: 100px;
+    width: 60px;
+    height: 60px;
+    z-index: 999999;
+    color: white;
+    border-radius: 50%;
+    background-color: #1972f5;
+    box-shadow: 0px 0px 10px #1972f5;
+    user-select: none;
+}
+
+.ai-btn img {
+    width: 20px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.ai-image {
+    opacity: 0;
+    transform-origin: center;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    transition: transform 1s, opacity 0.5s;
+}
+
+.ai-image.rotate {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}

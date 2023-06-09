@@ -5,6 +5,24 @@
             <div>
                 <img src="~@/assets/images/header-bg.png" alt="" class="header-bg" />
             </div>
+            <div class="nav-left" v-if="weatherData">
+                <ul>
+                    <li><img :src="`/smart-city/src/assets/images/weather/${weatherData.lives[0].weather}.png`" alt="" /></li>
+                    <li class="temperature">{{ weatherData.lives[0].temperature }}°C</li>
+                    <li>
+                        <p class="head">风向描述</p>
+                        <p class="content">{{ weatherData.lives[0].winddirection }}</p>
+                    </li>
+                    <li>
+                        <p class="head">风力级别</p>
+                        <p class="content">{{ weatherData.lives[0].windpower }}</p>
+                    </li>
+                    <li>
+                        <p class="head">空气湿度</p>
+                        <p class="content">{{ weatherData.lives[0].humidity }}</p>
+                    </li>
+                </ul>
+            </div>
             <div class="nav-right">
                 <div>
                     <span class="date">{{ systemTime.date }}</span
@@ -12,8 +30,17 @@
                 </div>
             </div>
         </header>
-        <button @click="showAiWindow('父组件')" class="ai-btn">Ai</button>
-        <Ai v-if="AiVisiable" ref="ai"></Ai>
+        <div @click="showAiWindow()" class="ai-btn">
+            <transition name="fade">
+                <span v-if="!AiVisible">
+                    <img src="~@/assets/images/AI.png" alt="" />
+                </span>
+                <span v-else>
+                    <img :class="{ rotate: isRotated }" class="ai-image" src="/smart-city/src/assets/images/close.png" alt="" />
+                </span>
+            </transition>
+        </div>
+        <Ai v-if="AiVisible" ref="ai"></Ai>
         <img src="~@/assets/images/bottom-bg.png" alt="" class="bottom-bg" />
     </div>
 </template>
@@ -21,17 +48,20 @@
 <script>
 import Map from "components/Map.vue";
 import Ai from "components/Ai.vue";
+import axios from "axios";
 
 export default {
     name: "ScreenPage",
     components: {
         Map: Map,
         Ai: Ai,
+        weatherData: null,
     },
     data() {
         return {
             // AI窗口的可见性
-            AiVisiable: false,
+            AiVisible: false, // 控制显示AI文字还是图片
+            isRotated: false, // 控制图片旋转
             // 当前的系统时间
             systemDateTime: null,
             // 用于保存当前系统日期的定时器id
@@ -45,6 +75,7 @@ export default {
     },
     mounted() {
         this.dateFormat();
+        this.getWeacher();
         this.systemTime.timer = setInterval(() => {
             this.dateFormat();
         }, 1000);
@@ -53,16 +84,9 @@ export default {
         this.dataDestroy();
     },
     methods: {
-        showAiWindow(data) {
-            if (this.AiVisiable == true) {
-                this.AiVisiable = false;
-            } else {
-                this.AiVisiable = true;
-            }
-            this.$nextTick(() => {
-                //data是传递给弹窗页面的值
-                this.$refs.dialog.init(data);
-            });
+        showAiWindow() {
+            this.AiVisible = !this.AiVisible; // 切换显示状态
+            this.isRotated = !this.isRotated; // 切换旋转状态
         },
         dataDestroy() {
             // 在Vue实例销毁前，清除我们的定时器
@@ -78,53 +102,20 @@ export default {
             let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
             let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
             let seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-
             this.systemTime.date = year + "." + month + "." + day + " " + "星期" + "日一二三四五六".charAt(date.getDay());
             this.systemTime.time = hours + ":" + minutes + ":" + seconds;
+        },
+        async getWeacher() {
+            try {
+                const response = await axios.get(
+                    "https://restapi.amap.com/v3/weather/weatherInfo?key=c409f28e7cbdd534efae2dcc10991175&city=420100&extensions=base&output=JSON"
+                );
+                this.weatherData = response.data;
+            } catch (error) {
+                console.error(error);
+            }
         },
     },
 };
 </script>
-
-<style>
-.ai-btn {
-    position: absolute;
-    right: 50px;
-    bottom: 100px;
-    width: 40px;
-    height: 30px;
-    z-index: 999999;
-}
-header {
-    position: absolute;
-    z-index: 999999;
-    width: 100%;
-}
-header .header-bg {
-    width: 100%;
-}
-
-header .nav-right {
-    font-family: "Alibaba";
-    position: absolute;
-    right: 35px;
-    top: 18px;
-    color: white;
-}
-
-header .date {
-    font-size: 14px;
-    margin-right: 10px;
-}
-
-header .time {
-    font-size: 20px;
-}
-
-.bottom-bg {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-</style>
+<style src="../assets/css/home.css"></style>

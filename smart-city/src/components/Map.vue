@@ -3,11 +3,15 @@
         <div id="MapContainer"></div>
         <div class="input-card">
             <div class="input-item">
-                <button class="btn" @click="show_road_condition()">实时路况</button>
-                <button class="btn" @click="show_average_traffic_flow()">日均车流</button>
-                <button class="btn" @click="show_3D_map()">3D模型</button>
-                <button class="btn" @click="show_people_out()">人口流出</button>
+                <button class="btn" @click="show_road_condition()"><img src="~@/assets/images/实时路况.png" alt=""></button>
+                <button class="btn" @click="show_average_traffic_flow()"><img src="~@/assets/images/日均车流.png" alt=""></button>
+                <button class="btn" @click="show_3D_map()"><img src="~@/assets/images/3D模型.png" alt=""></button>
+                <button class="btn" @click="show_people_out()"><img src="~@/assets/images/人口流出.png" alt=""></button>
+                <button class="btn" @click="show_people_out()"><img src="~@/assets/images/实时公交.png" alt=""></button>
             </div>
+        </div>
+        <div class="center-btns">
+            <img src="~@/assets/images/all-btn.png" alt="">
         </div>
     </div>
 </template>
@@ -48,14 +52,6 @@ export default {
         // this.clickOn();
     },
     methods: {
-        changeTheme() {
-            if (this.theme == "darkTheme") {
-                map.setMapStyle("amap://styles/grey"); // 设置地图样式
-                // map.setMapStyle("amap://styles/darkblue"); // 设置地图样式
-            } else {
-                map.setMapStyle("amap://styles/normal"); // 设置地图样式
-            }
-        },
         initMap() {
             // 添加性能监视器
             // var stats = new Stats();
@@ -87,10 +83,10 @@ export default {
                         center: map_init_center, //初始化地图中心点位置
                         showLabel: true, //设置文字标注
                     });
-                    var scale = new AMap.Scale();
-                    map.addControl(scale); // 添加比例尺控件
-                    var ToolBar = new AMap.ToolBar();
-                    map.addControl(ToolBar); // 缩放工具条
+                    // var scale = new AMap.Scale();
+                    // map.addControl(scale); // 添加比例尺控件
+                    // var ToolBar = new AMap.ToolBar();
+                    // map.addControl(ToolBar); // 缩放工具条
 
                     // 路况信息
                     trafficLayer = new AMap.TileLayer.Traffic();
@@ -4263,48 +4259,4 @@ export default {
 };
 </script>
 
-<style>
-html,
-body,
-#MapContainer {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0%;
-}
-.input-card {
-    position: absolute;
-    right: 70px;
-    bottom: 10px;
-    z-index: 999;
-    margin-bottom: 5px;
-}
-.input-card button {
-    margin-right: 8px;
-}
-.input-card button:last-child {
-    margin-right: 0px;
-}
-
-.input-item button.btn {
-    border: 1px solid #2fa1d636;
-    border-radius: 4px;
-    font-family: "nav-font";
-    font-weight: 100;
-    padding: 4px 10px;
-    background-color: transparent;
-    backdrop-filter: blur(6px);
-    cursor: pointer;
-    width: 76px;
-    color: #ffffffc4;
-    height: 26px;
-}
-
-.input-item button.btn:hover {
-    font-weight: 600;
-    color: #ffffff;
-    background-color: #ffffff17;
-}
-</style>
+<style src="../assets/css/map.css"></style>
