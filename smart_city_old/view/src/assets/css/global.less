@@ -1,0 +1,174 @@
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.com-page {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.com-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+}
+
+.com-chart {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.amap-logo *,
+.amap-copyright *,
+.amap-copyright {
+    display: none !important;
+}
+
+@font-face {
+    font-family: "nav-font";
+    src: url(../page-font/方正锐正黑简体_粗.TTF) format("truetype");
+}
+
+@font-face {
+    font-family: "PingFang";
+    src: url(../page-font/苹方-简.ttf) format("truetype");
+}
+
+body {
+    font-family: "PingFang", sans-serif;
+    background: #2c303a;
+}
+
+// 加载动画
+.progress-bar-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9999999999999;
+    left: 50%;
+    top: 50%;
+    // background-color: #303030;
+    background-color: #374151;
+    transform: translate(-50%, -50%);
+}
+
+.container {
+    margin-top: 100px;
+    width: 250px;
+    position: absolute;
+    width: 250px;
+    z-index: 9999999999999;
+    left: 50%;
+    top: 50%;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.3);
+    transform: translate(-50%, -50%);
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.progress {
+    padding: 3px;
+    background: rgb(137 137 137 / 25%);
+    border-radius: 6px;
+    // box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.progress-bar {
+    height: 8px;
+    background-color: #ee303c;
+    border-radius: 4px;
+    transition: 0.4s linear;
+    transition-property: width, background-color;
+}
+
+.progress-striped .progress-bar {
+    background-color: #39aceb;
+    width: 100%;
+    background-image: linear-gradient(45deg, #3190f8 25%, transparent 25%, transparent 50%, #3190f8 50%, #3190f8 75%, transparent 75%, transparent);
+    animation: progressAnimationStrike 6s;
+}
+
+@keyframes progressAnimationStrike {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+.progress2 {
+    padding: 6px;
+    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.progress-bar2 {
+    height: 18px;
+    border-radius: 30px;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    transition: 0.4s linear;
+    transition-property: width, background-color;
+}
+
+.progress-moved .progress-bar2 {
+    width: 85%;
+    background-color: #ef476f;
+    animation: progressAnimation 6s;
+}
+
+@keyframes progressAnimation {
+    0% {
+        width: 5%;
+        background-color: #f9bcca;
+    }
+    100% {
+        width: 85%;
+        background-color: #ef476f;
+    }
+}
+.progress-bar3 {
+    height: 18px;
+    border-radius: 4px;
+    background-image: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #7dc8e8, #5856d6, #ff2d55);
+    transition: 0.4s linear;
+    transition-property: width, background-color;
+}
+
+.progress-infinite .progress-bar3 {
+    width: 100%;
+    background-image: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #7dc8e8, #5856d6, #ff2d55);
+    animation: colorAnimation 1s infinite;
+}
+
+@keyframes colorAnimation {
+    0% {
+        background-image: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #7dc8e8, #5856d6, #ff2d55);
+    }
+    20% {
+        background-image: linear-gradient(to right, #5ac8fa, #007aff, #7dc8e8, #5856d6, #ff2d55, #4cd964);
+    }
+    40% {
+        background-image: linear-gradient(to right, #007aff, #7dc8e8, #5856d6, #ff2d55, #4cd964, #5ac8fa);
+    }
+    60% {
+        background-image: linear-gradient(to right, #7dc8e8, #5856d6, #ff2d55, #4cd964, #5ac8fa, #007aff);
+    }
+    100% {
+        background-image: linear-gradient(to right, #5856d6, #ff2d55, #4cd964, #5ac8fa, #007aff, #7dc8e8);
+    }
+}

@@ -1,0 +1,167 @@
+[
+  {
+    "name": "城市客运完成情况（月/万人次）",
+    "children": [
+      {
+        "name": "公共气电车",
+        "value": 2442.5,
+        "children": [
+          {
+            "name": "公共汽车",
+            "value": 2442.5
+          }
+        ]
+      },
+      {
+        "name": "轨道交通",
+        "value": 4465.4,
+        "children": [
+          {
+            "name": "轨道交通",
+            "value": 4465.4
+          }
+        ]
+      },
+      {
+        "name": "出租汽车",
+        "value": 1280.1,
+        "children": [
+          {
+            "name": "出租汽车",
+            "value": 1280.1
+          }
+        ]
+      },
+      {
+        "name": "客运轮渡",
+        "value": 9.2,
+        "children": [
+          {
+            "name": "客运轮渡",
+            "value": 9.2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "城市道路交通建设情况（公里）",
+    "children": [
+      {
+        "name": "高速公路",
+        "value": 920,
+        "children": [
+          {
+            "name": "高速公路",
+            "value": 920
+          }
+        ]
+      },
+      {
+        "name": "城市快速路",
+        "value": 135.3,
+        "children": [
+          {
+            "name": "城市快速路",
+            "value": 135.3
+          }
+        ]
+      },
+      {
+        "name": " 城市主干道",
+        "value": 905.63,
+        "children": [
+          {
+            "name": " 城市主干道",
+            "value": 905.63
+          }
+        ]
+      },
+      {
+        "name": "城市次干道",
+        "value": 758,
+        "children": [
+          {
+            "name": "城市次干道",
+            "value": 758
+          }
+        ]
+      },
+      {
+        "name": "普通道路",
+        "value": 533,
+        "children": [
+          {
+            "name": "普通道路",
+            "value": 533
+          }
+        ]
+      },
+      {
+        "name": "乡村公路",
+        "value": 203,
+        "children": [
+          {
+            "name": "乡村公路",
+            "value": 203
+          }
+        ]
+      },
+      {
+        "name": "其他",
+        "value": 453,
+        "children": [
+          {
+            "name": "其他",
+            "value": 453
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "城市货物运输情况（万吨）",
+    "children": [
+      {
+        "name": "铁路货运",
+        "value": 11600,
+        "children": [
+          {
+            "name": "铁路货运",
+            "value": 11600
+          }
+        ]
+      },
+      {
+        "name": "公路货运",
+        "value": 7865,
+        "children": [
+          {
+            "name": "公路货运",
+            "value": 7865
+          }
+        ]
+      },
+      {
+        "name": "水路货运",
+        "value": 20978,
+        "children": [
+          {
+            "name": "水路货运",
+            "value": 20978
+          }
+        ]
+      },
+      {
+        "name": "航空货运",
+        "value": 6789,
+        "children": [
+          {
+            "name": "航空货运",
+            "value": 6789
+          }
+        ]
+      }
+    ]
+  }
+]

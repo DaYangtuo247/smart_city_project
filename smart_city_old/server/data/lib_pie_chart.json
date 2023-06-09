@@ -1,0 +1,123 @@
+[
+    {
+      "name": "图书馆年级借阅书目统计（册）",
+      "children": [
+        {
+          "name": "2018级",
+          "value": 3297,
+          "children": [
+            {
+              "name": "2018级",
+              "value": 3297
+            }
+          ]
+        },
+        {
+          "name": "2019级",
+          "value": 6923,
+          "children": [
+            {
+              "name": "2019级",
+              "value": 6923
+            }
+          ]
+        },
+        {
+          "name": "2020级",
+          "value": 6207,
+          "children": [
+            {
+              "name": "2020级",
+              "value": 6207
+            }
+          ]
+        },
+        {
+          "name": "2021级",
+          "value": 6839,
+          "children": [
+            {
+              "name": "2021级",
+              "value": 6839
+            }
+          ]
+        },
+        {
+          "name": "2022级",
+          "value": 7535,
+          "children": [
+            {
+              "name": "2022级",
+              "value": 7535
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "纸质图书借阅分类统计（册）",
+      "children": [
+        {
+          "name": "文学",
+          "value": 11311,
+          "children": [
+            {
+              "name": "文学",
+              "value": 11311
+            }
+          ]
+        },
+        {
+          "name": "工业技术",
+          "value": 8772,
+          "children": [
+            {
+              "name": "工业技术",
+              "value": 8772
+            }
+          ]
+        },
+        {
+          "name": " 历史、地理",
+          "value": 1544,
+          "children": [
+            {
+              "name": " 历史、地理",
+              "value": 1544
+            }
+          ]
+        },
+        {
+          "name": "经济",
+          "value": 987,
+          "children": [
+            {
+              "name": "经济",
+              "value": 987
+            }
+          ]
+        },
+        {
+          "name": "数理科学和化学",
+          "value": 533,
+          "children": [
+            {
+              "name": "数理科学和化学",
+              "value": 533
+            }
+          ]
+        },
+        {
+          "name": "其他",
+          "value": 453,
+          "children": [
+            {
+              "name": "其他",
+              "value": 453
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  

@@ -1,0 +1,34 @@
+<template>
+    <el-dialog title="弹窗" :visible="detailVisible" width="35%" class="wind"> 弹窗内容 </el-dialog>
+</template>
+
+<script>
+export default {
+    name: "Ai",
+    data() {
+        return {
+            detailVisible: false,
+        };
+    },
+    methods: {
+        //3.定义一个init函数，通过设置detailVisible值为true来让弹窗弹出，这个函数会在父组件的方法中被调用
+        init(data) {
+            this.detailVisible = true;
+            //data是父组件弹窗传递过来的值，我们可以打印看看
+            console.log(data);
+        },
+    },
+};
+</script>
+
+<style>
+.wind {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+</style>

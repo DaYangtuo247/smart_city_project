@@ -1,0 +1,26 @@
+[{
+    "name": "PM25",
+    "stock": 246,
+    "sales": 64
+}, {
+    "name": "PM10",
+    "stock": 246,
+    "sales": 50
+}, {
+    "name": "SO2",
+    "stock": 246,
+    "sales": 64
+}, {
+    "name": "NO2",
+    "stock": 246,
+    "sales": 14
+}, {
+    "name": "O3",
+    "stock": 246,
+    "sales": 44
+}, {
+    "name": "CO",
+    "stock": 246,
+    "sales": 10
+}
+]

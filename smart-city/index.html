@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="smart_city.svg">
+    <title>武汉智慧城市运行中心</title>
+</head>
+
+<body style="background-color: #374151;">
+    <div class="progress-bar-box">
+        <img src="logo.png" alt=""
+            style="width: 200px;height: auto;-o-object-fit: cover;object-fit: cover;left: 50%;position: absolute;top: 55%;transform: translate(-50%, -90%);margin: auto;">
+        <div class="progress-bar-line">
+            <div class="progress progress-striped">
+                <div class="progress-bar"> </div>
+            </div>
+            <div class="loading" style="color: transparent;">加载中···</div>
+        </div>
+        <div class="author" style="color: transparent;">朱舸远、吴奇灵、刘仕意联合开发 © 2022-2023 whpu-z-w-l 版权所有</div>
+    </div>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+<style>
+    .progress-bar-box .loading {
+        position: absolute;
+        left: 50%;
+        color: #ffffff8c !important;
+        font-size: 14px;
+        font-family: 'nav-font';
+        font-weight: 200;
+        transform: translate(-40%, 5px);
+    }
+
+    .author {
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translate(-50%, -8px);
+        font-size: 14px;
+        font-family: "Montserrat", sans-serif;
+        color: #ffffff8c !important;
+    }
+</style>
+
+</html>
