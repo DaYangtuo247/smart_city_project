@@ -7,7 +7,7 @@
             </div>
             <div class="nav-left" v-if="weatherData">
                 <ul>
-                    <li><img :src="`/smart-city/src/assets/images/weather/${weatherData.lives[0].weather}.png`" alt="" /></li>
+                    <li style="position: relative;height: 40px;width: 40px;"><img :src="`/smart-city/src/assets/images/weather/${weatherData.lives[0].weather}.png`" alt="" /></li>
                     <li class="temperature">{{ weatherData.lives[0].temperature }}°C</li>
                     <li>
                         <p class="head">风向描述</p>

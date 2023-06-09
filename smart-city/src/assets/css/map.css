@@ -10,37 +10,62 @@
     height: 100%;
     position: absolute;
 }
-.input-card {
-    position: absolute;
-    left: 50%;
-    bottom: 136px;
-    z-index: 999;
-    height: 60px;
-    transform: translate(-50%);
-}
-
-.input-card img{
-    width: 56px;
-}
-
-.input-card button:last-child {
-    margin-right: 0px;
-}
-
-.input-item button.btn {
-    border: 0px solid #2fa1d636;
-    background-color: transparent;
-    margin-right: 40px;
-}
-
-.input-item button.btn:last-child{
-    margin-right: 0;
-}
 
 .center-btns {
     position: absolute;
     left: 50%;
     bottom: 50px;
+    z-index: 999;
+    width: 400px;
+    height: 120px;
+    transform: translate(-50%);
+}
+
+.center-btns .btn {
+    position: absolute;
+    border: 0px;
+    cursor: pointer;
+    filter: drop-shadow(0px 0px 10px #1972f5);
+    background-color: transparent;
+}
+
+.center-btns .btn1 {
+    left: 0;
+    top: 50%;
+}
+
+.center-btns .btn2 {
+    left: 50%;
+    transform: translate(-236%);
+    top: -13px;
+}
+
+.center-btns .btn3 {
+    left: 50%;
+    transform: translate(-44%);
+    top: -17px;
+}
+
+.center-btns .btn4 {
+    left: 50%;
+    transform: translate(135%);
+    top: -10px;
+}
+
+.center-btns .btn5 {
+    right: 0;
+    top: 50%;
+}
+
+.center-btns img {
+    width: 56px;
+}
+
+.center-btns .all {
+    width: 275px;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    cursor: pointer;
     transform: translateX(-50%);
-    z-index: 99999;
 }

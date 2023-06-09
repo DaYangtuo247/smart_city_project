@@ -1,17 +1,13 @@
 <template>
     <div class="com-container">
         <div id="MapContainer"></div>
-        <div class="input-card">
-            <div class="input-item">
-                <button class="btn" @click="show_road_condition()"><img src="~@/assets/images/实时路况.png" alt=""></button>
-                <button class="btn" @click="show_average_traffic_flow()"><img src="~@/assets/images/日均车流.png" alt=""></button>
-                <button class="btn" @click="show_3D_map()"><img src="~@/assets/images/3D模型.png" alt=""></button>
-                <button class="btn" @click="show_people_out()"><img src="~@/assets/images/人口流出.png" alt=""></button>
-                <button class="btn" @click="show_people_out()"><img src="~@/assets/images/实时公交.png" alt=""></button>
-            </div>
-        </div>
         <div class="center-btns">
-            <img src="~@/assets/images/all-btn.png" alt="">
+            <button class="btn btn1" @click="show_road_condition()"><img src="~@/assets/images/实时路况.png" alt="" /></button>
+            <button class="btn btn2" @click="show_average_traffic_flow()"><img src="~@/assets/images/日均车流.png" alt="" /></button>
+            <button class="btn btn3" @click="show_3D_map()"><img src="~@/assets/images/3D模型.png" alt="" /></button>
+            <button class="btn btn4" @click="show_people_out()"><img src="~@/assets/images/人口流出.png" alt="" /></button>
+            <button class="btn btn5" @click="show_people_out()"><img src="~@/assets/images/实时公交.png" alt="" /></button>
+            <img src="~@/assets/images/all-btn.png" alt="" class="all" />
         </div>
     </div>
 </template>

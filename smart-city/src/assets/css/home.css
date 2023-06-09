@@ -10,7 +10,7 @@ header .header-bg {
 header .nav-left {
     position: absolute;
     font-family: "Alibaba";
-    left: 16px;
+    left: 24px;
     top: 18px;
     height: 40px;
     color: white;
@@ -42,7 +42,11 @@ header .nav-left li p.content {
 }
 
 header .nav-left img {
-    width: 46px;
+    width: 44px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%)
 }
 
 header .nav-left span {
