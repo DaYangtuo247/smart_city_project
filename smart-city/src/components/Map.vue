@@ -2,11 +2,11 @@
     <div class="com-container">
         <div id="MapContainer"></div>
         <div class="center-btns">
-            <button class="btn btn1" @click="show_road_condition()"><img src="~@/assets/images/实时路况.png" alt="" /></button>
-            <button class="btn btn2" @click="show_average_traffic_flow()"><img src="~@/assets/images/日均车流.png" alt="" /></button>
-            <button class="btn btn3" @click="show_3D_map()"><img src="~@/assets/images/3D模型.png" alt="" /></button>
-            <button class="btn btn4" @click="show_people_out()"><img src="~@/assets/images/人口流出.png" alt="" /></button>
-            <button class="btn btn5" @click="show_people_out()"><img src="~@/assets/images/实时公交.png" alt="" /></button>
+            <button class="btn btn1" @click="immediately_road()"><img src="~@/assets/images/实时路况.png" alt="" /></button>
+            <button class="btn btn2" @click="traffic_flow()"><img src="~@/assets/images/日均车流.png" alt="" /></button>
+            <button class="btn btn3" @click="model_3D()"><img src="~@/assets/images/3D模型.png" alt="" /></button>
+            <button class="btn btn4" @click="people_out()"><img src="~@/assets/images/人口流出.png" alt="" /></button>
+            <button class="btn btn5" @click="people_out()"><img src="~@/assets/images/实时公交.png" alt="" /></button>
             <img src="~@/assets/images/all-btn.png" alt="" class="all" />
         </div>
     </div>
@@ -14,11 +14,8 @@
 <script>
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import AMapLoader from "@amap/amap-jsapi-loader"; // 高德地图
-import Stats from "three/examples/jsm/libs/stats.module"; // 性能监视器
+import AMapLoader from "@amap/amap-jsapi-loader";
 // import EventBus from "@/event-bus";
-//  gltf-pipeline 压缩gltf文件失败，会导致精度丢失，但仍保留该注释，以保日后需要
-// import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 // let height = 0.0;
 let camera; //相机
 let scene; //场景
@@ -34,25 +31,19 @@ let pol_lib;
 let pol_market;
 let zMarker1;
 let ii = 0;
-let avg_tf_loca, people_out_loca; // 日平均车流, 人口流出情况
-let trafficLayer; // 路况对象
-let show_road_condition_var = false,
-    show_3D_map_exist = false,
-    show_people_out_exist = false, // 路况信息是否存在
-    show_average_traffic_flow_exist = false; // 车流
+let avg_tf_loca, people_out_loca, trafficLayer; // 日平均车流, 人口流出情况, 路况对象
+let immediately_road = false, // 实时路况
+    model_3D = false, // 3D模型
+    people_out = false, // 人口流出
+    traffic_flow = false; // 车流
 export default {
     mounted() {
-        //DOM初始化完成进行地图初始化
         this.initMap();
         this.change();
         // this.clickOn();
     },
     methods: {
         initMap() {
-            // 添加性能监视器
-            // var stats = new Stats();
-            // stats.showPanel(0);
-            // document.body.appendChild(stats.dom);
             AMapLoader.load({
                 key: "283d29d48a72af6b61305c99b1f8638c", // 申请好的Web端开发者Key
                 version: "2.0",
@@ -119,8 +110,6 @@ export default {
                             scene.add(aLight);
                         },
                         render: () => {
-                            // 更新性能监视器数据
-                            // stats.update();
                             //重新设置模型大小，解决地图漂移的问题
                             var map_father_box = document.querySelector(".amap-layer");
                             // 确保获取到地图父盒子
@@ -129,8 +118,6 @@ export default {
                                     boxHeight = map_father_box.offsetHeight;
                                 camera = new THREE.PerspectiveCamera(60, boxWidth / boxHeight, 100, 1 << 30);
                             }
-                            // 这里必须执行！！重新设置 three 的 gl 上下文状态。
-                            renderer.resetState();
                             // 重新设置图层的渲染中心点，将模型等物体的渲染中心点重置, 否则和 LOCA 可视化等多个图层能力使用的时候会出现物体位置偏移的问题
                             customCoords.setCenter(map_gltf_model_Position);
                             var { near, far, fov, up, lookAt, position } = customCoords.getCameraParams();
@@ -277,7 +264,7 @@ export default {
 
                     // 图书馆触发事件
                     function showInfoClick(e) {
-                        // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
+                        console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
                         // EventBus.$emit("change-data-url-lib-p-w-e", "/lib_people_w_e");
                         // // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
@@ -291,13 +278,9 @@ export default {
 
                     // 控制图书馆附近的多边形是否显示
                     function change_polygon() {
-                        if (st == false) {
-                            map.add(pol_lib);
-                            st = true;
-                        } else {
-                            st = false;
-                            map.remove(pol_lib);
-                        }
+                        if (st == false) map.add(pol_lib);
+                        else map.remove(pol_lib);
+                        st = !st;
                     }
 
                     // 商场的触发事件
@@ -2324,7 +2307,7 @@ export default {
                 this.setPosition();
                 scene.add(object);
             });
-            show_3D_map_exist = true;
+            model_3D = true;
         },
         removeGltf() {
             if (object) {
@@ -2347,7 +2330,7 @@ export default {
                     }
                 });
                 object = null; // 将 object 设置为 null，释放内存
-                show_3D_map_exist = false;
+                model_3D = false;
             }
         },
         setRotation(rotation) {
@@ -2357,12 +2340,7 @@ export default {
             object.rotation.set(x, y, z);
         },
         setPosition() {
-            // 设置x、y、z缩放信息
-            object.scale.set(1, 1, 1);
-            // 对模型的经纬度进行转换
-            // var position = customCoords.lngLatsToCoords(map_gltf_model_Position)[0];
-            // object.position.setX(position[0]);
-            // object.position.setY(position[1]);
+            object.scale.set(1, 1, 1); // 设置x、y、z缩放信息
         },
         city_line(model) {
             // 添加边框线
@@ -2630,7 +2608,7 @@ export default {
                     { label: 5, color: colors[0] },
                 ],
             });
-            show_average_traffic_flow_exist = true;
+            traffic_flow = true;
             // 控制条
             // var dat = new Loca.Dat();
             // dat.addLight(loca.ambLight, loca, "环境光");
@@ -2639,9 +2617,7 @@ export default {
             // dat.addLayer(ll, "车辆图层");
         },
         create_people_out_loca() {
-            people_out_loca = new Loca.Container({
-                map,
-            });
+            people_out_loca = new Loca.Container({ map });
             // 呼吸点
             var scatter = new Loca.ScatterLayer({
                 people_out_loca,
@@ -4194,41 +4170,37 @@ export default {
             });
             people_out_loca.add(pulseLink);
             people_out_loca.animate.start();
-            show_people_out_exist = true;
+            people_out = true;
         },
-        show_road_condition() {
-            if (show_road_condition_var) {
-                trafficLayer.hide();
-                show_road_condition_var = false;
-            } else {
-                trafficLayer.show();
-                show_road_condition_var = true;
-            }
+        immediately_road() {
+            if (immediately_road) trafficLayer.hide();
+            else trafficLayer.show();
+            immediately_road = !immediately_road;
         },
-        show_average_traffic_flow() {
-            if (show_average_traffic_flow_exist) {
+        traffic_flow() {
+            if (traffic_flow) {
                 avg_tf_loca.destroy();
-                show_average_traffic_flow_exist = false;
+                traffic_flow = false;
             } else {
                 this.create_avg_traffic_flow_loca();
             }
         },
-        show_3D_map() {
-            if (show_3D_map_exist) {
+        model_3D() {
+            if (model_3D) {
                 this.removeGltf();
             } else {
                 this.initGltf();
             }
         },
-        show_people_out() {
-            if (show_people_out_exist) {
+        people_out() {
+            if (people_out) {
                 people_out_loca.destroy();
-                show_people_out_exist = false;
+                people_out = false;
             } else {
                 this.create_people_out_loca();
             }
         },
-        // 加载动画
+        // 系统加载动画
         async map_load_comple() {
             map.on("complete", function () {
                 setTimeout(() => {

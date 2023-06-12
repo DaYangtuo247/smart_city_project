@@ -122,3 +122,21 @@ header .time {
     opacity: 1;
     transform: translate(-50%, -50%);
 }
+
+.left-graph,
+.right-graph {
+    position: absolute;
+    left: 30px;
+    top: 90px;
+    width: 450px;
+    z-index: 999;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 1px solid #ffffff24;
+    backdrop-filter: blur(5px);
+}
+
+.right-graph {
+    left: unset;
+    right: 30px;
+}

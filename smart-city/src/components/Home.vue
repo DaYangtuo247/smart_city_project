@@ -1,13 +1,12 @@
 <template>
     <div class="com-container">
         <Map ref="map"></Map>
+        <!-- 顶部导航 -->
         <header>
-            <div>
-                <img src="~@/assets/images/header-bg.png" alt="" class="header-bg" />
-            </div>
+            <img src="~@/assets/images/header-bg.png" alt="" class="header-bg" />
             <div class="nav-left" v-if="weatherData">
                 <ul>
-                    <li style="position: relative;height: 40px;width: 40px;"><img :src="`/smart-city/src/assets/images/weather/${weatherData.lives[0].weather}.png`" alt="" /></li>
+                    <li style="position: relative; height: 40px; width: 40px"><img :src="`/smart-city/src/assets/images/weather/${weatherData.lives[0].weather}.png`" alt="" /></li>
                     <li class="temperature">{{ weatherData.lives[0].temperature }}°C</li>
                     <li>
                         <p class="head">风向描述</p>
@@ -30,32 +29,42 @@
                 </div>
             </div>
         </header>
-        <div @click="showAiWindow()" class="ai-btn">
-            <transition name="fade">
-                <span v-if="!AiVisible">
-                    <img src="~@/assets/images/AI.png" alt="" />
-                </span>
-                <span v-else>
-                    <img :class="{ rotate: isRotated }" class="ai-image" src="/smart-city/src/assets/images/close.png" alt="" />
-                </span>
-            </transition>
+        <!-- AI -->
+        <div>
+            <div @click="showAiWindow()" class="ai-btn">
+                <transition name="fade">
+                    <span v-if="!AiVisible">
+                        <img src="~@/assets/images/AI.png" alt="" />
+                    </span>
+                    <span v-else>
+                        <img :class="{ rotate: isRotated }" class="ai-image" src="/smart-city/src/assets/images/close.png" alt="" />
+                    </span>
+                </transition>
+            </div>
+            <Ai v-if="AiVisible" ref="ai"></Ai>
         </div>
-        <Ai v-if="AiVisible" ref="ai"></Ai>
         <img src="~@/assets/images/bottom-bg.png" alt="" class="bottom-bg" />
+        <!-- echarts图表 -->
+        <div class="left-graph">
+            <Test></Test>
+        </div>
+        <div class="right-graph"></div>
     </div>
 </template>
 
 <script>
 import Map from "components/Map.vue";
 import Ai from "components/Ai.vue";
+import Test from "components/test.vue";
 import axios from "axios";
 
 export default {
     name: "ScreenPage",
     components: {
-        Map: Map,
-        Ai: Ai,
         weatherData: null,
+        Map,
+        Ai,
+        Test,
     },
     data() {
         return {
@@ -107,9 +116,7 @@ export default {
         },
         async getWeacher() {
             try {
-                const response = await axios.get(
-                    "https://restapi.amap.com/v3/weather/weatherInfo?key=c409f28e7cbdd534efae2dcc10991175&city=420100&extensions=base&output=JSON"
-                );
+                const response = await axios.get("https://restapi.amap.com/v3/weather/weatherInfo?key=c409f28e7cbdd534efae2dcc10991175&city=420100&extensions=base&output=JSON");
                 this.weatherData = response.data;
             } catch (error) {
                 console.error(error);
