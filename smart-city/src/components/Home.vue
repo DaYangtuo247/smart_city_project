@@ -45,29 +45,27 @@
         </div>
         <img src="~@/assets/images/bottom-bg.png" alt="" class="bottom-bg" />
         <!-- echarts图表 -->
-        <div class="left-graph">
-            <Test></Test>
+        <div class="left-graph" ref="left_graph" :style="{ display: 'none' }">
+            <Trend></Trend>
         </div>
-        <div class="right-graph"></div>
+        <div class="right-graph" ref="right_graph"></div>
     </div>
 </template>
 
 <script>
 import Map from "components/Map.vue";
 import Ai from "components/Ai.vue";
-import Test from "components/test.vue";
-import axios from "axios";
-
+import Trend from "graphData/library_trend.vue";
 export default {
     name: "ScreenPage",
     components: {
-        weatherData: null,
         Map,
         Ai,
-        Test,
+        Trend,
     },
     data() {
         return {
+            weatherData: null,
             // AI窗口的可见性
             AiVisible: false, // 控制显示AI文字还是图片
             isRotated: false, // 控制图片旋转
@@ -116,7 +114,7 @@ export default {
         },
         async getWeacher() {
             try {
-                const response = await axios.get("https://restapi.amap.com/v3/weather/weatherInfo?key=c409f28e7cbdd534efae2dcc10991175&city=420100&extensions=base&output=JSON");
+                const response = await this.$http.get("https://restapi.amap.com/v3/weather/weatherInfo?key=c409f28e7cbdd534efae2dcc10991175&city=420100&extensions=base&output=JSON");
                 this.weatherData = response.data;
             } catch (error) {
                 console.error(error);

@@ -15,7 +15,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import AMapLoader from "@amap/amap-jsapi-loader";
-// import EventBus from "@/event-bus";
 // let height = 0.0;
 let camera; //相机
 let scene; //场景
@@ -68,6 +67,7 @@ export default {
                         mapStyle: "amap://styles/grey",
                         showBuildingBlock: false, // 显示高德自带地图块
                         center: map_init_center, //初始化地图中心点位置
+                        doubleClickZoom: false, // 双击放大地图
                         showLabel: true, //设置文字标注
                     });
                     // var scale = new AMap.Scale();
@@ -140,13 +140,13 @@ export default {
                     var icon = new AMap.Icon({
                         image: "none.png", // 图标的图片
                         size: new AMap.Size(50, 50), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
-                        imageSize: new AMap.Size(256, 256), // 图标所用图片的大小
+                        imageSize: new AMap.Size(18, 18), // 图标所用图片的大小
                     });
 
                     var big_icon = new AMap.Icon({
                         image: "none.png", // 图标的图片
                         size: new AMap.Size(200, 200), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
-                        imageSize: new AMap.Size(256, 256), // 图标所用图片的大小
+                        imageSize: new AMap.Size(18, 18), // 图标所用图片的大小
                     });
 
                     // 图书馆的标记点
@@ -263,10 +263,12 @@ export default {
                     // }
 
                     // 图书馆触发事件
+                    let eventBus = this.$eventBus; // 该代码下的this指向app实例，在如下函数中的this指向当前函数本身
                     function showInfoClick(e) {
                         console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
-                        // EventBus.$emit("change-data-url-lib-p-w-e", "/lib_people_w_e");
+                        eventBus.emit("change", "/test123"); // 正确
+                        // this.$eventBus.emit("change", "/test123"); // 错误，该this指向当前函数
                         // // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
                         // EventBus.$emit("change-data-url-p-c", "/lib_pie_chart");
                         // // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源

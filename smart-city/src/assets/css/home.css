@@ -128,15 +128,21 @@ header .time {
     position: absolute;
     left: 30px;
     top: 90px;
-    width: 450px;
+    width: 430px;
     z-index: 999;
     overflow: hidden;
-    border-radius: 5px;
+    border-radius: 2px;
     border: 1px solid #ffffff24;
     backdrop-filter: blur(5px);
+    padding: 30px 20px;
+    box-sizing: border-box;
 }
 
 .right-graph {
     left: unset;
     right: 30px;
+}
+
+.chart{
+    width: 388px;
 }
