@@ -14,7 +14,7 @@ export default {
             // 是否显示可选项
             showMenu: false,
             activeName: "people",
-            url: "/libary_people_trend",
+            url: "/图书馆人流量趋势",
         };
     },
     mounted() {
@@ -75,11 +75,9 @@ export default {
         },
         // 获取服务器数据
         async getData() {
-            // http://localhost:8080/api/seller
             this.allData = null;
-            const { data: res } = await this.$http.get(this.url);
+            const { data: res } = await this.$http.get(this.url); // http://localhost:8080/api/seller
             this.allData = res;
-            // 更新数据
             this.updateChart();
         },
         // 更新图表
