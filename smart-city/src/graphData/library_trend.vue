@@ -14,7 +14,7 @@ export default {
             // 是否显示可选项
             showMenu: false,
             activeName: "people",
-            url: "/图书馆人流量趋势",
+            url: "/图书馆人流量趋势.json",
         };
     },
     mounted() {

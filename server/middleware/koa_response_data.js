@@ -9,7 +9,7 @@ module.exports = async (ctx, next) => {
 	// 处理掉 /api
 	let filePath = url.replace("/api", "");
 	// 拼接文件路径
-	filePath = `../data${filePath}.json`;
+	filePath = `../data${filePath}`;
 	// filePath = `../data${filePath}`
 
     // 解码filePath中的特殊字符

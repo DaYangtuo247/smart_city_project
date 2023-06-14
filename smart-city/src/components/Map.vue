@@ -16,20 +16,10 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import AMapLoader from "@amap/amap-jsapi-loader";
 // let height = 0.0;
-let camera; //相机
-let scene; //场景
-let renderer;
-let object; // gltf模型场景
-let map_gltf_model_Position = [114.281454, 30.59925]; // 模型放置点
-let map_init_center = [114.30443, 30.591613]; // 地图放置点
-let customCoords;
-let map;
-let st = false;
-let st1 = false;
-let pol_lib;
-let pol_market;
-let zMarker1;
-let ii = 0;
+let map, camera, scene, renderer, object; // 高德地图, 相机, 场景, 渲染器, gltf模型场景
+let map_gltf_model_Position = [114.281454, 30.59925], // 模型放置点
+    map_init_center = [114.30443, 30.591613]; //初始化地图中心点位置
+let customCoords, zMarker1;
 let avg_tf_loca, people_out_loca, trafficLayer; // 日平均车流, 人口流出情况, 路况对象
 let immediately_road = false, // 实时路况
     model_3D = false, // 3D模型
@@ -48,7 +38,6 @@ export default {
     mounted() {
         this.initMap();
         this.change();
-        // this.clickOn();
     },
     methods: {
         initMap() {
@@ -138,42 +127,8 @@ export default {
                     });
                     map.add(gllayer);
 
-                    // 隐藏按钮的添加（实际上是添加了个透明的图标，供人点击）
-                    var icon = new AMap.Icon({
-                        image: "none.png", // 图标的图片
-                        size: new AMap.Size(50, 50), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
-                        imageSize: new AMap.Size(18, 18), // 图标所用图片的大小
-                    });
-
-                    var big_icon = new AMap.Icon({
-                        image: "none.png", // 图标的图片
-                        size: new AMap.Size(200, 200), // 图标的尺寸，这里将宽度和高度均设为32，可以根据需要调整大小
-                        imageSize: new AMap.Size(18, 18), // 图标所用图片的大小
-                    });
-
-                    // 图书馆的标记点
-                    var marker_lib = new AMap.Marker({
-                        map: map,
-                        icon: icon,
-                        position: [114.222004, 30.6525],
-                    });
-
-                    // 商场的标记点
-                    var marker_market = new AMap.Marker({
-                        map: map,
-                        icon: icon,
-                        position: [114.237741, 30.650317],
-                    });
-
-                    // 交通枢纽的标记点
-                    var marker_traffic = new AMap.Marker({
-                        map: map,
-                        icon: big_icon,
-                        position: [114.270521, 30.618645],
-                    });
-
                     // 图书馆鼠标点击范围的设置
-                    var polygonArr_lib = [
+                    var libary_area = [
                         [114.222285, 30.653019],
                         [114.222279, 30.652661],
                         [114.222309, 30.652662],
@@ -204,7 +159,7 @@ export default {
                     ];
 
                     // 商场鼠标点击范围的设置
-                    var polygonArr_market = [
+                    var store_area = [
                         [114.235541, 30.650994],
                         [114.23545, 30.649432],
                         [114.237969, 30.649387],
@@ -219,116 +174,49 @@ export default {
                         [114.235541, 30.650994],
                     ];
 
-                    map.setFitView();
-
-                    pol_market = new AMap.Polygon({
-                        map: map,
-                        path: polygonArr_market, //设置多边形边界路径
-                        strokeColor: "#FF33FF", //线颜色
-                        strokeOpacity: 0.2, //线透明度
-                        strokeWeight: 3, //线宽
-                        fillColor: "#1791fc", //填充色
-                        fillOpacity: 0.35, //填充透明度
-                    });
-
-                    pol_lib = new AMap.Polygon({
-                        map: map,
-                        path: polygonArr_lib, //设置多边形边界路径
-                        strokeColor: "#FF33FF", //线颜色
-                        strokeOpacity: 0.2, //线透明度
-                        strokeWeight: 3, //线宽
-                        fillColor: "#1791fc", //填充色
-                        fillOpacity: 0.35, //填充透明度
-                    });
-
-                    map.remove(pol_lib);
-                    map.remove(pol_market);
-
-                    marker_lib.on("click", showInfoClick);
-                    marker_market.on("click", showInfoClick1);
-                    marker_traffic.on("click", showInfoClick2);
-
-                    function clickOn() {
-                        // log.success("绑定事件!");
-                        console.log("clickOn事件被触发！");
-                        // polygon.on("click", showInfoClick);
-                        marker.on("click", showInfoClick);
-                        // this.map.on('mousemove', this.showInfoMove);
+                    // 在地图上添加多边形，该方法来源于 https://lbs.amap.com/api/javascript-api-v2/documentation#Polygon
+                    function addPolygon(data, fun) {
+                        let polygon = new AMap.Polygon({
+                            path: data,
+                            fillColor: "#ccebc5",
+                            strokeColor: "#2b8cbe",
+                            strokeStyle: "dashed",
+                            strokeDasharray: [5, 5],
+                            cursor: "pointer",
+                            strokeOpacity: 0.2, //线透明度
+                            strokeWeight: 1, //线宽
+                            fillOpacity: 0.35, //填充透明度
+                        });
+                        polygon.on("mouseover", () => {
+                            polygon.setOptions({
+                                fillOpacity: 0.7,
+                                fillColor: "#7bccc4",
+                            });
+                        });
+                        polygon.on("mouseout", () => {
+                            polygon.setOptions({
+                                fillOpacity: 0.5,
+                                fillColor: "#ccebc5",
+                            });
+                        });
+                        polygon.on("click", e => {
+                            fun(e);
+                        });
+                        map.add(polygon);
                     }
 
-                    function clickOff() {
-                        // log.success("解绑事件!");
-                        console.log("clickOff事件被解除！");
-                        // polygon.off("click", showInfoClick);
-                        marker.off("click", showInfoClick);
-                        // this.map.off('mousemove', this.showInfoMove);
-                    }
+                    addPolygon(libary_area, showInfoClick); // 参数二为需要执行的函数
+                    addPolygon(store_area, showInfoClick);
 
                     // 图书馆触发事件
                     let eventBus = this.$eventBus; // 该代码下的this指向app实例，在如下函数中的this指向当前函数本身
                     function showInfoClick(e) {
                         console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
-                        // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
-                        eventBus.emit("change", "/test123"); // 正确
-                        // this.$eventBus.emit("change", "/test123"); // 错误，该this指向当前函数
-                        // // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
-                        // EventBus.$emit("change-data-url-p-c", "/lib_pie_chart");
-                        // // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源
-                        // EventBus.$emit("change-data-url-s", "/lib_seller");
-                        // // 触发一个名为'change-data-url-huan'的自定义事件，用于更换环形图的数据源
-                        // EventBus.$emit("change-data-url-huan", "/lib_stock");
-                        change_polygon();
+                        // 触发一个名为'change'的自定义事件
+                        eventBus.emit("change", "数据(目前没有)"); // 正确
                     }
 
-                    // 控制图书馆附近的多边形是否显示
-                    function change_polygon() {
-                        if (st == false) map.add(pol_lib);
-                        else map.remove(pol_lib);
-                        st = !st;
-                    }
-
-                    // 商场的触发事件
-                    function showInfoClick1(e) {
-                        // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
-                        // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
-                        // EventBus.$emit("change-data-url-mar", "/market_people_w_e");
-                        // // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
-                        // EventBus.$emit("change-data-url-chat", "/market_pie_chart");
-                        // // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源
-                        // EventBus.$emit("change-data-url-m_s", "/market_seller");
-                        // // 触发一个名为'change-data-url-huan'的自定义事件，用于更换环形图的数据源
-                        // EventBus.$emit("change-data-url-m-sk", "/market_stock");
-                        change_polygon1();
-                    }
-
-                    // 控制商场附近的多边形是否显示
-                    function change_polygon1() {
-                        if (st1 == false) {
-                            map.add(pol_market);
-                            st1 = true;
-                        } else {
-                            st1 = false;
-                            map.remove(pol_market);
-                        }
-                    }
-
-                    // 交通枢纽的触发事件
-                    function showInfoClick2(e) {
-                        // console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
-                        // 触发一个名为'change-data-url-lib-p-w-e'的自定义事件，用于更换趋势图的数据源
-                        // EventBus.$emit("change-data-url-triffic", "/traffic_car_qushi");
-                        // // 触发一个名为'change-data-url-p-c'的自定义事件，用于更换饼图的数据源
-                        // EventBus.$emit("change-data-url-triffic-chat", "/traffic_pie_chart");
-                        // // 触发一个名为'change-data-url-s'的自定义事件，用于更换条形图的数据源
-                        // EventBus.$emit("change-data-url-traffic-rank", "/traffic_rank");
-                        // // 触发一个名为'change-data-url-huan'的自定义事件，用于更换环形图的数据源
-                        // EventBus.$emit("change-data-url-traffic-huan", "/traffic_huan");
-                        // change_polygon1();
-                    }
-
-                    var loca = new Loca.Container({
-                        map,
-                    });
+                    var loca = new Loca.Container({ map });
 
                     var geo = new Loca.GeoJSONSource({
                         data: {
@@ -486,7 +374,7 @@ export default {
                     var heightFactor = 5;
 
                     var pointGeo = new Loca.GeoJSONSource({
-                        url: this.$http.defaults.baseURL + "/唐家墩人流量粒子特效",
+                        url: this.$http.defaults.baseURL + "/唐家墩人流量粒子特效.json",
                     });
                     layer.setSource(pointGeo, {
                         unit: "meter",
@@ -656,10 +544,6 @@ export default {
                     loca.pointLight.intensity = 0;
                     loca.ambLight.intensity = 1;
 
-                    // // 给按钮绑定事件
-                    // document.querySelector("#clickOn").addEventListener("click", clickOn);
-                    // document.querySelector("#clickOff").addEventListener("click", clickOff);
-
                     function alive() {
                         map.render();
                         requestAnimationFrame(alive);
@@ -690,12 +574,15 @@ export default {
                 });
                 gltf.scene.position.z = 10;
                 object = gltf.scene;
-                this.setRotation({
-                    x: 90,
-                    y: 0,
-                    z: 0,
-                });
-                this.setPosition();
+
+                function setRotation(rotation) {
+                    var x = (Math.PI / 180) * (rotation.x || 0);
+                    var y = (Math.PI / 180) * (rotation.y || 0);
+                    var z = (Math.PI / 180) * (rotation.z || 0);
+                    object.rotation.set(x, y, z);
+                }
+                setRotation({ x: 90, y: 0, z: 0 });
+                object.scale.set(1, 1, 1); // 设置x、y、z缩放信息
                 scene.add(object);
             });
             model_3D = true;
@@ -723,15 +610,6 @@ export default {
                 object = null; // 将 object 设置为 null，释放内存
                 model_3D = false;
             }
-        },
-        setRotation(rotation) {
-            var x = (Math.PI / 180) * (rotation.x || 0);
-            var y = (Math.PI / 180) * (rotation.y || 0);
-            var z = (Math.PI / 180) * (rotation.z || 0);
-            object.rotation.set(x, y, z);
-        },
-        setPosition() {
-            object.scale.set(1, 1, 1); // 设置x、y、z缩放信息
         },
         city_line(model) {
             // 添加边框线
@@ -852,9 +730,7 @@ export default {
             model.material = shaderMaterial;
         },
         create_avg_traffic_flow_loca() {
-            avg_tf_loca = new Loca.Container({
-                map,
-            });
+            avg_tf_loca = new Loca.Container({ map });
 
             avg_tf_loca.ambLight = {
                 intensity: 0.3,
@@ -870,12 +746,11 @@ export default {
                 color: "rgb(100,100,100)",
                 position: [114.2517, 30.552128, 20000],
                 intensity: 1.6,
-                // 距离表示从光源到光照强度为 0 的位置，0 就是光不会消失。
                 distance: 100000,
             };
 
             var geo = new Loca.GeoJSONSource({
-                url: this.$http.defaults.baseURL + "/武汉市日均车流统计",
+                url: this.$http.defaults.baseURL + "/武汉市日均车流统计.json",
             });
 
             var ll = new Loca.GridLayer({
@@ -1019,7 +894,7 @@ export default {
             });
 
             var pointGeo = new Loca.GeoJSONSource({
-                url: this.$http.defaults.baseURL + "/人口流出目标点",
+                url: this.$http.defaults.baseURL + "/人口流出目标点.json",
             });
             scatter.setSource(pointGeo);
             scatter.setStyle({
@@ -1043,7 +918,7 @@ export default {
             });
 
             var geo = new Loca.GeoJSONSource({
-                url: this.$http.defaults.baseURL + "/人口流出飞线",
+                url: this.$http.defaults.baseURL + "/人口流出飞线.json",
             });
 
             pulseLink.setSource(geo);

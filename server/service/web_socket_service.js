@@ -22,7 +22,7 @@ module.exports.listen = () => {
 			const action = payload.action;
 			if (action === "getData") {
 				// trend seller map rank hot stock
-				let filePath = `../data/${payload.chartName}.json`;
+				let filePath = `../data/${payload.chartName}`;
 				filePath = path.join(__dirname, filePath);
 				// 读取到文件内容
 				const result = await fileUtils.getFileJsonData(filePath);
