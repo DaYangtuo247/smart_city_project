@@ -46,7 +46,7 @@ header .nav-left img {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
 }
 
 header .nav-left span {
@@ -131,8 +131,8 @@ header .time {
     width: 430px;
     z-index: 999;
     overflow: hidden;
-    border-radius: 2px;
-    border: 1px solid #ffffff24;
+    border-radius: 8px;
+    border: 1px solid #ffffff0f;
     backdrop-filter: blur(5px);
     padding: 30px 20px;
     box-sizing: border-box;
@@ -143,6 +143,6 @@ header .time {
     right: 30px;
 }
 
-.chart{
+.chart {
     width: 388px;
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="chart" ref="TrendRef" style="height: 260px" v-show="showMenu"></div>
+    <div class="chart" ref="TrendRef" style="height: 260px"></div>
 </template>
 
 <script>
@@ -11,24 +11,16 @@ export default {
             chartInstance: null,
             // 从服务器中获取的所有数据
             allData: null,
-            // 是否显示可选项
-            showMenu: false,
             activeName: "people",
             url: "/图书馆人流量趋势.json",
         };
     },
     mounted() {
-        this.$eventBus.on("change", url => {
-            this.showMenu = !this.showMenu;
-            const left_graph = this.$parent.$refs.left_graph;
-            if (left_graph.style.display == "none") {
-                left_graph.style.display = "block";
-                this.$nextTick(() => {
-                    this.initChart();
-                    this.getData();
-                });
+        this.$eventBus.on("show-libary-data", showMenu => {
+            if (showMenu) {
+                this.initChart();
+                this.getData();
             } else {
-                left_graph.style.display = "none";
                 this.chartInstance.dispose();
             }
         });

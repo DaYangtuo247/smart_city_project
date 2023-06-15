@@ -1,5 +1,5 @@
 <template>
-    <div id="modelBorder" :style="{ width: '388px', height: '280px' }"></div>
+    <div id="modelBorder" width="{{this.width}}px" height="{{this.height}}px"></div>
 </template>
 
 <script>
@@ -7,31 +7,37 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+let libary_model;
+
 export default {
     data() {
         return {
-            showMenu: false,
+            width: "388",
+            hieght: "280",
         };
     },
     mounted() {
-        this.$eventBus.on("change", url => {
-            this.init();
-            // this.removeGltf();
+        this.$eventBus.on("show-libary-data", showMenu => {
+            if (showMenu) {
+                this.init();
+            } else {
+                this.removeGltf();
+            }
         });
     },
     methods: {
         init() {
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, 380 / 400, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(380, 400);
+            const camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(this.width, this.height);
             document.getElementById("modelBorder").appendChild(renderer.domElement);
 
             const loader = new GLTFLoader();
             loader.load("house.glb", gltf => {
-                const model = gltf.scene;
-                model.name = "library"; // 设置模型的名称为"myModel"
-                scene.add(model);
+                libary_model = gltf.scene;
+                libary_model.name = "library"; // 设置模型的名称为"myModel"
+                scene.add(libary_model);
 
                 // 添加控制器
                 const controls = new OrbitControls(camera, renderer.domElement);
@@ -41,8 +47,8 @@ export default {
                 controls.target.set(0, 0, 0); // 设置控制目标为场景中心
 
                 // 设置模型的初始位置和大小
-                model.position.set(0, 0, 0);
-                model.scale.set(0.8, 0.8, 0.8);
+                libary_model.position.set(0, 0, 0);
+                libary_model.scale.set(0.8, 0.8, 0.8);
 
                 // 设置相机的初始位置
                 camera.position.set(-3, 3, 5);
@@ -62,7 +68,7 @@ export default {
                     light.position.copy(camera.position); // 更新光源位置为相机位置
 
                     // 模型自动旋转
-                    model.rotation.y += rotationSpeed;
+                    libary_model.rotation.y += rotationSpeed;
 
                     renderer.render(scene, camera);
                 }
@@ -71,17 +77,14 @@ export default {
             });
         },
         removeGltf() {
-            const scene = this.$data.__threeObject; // 获取场景对象
-            const model = scene.getObjectByName("library");
-            if (model) {
-                scene.remove(model); // 从场景中移除模型
-                model.traverse(child => {
-                    if (child.isMesh) {
-                        child.geometry.dispose(); // 释放几何体资源
-                        child.material.dispose(); // 释放材质资源
-                    }
-                });
-            }
+            const modelElement = document.getElementById("modelBorder"); // 获取包含canvas的父元素
+            const canvasElement = modelElement.getElementsByTagName("canvas")[0]; // 获取canvas元素
+
+            // 移除模型和canvas元素
+            modelElement.removeChild(canvasElement);
+
+            // 清空场景中的模型对象
+            scene.remove(libary_model);
         },
     },
 };
