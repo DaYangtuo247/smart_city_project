@@ -45,9 +45,7 @@
         </div>
         <img src="~@/assets/images/bottom-bg.png" alt="" class="bottom-bg" />
         <!-- echarts图表 -->
-        <div class="left-graph" ref="left_graph" :style="{ display: 'none' }">
-            <Trend></Trend>
-        </div>
+        <liftGraph></liftGraph>
         <div class="right-graph" ref="right_graph"></div>
     </div>
 </template>
@@ -55,13 +53,14 @@
 <script>
 import Map from "components/Map.vue";
 import Ai from "components/Ai.vue";
-import Trend from "graphData/library_trend.vue";
+import liftGraph from "components/left_graph.vue";
+
 export default {
     name: "ScreenPage",
     components: {
         Map,
         Ai,
-        Trend,
+        liftGraph,
     },
     data() {
         return {
