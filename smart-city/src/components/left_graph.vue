@@ -1,6 +1,6 @@
 <template>
-    <div class="left-graph" v-show="showMenu">
-        <div class="libary">
+    <div class="left-graph" v-show="show_libary">
+        <div class="libary" v-show="show_libary">
             <libModel></libModel>
             <library_trend></library_trend>
         </div>
@@ -17,14 +17,14 @@ export default {
     },
     data() {
         return {
-            showMenu: false,
+            show_libary: false,
         };
     },
     mounted() {
         let eventBus = this.$eventBus;
-        this.$eventBus.on("libary-data", url => {
-            this.showMenu = !this.showMenu;
-            eventBus.emit("show-libary-data", this.showMenu);
+        this.$eventBus.on("show-libary-graph", url => {
+            this.show_libary = !this.show_libary;
+            eventBus.emit("show-libary-data", this.show_libary);
         });
     },
 };

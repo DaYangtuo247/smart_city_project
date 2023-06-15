@@ -143,6 +143,8 @@ header .time {
     right: 30px;
 }
 
-.chart {
+.left-graph > div,
+.right-graph > div {
     width: 388px;
 }
+

@@ -213,7 +213,7 @@ export default {
                     function showInfoClick(e) {
                         console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // 触发一个名为'change'的自定义事件
-                        eventBus.emit("libary-data", "数据(目前没有)"); // 正确
+                        eventBus.emit("show-libary-graph", "数据(目前没有)"); // 正确
                     }
 
                     var loca = new Loca.Container({ map });

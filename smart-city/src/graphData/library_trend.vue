@@ -1,5 +1,5 @@
 <template>
-    <div class="chart" ref="TrendRef" style="height: 260px"></div>
+    <div ref="TrendRef" style="width: 388px; height: 260px"></div>
 </template>
 
 <script>
@@ -18,10 +18,13 @@ export default {
     mounted() {
         this.$eventBus.on("show-libary-data", showMenu => {
             if (showMenu) {
-                this.initChart();
-                this.getData();
+                // 在div渲染结束后在初始化图表
+                this.$nextTick(() => {
+                    this.initChart();
+                    this.getData();
+                });
             } else {
-                this.chartInstance.dispose();
+                this.removeChart();
             }
         });
     },
@@ -68,7 +71,7 @@ export default {
         // 获取服务器数据
         async getData() {
             this.allData = null;
-            const { data: res } = await this.$http.get(this.url); // http://localhost:8080/api/seller
+            const { data: res } = await this.$http.get(this.url);
             this.allData = res;
             this.updateChart();
         },
@@ -138,6 +141,10 @@ export default {
                 series: seriesArr,
             };
             this.chartInstance.setOption(dataOption);
+        },
+        removeChart() {
+            this.chartInstance.dispose();
+            this.chartInstance = null;
         },
     },
 };
