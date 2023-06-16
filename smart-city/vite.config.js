@@ -17,7 +17,7 @@ export default defineConfig({
             "@": resolve(__dirname, "src"),
             components: "/src/components",
             assets: "/src/assets",
-            graphData: "/src/graphData",
+            graph: "/src/graph",
         },
     },
 });

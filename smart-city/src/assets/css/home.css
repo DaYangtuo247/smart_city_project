@@ -148,3 +148,43 @@ header .time {
     width: 388px;
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+    color: white;
+    z-index: 1;
+}
+
+.title {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.arrow {
+    font-style: normal;
+    font-weight: bold;
+}
+
+.arrow-up {
+    transform: rotate(180deg);
+}
+
+.arrow-down {
+    transform: rotate(0deg);
+}
+
+.dropdown ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    list-style: none;
+    border-left: 2px solid red;
+}
+
+.dropdown li {
+    cursor: pointer;
+    padding-top: 2px;
+}

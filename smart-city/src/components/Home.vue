@@ -46,7 +46,7 @@
         <img src="~@/assets/images/bottom-bg.png" alt="" class="bottom-bg" />
         <!-- echarts图表 -->
         <liftGraph></liftGraph>
-        <div class="right-graph" ref="right_graph"></div>
+        <rightGraph></rightGraph>
     </div>
 </template>
 
@@ -54,6 +54,7 @@
 import Map from "components/Map.vue";
 import Ai from "components/Ai.vue";
 import liftGraph from "components/left_graph.vue";
+import rightGraph from "components/right_graph.vue";
 
 export default {
     name: "ScreenPage",
@@ -61,6 +62,7 @@ export default {
         Map,
         Ai,
         liftGraph,
+        rightGraph
     },
     data() {
         return {

@@ -7,7 +7,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-let libary_model, animateID;
+let library_model, animateID;
 
 export default {
     data() {
@@ -17,7 +17,7 @@ export default {
         };
     },
     mounted() {
-        this.$eventBus.on("show-libary-data", showMenu => {
+        this.$eventBus.on("show-library-data-l", showMenu => {
             if (showMenu) {
                 this.init();
             } else {
@@ -35,9 +35,9 @@ export default {
 
             const loader = new GLTFLoader();
             loader.load("house.glb", gltf => {
-                libary_model = gltf.scene;
-                libary_model.name = "library"; // 设置模型的名称为"myModel"
-                scene.add(libary_model);
+                library_model = gltf.scene;
+                library_model.name = "library"; // 设置模型的名称为"myModel"
+                scene.add(library_model);
 
                 // 添加控制器
                 const controls = new OrbitControls(camera, renderer.domElement);
@@ -47,8 +47,8 @@ export default {
                 controls.target.set(0, 0, 0); // 设置控制目标为场景中心
 
                 // 设置模型的在坐标系中的初始位置和大小
-                libary_model.position.set(0, -1.1, 0);
-                libary_model.scale.set(1, 1, 1);
+                library_model.position.set(0, -1.1, 0);
+                library_model.scale.set(1, 1, 1);
 
                 // 设置相机的初始位置
                 camera.position.set(-3, 3, 5);
@@ -70,7 +70,7 @@ export default {
                     light.position.copy(camera.position); // 更新光源位置为相机位置
 
                     // 模型自动旋转
-                    libary_model.rotation.y += 0.01;
+                    library_model.rotation.y += 0.01;
 
                     renderer.render(scene, camera);
                 }

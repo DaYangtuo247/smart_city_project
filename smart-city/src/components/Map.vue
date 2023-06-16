@@ -128,7 +128,7 @@ export default {
                     map.add(gllayer);
 
                     // 图书馆鼠标点击范围的设置
-                    var libary_area = [
+                    var library_area = [
                         [114.222285, 30.653019],
                         [114.222279, 30.652661],
                         [114.222309, 30.652662],
@@ -205,7 +205,7 @@ export default {
                         map.add(polygon);
                     }
 
-                    addPolygon(libary_area, showInfoClick); // 参数二为需要执行的函数
+                    addPolygon(library_area, showInfoClick); // 参数二为需要执行的函数
                     addPolygon(store_area, showInfoClick);
 
                     // 图书馆触发事件
@@ -213,342 +213,342 @@ export default {
                     function showInfoClick(e) {
                         console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // 触发一个名为'change'的自定义事件
-                        eventBus.emit("show-libary-graph", "数据(目前没有)"); // 正确
+                        eventBus.emit("show-library-graph-lr", "数据(目前没有)"); // 正确
                     }
 
-                    var loca = new Loca.Container({ map });
+                    // var loca = new Loca.Container({ map });
 
-                    var geo = new Loca.GeoJSONSource({
-                        data: {
-                            type: "FeatureCollection",
-                            features: [
-                                {
-                                    type: "Feature",
-                                    geometry: {
-                                        type: "Point",
-                                        coordinates: [114.222131, 30.652322],
-                                    },
-                                    properties: {
-                                        name: "武汉轻工大学图书馆",
-                                        price: 55000,
-                                        count: 92,
-                                    },
-                                },
-                                {
-                                    type: "Feature",
-                                    geometry: {
-                                        type: "Point",
-                                        coordinates: [114.237858, 30.650277],
-                                    },
-                                    properties: {
-                                        name: "永旺梦乐城",
-                                        price: 65000,
-                                        count: 92,
-                                    },
-                                },
-                            ],
-                        },
-                    });
+                    // var geo = new Loca.GeoJSONSource({
+                    //     data: {
+                    //         type: "FeatureCollection",
+                    //         features: [
+                    //             {
+                    //                 type: "Feature",
+                    //                 geometry: {
+                    //                     type: "Point",
+                    //                     coordinates: [114.222131, 30.652322],
+                    //                 },
+                    //                 properties: {
+                    //                     name: "武汉轻工大学图书馆",
+                    //                     price: 55000,
+                    //                     count: 92,
+                    //                 },
+                    //             },
+                    //             {
+                    //                 type: "Feature",
+                    //                 geometry: {
+                    //                     type: "Point",
+                    //                     coordinates: [114.237858, 30.650277],
+                    //                 },
+                    //                 properties: {
+                    //                     name: "永旺梦乐城",
+                    //                     price: 65000,
+                    //                     count: 92,
+                    //                 },
+                    //             },
+                    //         ],
+                    //     },
+                    // });
 
-                    // 文字主体图层
-                    var zMarker = new Loca.ZMarkerLayer({
-                        loca: loca,
-                        zIndex: 120,
-                        depth: false,
-                    });
-                    zMarker.setSource(geo);
-                    zMarker.setStyle({
-                        content: (i, feat) => {
-                            var props = feat.properties;
-                            var leftColor = props.price < 60000 ? "rgba(0, 28, 52, 0.6)" : "rgba(33,33,33,0.6)";
-                            var rightColor = props.price < 60000 ? "#038684" : "rgba(172, 137, 51, 0.3)";
-                            var borderColor = props.price < 60000 ? "#038684" : "rgba(172, 137, 51, 1)";
-                            return (
-                                '<div style="width: 490px; height: 228px; padding: 0 0;">' +
-                                '<p style="display: block; height:80px; line-height:80px;font-size:40px;background-image: linear-gradient(to right, ' +
-                                leftColor +
-                                "," +
-                                leftColor +
-                                "," +
-                                rightColor +
-                                ",rgba(0,0,0,0.4)); border:4px solid " +
-                                borderColor +
-                                '; color:#fff; border-radius: 15px; text-align:center; margin:0; padding:5px;">' +
-                                props["name"] +
-                                '</p><span style="width: 130px; height: 130px; margin: 0 auto; display: block; background: url(https://a.amap.com/Loca/static/loca-v2/demos/images/prism_' +
-                                (props["price"] < 60000 ? "blue" : "yellow") +
-                                '.png);"></span></div>'
-                            );
-                        },
-                        unit: "meter",
-                        rotation: 0,
-                        alwaysFront: true,
-                        size: [490 / 2, 222 / 2],
-                        altitude: 0,
-                    });
+                    // // 文字主体图层
+                    // var zMarker = new Loca.ZMarkerLayer({
+                    //     loca: loca,
+                    //     zIndex: 120,
+                    //     depth: false,
+                    // });
+                    // zMarker.setSource(geo);
+                    // zMarker.setStyle({
+                    //     content: (i, feat) => {
+                    //         var props = feat.properties;
+                    //         var leftColor = props.price < 60000 ? "rgba(0, 28, 52, 0.6)" : "rgba(33,33,33,0.6)";
+                    //         var rightColor = props.price < 60000 ? "#038684" : "rgba(172, 137, 51, 0.3)";
+                    //         var borderColor = props.price < 60000 ? "#038684" : "rgba(172, 137, 51, 1)";
+                    //         return (
+                    //             '<div style="width: 490px; height: 228px; padding: 0 0;">' +
+                    //             '<p style="display: block; height:80px; line-height:80px;font-size:40px;background-image: linear-gradient(to right, ' +
+                    //             leftColor +
+                    //             "," +
+                    //             leftColor +
+                    //             "," +
+                    //             rightColor +
+                    //             ",rgba(0,0,0,0.4)); border:4px solid " +
+                    //             borderColor +
+                    //             '; color:#fff; border-radius: 15px; text-align:center; margin:0; padding:5px;">' +
+                    //             props["name"] +
+                    //             '</p><span style="width: 130px; height: 130px; margin: 0 auto; display: block; background: url(https://a.amap.com/Loca/static/loca-v2/demos/images/prism_' +
+                    //             (props["price"] < 60000 ? "blue" : "yellow") +
+                    //             '.png);"></span></div>'
+                    //         );
+                    //     },
+                    //     unit: "meter",
+                    //     rotation: 0,
+                    //     alwaysFront: true,
+                    //     size: [490 / 2, 222 / 2],
+                    //     altitude: 0,
+                    // });
 
-                    // 浮动三角
-                    var triangleZMarker = new Loca.ZMarkerLayer({
-                        loca: loca,
-                        zIndex: 119,
-                        depth: false,
-                    });
-                    triangleZMarker.setSource(geo);
-                    triangleZMarker.setStyle({
-                        content: (i, feat) => {
-                            return (
-                                '<div style="width: 120px; height: 120px; background: url(https://a.amap.com/Loca/static/loca-v2/demos/images/triangle_' +
-                                (feat.properties.price < 60000 ? "blue" : "yellow") +
-                                '.png);"></div>'
-                            );
-                        },
-                        unit: "meter",
-                        rotation: 0,
-                        alwaysFront: true,
-                        size: [60, 60],
-                        altitude: 15,
-                    });
-                    triangleZMarker.addAnimate({
-                        key: "altitude",
-                        value: [0, 1],
-                        random: true,
-                        transform: 1000,
-                        delay: 2000,
-                        yoyo: true,
-                        repeat: Infinity,
-                    });
+                    // // 浮动三角
+                    // var triangleZMarker = new Loca.ZMarkerLayer({
+                    //     loca: loca,
+                    //     zIndex: 119,
+                    //     depth: false,
+                    // });
+                    // triangleZMarker.setSource(geo);
+                    // triangleZMarker.setStyle({
+                    //     content: (i, feat) => {
+                    //         return (
+                    //             '<div style="width: 120px; height: 120px; background: url(https://a.amap.com/Loca/static/loca-v2/demos/images/triangle_' +
+                    //             (feat.properties.price < 60000 ? "blue" : "yellow") +
+                    //             '.png);"></div>'
+                    //         );
+                    //     },
+                    //     unit: "meter",
+                    //     rotation: 0,
+                    //     alwaysFront: true,
+                    //     size: [60, 60],
+                    //     altitude: 15,
+                    // });
+                    // triangleZMarker.addAnimate({
+                    //     key: "altitude",
+                    //     value: [0, 1],
+                    //     random: true,
+                    //     transform: 1000,
+                    //     delay: 2000,
+                    //     yoyo: true,
+                    //     repeat: Infinity,
+                    // });
 
-                    // 呼吸点 蓝色
-                    var scatterBlue = new Loca.ScatterLayer({
-                        loca,
-                        zIndex: 110,
-                        opacity: 1,
-                        visible: true,
-                        zooms: [2, 26],
-                        depth: false,
-                    });
+                    // // 呼吸点 蓝色
+                    // var scatterBlue = new Loca.ScatterLayer({
+                    //     loca,
+                    //     zIndex: 110,
+                    //     opacity: 1,
+                    //     visible: true,
+                    //     zooms: [2, 26],
+                    //     depth: false,
+                    // });
 
-                    scatterBlue.setSource(geo);
-                    scatterBlue.setStyle({
-                        unit: "meter",
-                        size: function (i, feat) {
-                            return feat.properties.price < 60000 ? [90, 90] : [0, 0];
-                        },
-                        texture: "https://a.amap.com/Loca/static/loca-v2/demos/images/scan_blue.png",
-                        altitude: 20,
-                        duration: 2000,
-                        animate: true,
-                    });
+                    // scatterBlue.setSource(geo);
+                    // scatterBlue.setStyle({
+                    //     unit: "meter",
+                    //     size: function (i, feat) {
+                    //         return feat.properties.price < 60000 ? [90, 90] : [0, 0];
+                    //     },
+                    //     texture: "https://a.amap.com/Loca/static/loca-v2/demos/images/scan_blue.png",
+                    //     altitude: 20,
+                    //     duration: 2000,
+                    //     animate: true,
+                    // });
 
-                    // 呼吸点 金色
-                    var scatterYellow = new Loca.ScatterLayer({
-                        loca,
-                        zIndex: 110,
-                        opacity: 1,
-                        visible: true,
-                        zooms: [2, 26],
-                        depth: false,
-                    });
+                    // // 呼吸点 金色
+                    // var scatterYellow = new Loca.ScatterLayer({
+                    //     loca,
+                    //     zIndex: 110,
+                    //     opacity: 1,
+                    //     visible: true,
+                    //     zooms: [2, 26],
+                    //     depth: false,
+                    // });
 
-                    scatterYellow.setSource(geo);
-                    scatterYellow.setStyle({
-                        unit: "meter",
-                        size: function (i, feat) {
-                            return feat.properties.price > 60000 ? [90, 90] : [0, 0];
-                        },
-                        texture: "https://a.amap.com/Loca/static/loca-v2/demos/images/scan_yellow.png",
-                        altitude: 20,
-                        duration: 2000,
-                        animate: true,
-                    });
+                    // scatterYellow.setSource(geo);
+                    // scatterYellow.setStyle({
+                    //     unit: "meter",
+                    //     size: function (i, feat) {
+                    //         return feat.properties.price > 60000 ? [90, 90] : [0, 0];
+                    //     },
+                    //     texture: "https://a.amap.com/Loca/static/loca-v2/demos/images/scan_yellow.png",
+                    //     altitude: 20,
+                    //     duration: 2000,
+                    //     animate: true,
+                    // });
 
-                    // 粒子上升效果
-                    var layer = new Loca.LaserLayer({
-                        zIndex: 130,
-                        opacity: 1,
-                        visible: true,
-                        depth: true,
-                        zooms: [2, 26],
-                    });
+                    // // 粒子上升效果
+                    // var layer = new Loca.LaserLayer({
+                    //     zIndex: 130,
+                    //     opacity: 1,
+                    //     visible: true,
+                    //     depth: true,
+                    //     zooms: [2, 26],
+                    // });
 
-                    var heightFactor = 5;
+                    // var heightFactor = 5;
 
-                    var pointGeo = new Loca.GeoJSONSource({
-                        url: this.$http.defaults.baseURL + "/唐家墩人流量粒子特效.json",
-                    });
-                    layer.setSource(pointGeo, {
-                        unit: "meter",
-                        height: (index, feat) => {
-                            return feat.properties.h * heightFactor;
-                        },
-                        color: (index, feat) => {
-                            return ["#FF6F47", "#4FDDC7", "#4FDDC7"][index % 3];
-                        },
-                        lineWidth: 6,
-                        trailLength: 300,
-                        angle: 0,
-                        duration: 1500,
-                        interval: 1000,
-                        repeat: Infinity,
-                        delay: () => {
-                            return Math.random() * 2000;
-                        },
-                    });
+                    // var pointGeo = new Loca.GeoJSONSource({
+                    //     url: this.$http.defaults.baseURL + "/唐家墩人流量粒子特效.json",
+                    // });
+                    // layer.setSource(pointGeo, {
+                    //     unit: "meter",
+                    //     height: (index, feat) => {
+                    //         return feat.properties.h * heightFactor;
+                    //     },
+                    //     color: (index, feat) => {
+                    //         return ["#FF6F47", "#4FDDC7", "#4FDDC7"][index % 3];
+                    //     },
+                    //     lineWidth: 6,
+                    //     trailLength: 300,
+                    //     angle: 0,
+                    //     duration: 1500,
+                    //     interval: 1000,
+                    //     repeat: Infinity,
+                    //     delay: () => {
+                    //         return Math.random() * 2000;
+                    //     },
+                    // });
 
-                    var geo = new Loca.GeoJSONSource({
-                        url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_soho.json",
-                    });
+                    // var geo = new Loca.GeoJSONSource({
+                    //     url: "https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_soho.json",
+                    // });
 
-                    loca.add(layer);
+                    // loca.add(layer);
 
-                    // 围栏
-                    var outLayer = new Loca.PolygonLayer({
-                        zIndex: 120,
-                        cullface: "none",
-                        shininess: 1,
-                        hasBottom: false,
-                        blockHide: false,
-                        hasSide: true,
-                        hasTop: false,
-                        depth: true,
-                    });
+                    // // 围栏
+                    // var outLayer = new Loca.PolygonLayer({
+                    //     zIndex: 120,
+                    //     cullface: "none",
+                    //     shininess: 1,
+                    //     hasBottom: false,
+                    //     blockHide: false,
+                    //     hasSide: true,
+                    //     hasTop: false,
+                    //     depth: true,
+                    // });
 
-                    var outGeo = new Loca.GeoJSONSource({
-                        data: {
-                            type: "FeatureCollection",
-                            name: "out",
-                            crs: {
-                                type: "name",
-                                properties: {
-                                    name: "urn:ogc:def:crs:OGC:1.3:CRS84",
-                                },
-                            },
-                            features: [
-                                {
-                                    type: "Feature",
-                                    properties: {},
-                                    geometry: {
-                                        type: "Polygon",
-                                        coordinates: [
-                                            [
-                                                [114.268337, 30.622766],
-                                                [114.26736, 30.62209],
-                                                [114.266002, 30.621475],
-                                                [114.265454, 30.620634],
-                                                [114.264715, 30.620224],
-                                                [114.264358, 30.619507],
-                                                [114.264144, 30.618646],
-                                                [114.264453, 30.617149],
-                                                [114.264715, 30.61598],
-                                                [114.264739, 30.615529],
-                                                [114.265478, 30.614854],
-                                                [114.26655, 30.613973],
-                                                [114.26736, 30.613419],
-                                                [114.268765, 30.613398],
-                                                [114.270314, 30.613501],
-                                                [114.272125, 30.613398],
-                                                [114.272955, 30.613878],
-                                                [114.274197, 30.614813],
-                                                [114.276341, 30.615428],
-                                                [114.277878, 30.616299],
-                                                [114.278603, 30.616619],
-                                                [114.279045, 30.61753],
-                                                [114.279093, 30.6204],
-                                                [114.279236, 30.621076],
-                                                [114.278187, 30.622635],
-                                                [114.27459, 30.623598],
-                                                [114.272946, 30.623721],
-                                                [114.268337, 30.622766],
-                                            ],
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                        // url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_out.json',
-                    });
-                    outLayer.setSource(outGeo);
-                    outLayer.setStyle({
-                        topColor: function (index, feature) {
-                            return "rgba(217,104,104,0.1)";
-                        },
-                        sideTopColor: function (index, feature) {
-                            return "rgba(217,104,104,0.1)";
-                        },
-                        sideBottomColor: function (index, feature) {
-                            return "rgba(237,87,87,1)";
-                        },
-                        height: 50,
-                        altitude: 0,
-                    });
-                    loca.add(outLayer);
+                    // var outGeo = new Loca.GeoJSONSource({
+                    //     data: {
+                    //         type: "FeatureCollection",
+                    //         name: "out",
+                    //         crs: {
+                    //             type: "name",
+                    //             properties: {
+                    //                 name: "urn:ogc:def:crs:OGC:1.3:CRS84",
+                    //             },
+                    //         },
+                    //         features: [
+                    //             {
+                    //                 type: "Feature",
+                    //                 properties: {},
+                    //                 geometry: {
+                    //                     type: "Polygon",
+                    //                     coordinates: [
+                    //                         [
+                    //                             [114.268337, 30.622766],
+                    //                             [114.26736, 30.62209],
+                    //                             [114.266002, 30.621475],
+                    //                             [114.265454, 30.620634],
+                    //                             [114.264715, 30.620224],
+                    //                             [114.264358, 30.619507],
+                    //                             [114.264144, 30.618646],
+                    //                             [114.264453, 30.617149],
+                    //                             [114.264715, 30.61598],
+                    //                             [114.264739, 30.615529],
+                    //                             [114.265478, 30.614854],
+                    //                             [114.26655, 30.613973],
+                    //                             [114.26736, 30.613419],
+                    //                             [114.268765, 30.613398],
+                    //                             [114.270314, 30.613501],
+                    //                             [114.272125, 30.613398],
+                    //                             [114.272955, 30.613878],
+                    //                             [114.274197, 30.614813],
+                    //                             [114.276341, 30.615428],
+                    //                             [114.277878, 30.616299],
+                    //                             [114.278603, 30.616619],
+                    //                             [114.279045, 30.61753],
+                    //                             [114.279093, 30.6204],
+                    //                             [114.279236, 30.621076],
+                    //                             [114.278187, 30.622635],
+                    //                             [114.27459, 30.623598],
+                    //                             [114.272946, 30.623721],
+                    //                             [114.268337, 30.622766],
+                    //                         ],
+                    //                     ],
+                    //                 },
+                    //             },
+                    //         ],
+                    //     },
+                    //     // url: 'https://a.amap.com/Loca/static/loca-v2/demos/mock_data/laser_out.json',
+                    // });
+                    // outLayer.setSource(outGeo);
+                    // outLayer.setStyle({
+                    //     topColor: function (index, feature) {
+                    //         return "rgba(217,104,104,0.1)";
+                    //     },
+                    //     sideTopColor: function (index, feature) {
+                    //         return "rgba(217,104,104,0.1)";
+                    //     },
+                    //     sideBottomColor: function (index, feature) {
+                    //         return "rgba(237,87,87,1)";
+                    //     },
+                    //     height: 50,
+                    //     altitude: 0,
+                    // });
+                    // loca.add(outLayer);
 
-                    var top5 = new Loca.GeoJSONSource({
-                        data: {
-                            type: "FeatureCollection",
-                            features: [
-                                {
-                                    geometry: {
-                                        coordinates: [114.271389, 30.618726],
-                                        type: "Point",
-                                    },
-                                    type: "Feature",
-                                    properties: {
-                                        h: 140,
-                                        p: 460,
-                                    },
-                                },
-                            ],
-                        },
-                    });
-                    zMarker1 = new Loca.ZMarkerLayer({
-                        zIndex: 120,
-                        loca,
-                    });
-                    zMarker1.setSource(top5);
-                    zMarker1.setStyle({
-                        content: (i, feat) => {
-                            var people = feat.properties.p;
-                            return `<div>
-                                <p style="width: 400px; height: 80px; line-height: 80px; font-size: 40px; background-image:linear-gradient(to right,rgba(30,215,196,0.4),rgba(30, 215, 196, 0.3),rgba(0,0,0,0.4)); border:4px solid rgba(30, 215, 196, 0.9); color:#fff; border-radius: 20px; text-align:center; margin:0;padding:0;">
-                                人流量: ${people}人/分
-                                </p>
-                            </div>
-                            `;
-                        },
-                        unit: "meter",
-                        rotation: 0,
-                        alwaysFront: true,
-                        size: [200 * 2, 40 * 2],
-                        altitude: (i, feat) => {
-                            return feat.properties.h * heightFactor;
-                        },
-                    });
-                    var pole = new Loca.LaserLayer({
-                        zIndex: 120,
-                        loca,
-                        depth: false,
-                    });
-                    pole.setSource(top5, {
-                        unit: "meter",
-                        height: (i, feat) => {
-                            return feat.properties.h * heightFactor;
-                        },
-                        color: "rgba(30,215,196, 1)",
-                        lineWidth: 10,
-                        trailLength: 50000,
-                        repeat: 0,
-                    });
+                    // var top5 = new Loca.GeoJSONSource({
+                    //     data: {
+                    //         type: "FeatureCollection",
+                    //         features: [
+                    //             {
+                    //                 geometry: {
+                    //                     coordinates: [114.271389, 30.618726],
+                    //                     type: "Point",
+                    //                 },
+                    //                 type: "Feature",
+                    //                 properties: {
+                    //                     h: 140,
+                    //                     p: 460,
+                    //                 },
+                    //             },
+                    //         ],
+                    //     },
+                    // });
+                    // zMarker1 = new Loca.ZMarkerLayer({
+                    //     zIndex: 120,
+                    //     loca,
+                    // });
+                    // zMarker1.setSource(top5);
+                    // zMarker1.setStyle({
+                    //     content: (i, feat) => {
+                    //         var people = feat.properties.p;
+                    //         return `<div>
+                    //             <p style="width: 400px; height: 80px; line-height: 80px; font-size: 40px; background-image:linear-gradient(to right,rgba(30,215,196,0.4),rgba(30, 215, 196, 0.3),rgba(0,0,0,0.4)); border:4px solid rgba(30, 215, 196, 0.9); color:#fff; border-radius: 20px; text-align:center; margin:0;padding:0;">
+                    //             人流量: ${people}人/分
+                    //             </p>
+                    //         </div>
+                    //         `;
+                    //     },
+                    //     unit: "meter",
+                    //     rotation: 0,
+                    //     alwaysFront: true,
+                    //     size: [200 * 2, 40 * 2],
+                    //     altitude: (i, feat) => {
+                    //         return feat.properties.h * heightFactor;
+                    //     },
+                    // });
+                    // var pole = new Loca.LaserLayer({
+                    //     zIndex: 120,
+                    //     loca,
+                    //     depth: false,
+                    // });
+                    // pole.setSource(top5, {
+                    //     unit: "meter",
+                    //     height: (i, feat) => {
+                    //         return feat.properties.h * heightFactor;
+                    //     },
+                    //     color: "rgba(30,215,196, 1)",
+                    //     lineWidth: 10,
+                    //     trailLength: 50000,
+                    //     repeat: 0,
+                    // });
 
-                    loca.animate.start();
-                    loca.pointLight.intensity = 0;
-                    loca.ambLight.intensity = 1;
+                    // loca.animate.start();
+                    // loca.pointLight.intensity = 0;
+                    // loca.ambLight.intensity = 1;
 
-                    function alive() {
-                        map.render();
-                        requestAnimationFrame(alive);
-                    }
-                    alive();
+                    // function alive() {
+                    //     map.render();
+                    //     requestAnimationFrame(alive);
+                    // }
+                    // alive();
 
                     this.map_load_comple();
                 })

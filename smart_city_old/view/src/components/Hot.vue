@@ -32,36 +32,6 @@ export default {
     // this.$socket.registerCallBack('hotData', this.getData)
     // this.getData()
   },
-  computed: {
-    ...mapState(['theme']),
-    cateName() {
-      if (!this.allData) return ''
-      return this.allData[this.currentIndex].name
-    },
-    themeStyle() {
-      if (!this.titleFontSize) {
-        // return { color: getThemeValue(this.theme).titleColor }
-      }
-      return {
-        fontSize: this.titleFontSize + 'px',
-        // color: getThemeValue(this.theme).titleColor,
-      }
-    },
-  },
-  watch: {
-    theme() {
-      // 销毁当前的图表
-      if(this.chartInstance != null){
-          this.chartInstance.dispose();
-      }
-      // 以最新主题初始化图表对象
-      this.initChart()
-      // 屏幕适配
-      this.screenAdapter()
-      // 渲染数据
-      this.updateChart()
-    },
-  },
   mounted() {
     this.initChart()
     this.getData()
@@ -104,19 +74,6 @@ export default {
       }
       this.getData();       
     });
-    // this.$socket.send({
-    //   action: 'getData',
-    //   socketType: 'hotData',
-    //   chartName: 'hotproduct',
-    //   value: '',
-    // })
-    window.addEventListener('resize', this.screenAdapter)
-    // 主动触发 响应式配置
-    this.screenAdapter()
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.screenAdapter)
-    // this.$socket.unRegisterCallBack('hotData')
   },
   methods: {
     // 初始化图表的方法
@@ -214,37 +171,6 @@ export default {
         ],
       }
       this.chartInstance.setOption(dataOption)
-    },
-    // 不同分辨率的响应式
-    screenAdapter() {
-      this.titleFontSize = (this.$refs.hotRef.offsetWidth / 100) * 2.8
-
-      const adapterOption = {
-        title: {
-          textStyle: {
-            fontSize: this.titleFontSize * 1.6,
-          },
-        },
-        legend: {
-          itemWidth: this.titleFontSize,
-          itemHeight: this.titleFontSize,
-          // 图例的间隔
-          itemGap: this.titleFontSize / 2,
-          textStyle: {
-            fontSize: this.titleFontSize / 0.8,
-          },
-        },
-        series: [
-          {
-            // 饼图的大小 半径
-            radius: this.titleFontSize * 5,
-            // 控制饼图的位置 x,y
-            center: ['50%', '60%'],
-          },
-        ],
-      }
-      this.chartInstance.setOption(adapterOption)
-      this.chartInstance.resize()
     },
     // 点击左侧按钮
     toLeft() {
