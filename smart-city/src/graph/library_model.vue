@@ -34,7 +34,7 @@ export default {
             document.getElementById("modelBorder").appendChild(renderer.domElement);
 
             const loader = new GLTFLoader();
-            loader.load("house.glb", gltf => {
+            loader.load("library.glb", gltf => {
                 library_model = gltf.scene;
                 library_model.name = "library"; // 设置模型的名称为"myModel"
                 scene.add(library_model);
@@ -47,16 +47,16 @@ export default {
                 controls.target.set(0, 0, 0); // 设置控制目标为场景中心
 
                 // 设置模型的在坐标系中的初始位置和大小
-                library_model.position.set(0, -1.1, 0);
+                library_model.position.set(0, 0, 0);
                 library_model.scale.set(1, 1, 1);
 
                 // 设置相机的初始位置
-                camera.position.set(-3, 3, 5);
+                camera.position.set(-2.5, 2.5, 5);
 
                 // 创建坐标轴
-                const axesHelper = new THREE.AxesHelper(20); // 设置坐标轴长度为2个单位
-                axesHelper.position.set(0, 0, 0); // 设置坐标轴的位置
-                scene.add(axesHelper);
+                // const axesHelper = new THREE.AxesHelper(20); // 设置坐标轴长度为2个单位
+                // axesHelper.position.set(0, 0, 0); // 设置坐标轴的位置
+                // scene.add(axesHelper);
 
                 // 创建光源
                 const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -70,7 +70,7 @@ export default {
                     light.position.copy(camera.position); // 更新光源位置为相机位置
 
                     // 模型自动旋转
-                    library_model.rotation.y += 0.01;
+                    // library_model.rotation.y += 0.01;
 
                     renderer.render(scene, camera);
                 }
