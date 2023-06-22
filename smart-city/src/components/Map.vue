@@ -563,6 +563,30 @@ export default {
             }
             requestAnimationFrame(this.change);
         },
+        lib_model_load()
+        {
+            const loader = new GLTFLoader();
+            loader.load("lib.gltf", gltf => {
+                gltf.scene.traverse(model => {
+                    if (model.isMesh) {
+                        this.lib_line(model);
+                        this.black_lib(model);
+                    }
+                });
+                gltf.scene.position.z = 10;
+                object = gltf.scene;
+
+                function setRotation(rotation) {
+                    var x = (Math.PI / 180) * (rotation.x || 0);
+                    var y = (Math.PI / 180) * (rotation.y || 0);
+                    var z = (Math.PI / 180) * (rotation.z || 0);
+                    object.rotation.set(x, y, z);
+                }
+                setRotation({ x: 90, y: 0, z: 0 });
+                object.scale.set(1, 1, 1); // 设置x、y、z缩放
+                this.scene.add(object);
+            });
+        },
         initGltf() {
             const loader = new GLTFLoader();
             loader.load("wuhan.gltf", gltf => {

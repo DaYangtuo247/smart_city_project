@@ -2,3 +2,7 @@ other.txt
 wuhant.gltf
 wuhan_mini.gltf
 wuhan_big.gltf
+**/node_modules/
+smart-city/public/wuhan.gltf
+smart-city/public/demo.gltf
+smart-city/public/library.glb
