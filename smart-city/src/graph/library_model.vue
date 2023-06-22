@@ -70,7 +70,7 @@ export default {
                     light.position.copy(camera.position); // 更新光源位置为相机位置
 
                     // 模型自动旋转
-                    // library_model.rotation.y += 0.01;
+                    library_model.rotation.y += 0.002;
 
                     renderer.render(scene, camera);
                 }
