@@ -185,17 +185,17 @@ export default {
                             cursor: "pointer",
                             strokeOpacity: 0.2, //线透明度
                             strokeWeight: 1, //线宽
-                            fillOpacity: 0.35, //填充透明度
+                            fillOpacity: 0, //填充透明度
                         });
                         polygon.on("mouseover", () => {
                             polygon.setOptions({
-                                fillOpacity: 0.7,
+                                fillOpacity: 0,
                                 fillColor: "#7bccc4",
                             });
                         });
                         polygon.on("mouseout", () => {
                             polygon.setOptions({
-                                fillOpacity: 0.5,
+                                fillOpacity: 0,
                                 fillColor: "#ccebc5",
                             });
                         });
@@ -589,13 +589,13 @@ export default {
         },
         initGltf() {
             const loader = new GLTFLoader();
-            loader.load("wuhan.gltf", gltf => {
-                gltf.scene.traverse(model => {
-                    if (model.isMesh) {
-                        this.city_line(model);
-                        this.black_city(model);
-                    }
-                });
+            loader.load("library_transform.glb", gltf => {
+                // gltf.scene.traverse(model => {
+                //     if (model.isMesh) {
+                //         this.city_line(model);
+                //         this.black_city(model);
+                //     }
+                // });
                 gltf.scene.position.z = 10;
                 object = gltf.scene;
 
