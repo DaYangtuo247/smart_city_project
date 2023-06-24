@@ -550,6 +550,38 @@ export default {
                     // }
                     // alive();
 
+                    //  下面代码未能实现wuwuwu
+                    AMap.plugin('AMap.DistrictSearch', function() {
+
+                    var mask = [];
+
+                    var opts = {
+                        subdistrict: 0,
+                        extensions: 'all',
+                        level: 'city'
+                    };
+                    
+                    var district = new AMap.DistrictSearch(opts);
+                    district.search('武汉市', function(status, result) {
+                        console.log(status);
+                        var bounds = result.districtList[0].boundaries;
+                        for(var i =0;i<bounds.length;i+=1){
+                            mask.push([bounds[i]])
+                        }
+
+                        for(var i =0;i<bounds.length;i+=1){
+                            new AMap.Polyline({
+                                path:bounds[i],
+                                strokeColor:'#99ffff',
+                                strokeWeight:4,
+                                map:map
+                            })
+                        };
+                        console.log(mask.length);
+                    });
+                    
+                    });
+
                     this.map_load_comple();
                     this.load_library();
                 })
