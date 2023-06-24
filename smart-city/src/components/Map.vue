@@ -551,6 +551,7 @@ export default {
                     // alive();
 
                     this.map_load_comple();
+                    this.load_library();
                 })
                 .catch(e => {
                     console.log(e);
@@ -563,16 +564,16 @@ export default {
             }
             requestAnimationFrame(this.change);
         },
-        lib_model_load()
+        load_library()
         {
             const loader = new GLTFLoader();
-            loader.load("lib.gltf", gltf => {
-                gltf.scene.traverse(model => {
-                    if (model.isMesh) {
-                        this.lib_line(model);
-                        this.black_lib(model);
-                    }
-                });
+            loader.load("library_transform_6_24.glb", gltf => {
+                // gltf.scene.traverse(model => {
+                //     if (model.isMesh) {
+                //         this.lib_line(model);
+                //         this.black_lib(model);
+                //     }
+                // });
                 gltf.scene.position.z = 10;
                 object = gltf.scene;
 
@@ -584,18 +585,18 @@ export default {
                 }
                 setRotation({ x: 90, y: 0, z: 0 });
                 object.scale.set(1, 1, 1); // 设置x、y、z缩放
-                this.scene.add(object);
+                scene.add(object);
             });
         },
         initGltf() {
             const loader = new GLTFLoader();
-            loader.load("library_transform.glb", gltf => {
-                // gltf.scene.traverse(model => {
-                //     if (model.isMesh) {
-                //         this.city_line(model);
-                //         this.black_city(model);
-                //     }
-                // });
+            loader.load("city_6_24.gltf", gltf => {
+                gltf.scene.traverse(model => {
+                    if (model.isMesh) {
+                        this.city_line(model);
+                        this.black_city(model);
+                    }
+                });
                 gltf.scene.position.z = 10;
                 object = gltf.scene;
 
