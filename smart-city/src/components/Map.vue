@@ -44,7 +44,7 @@ export default {
             AMapLoader.load({
                 key: "283d29d48a72af6b61305c99b1f8638c", // 申请好的Web端开发者Key
                 version: "2.0",
-                plugins: ["AMap.Scale"], // 插件列表
+                plugins: ["AMap.Scale", "AMap.DistrictSearch"], // 插件列表
                 AMapUI: {
                     version: "1.1",
                     plugins: ["overlay/SimpleMarker"],
@@ -551,18 +551,20 @@ export default {
                     // alive();
 
                     //  下面代码未能实现wuwuwu
-                    AMap.plugin('AMap.DistrictSearch', function() {
-
+                    
                     var mask = [];
 
                     var opts = {
                         subdistrict: 0,
                         extensions: 'all',
-                        level: 'city'
+                        level: 'country'
                     };
                     
+                    console.log('开始执行 district.search');
                     var district = new AMap.DistrictSearch(opts);
-                    district.search('武汉市', function(status, result) {
+                    console.log('开始执行 district.search');
+
+                    district.search('中国', function(status, result) {
                         console.log(status);
                         var bounds = result.districtList[0].boundaries;
                         for(var i =0;i<bounds.length;i+=1){
@@ -576,11 +578,11 @@ export default {
                                 strokeWeight:4,
                                 map:map
                             })
-                        };
-                        console.log(mask.length);
+                        }; 
                     });
+                    console.log(mask.length);
+                    console.log('end district.search');
                     
-                    });
 
                     this.map_load_comple();
                     this.load_library();
@@ -589,6 +591,22 @@ export default {
                     console.log(e);
                 });
         },
+        // get_mask(){
+        //     AMap.plugin('AMap.DistrictSearch', function () {
+        //     var districtSearch = new AMap.DistrictSearch({
+        //         // 关键字对应的行政区级别，country表示国家
+        //         level: 'city',
+        //         extensions: 'all',
+        //         //  显示下级行政区级数，1表示返回下一级行政区
+        //         subdistrict: 1
+        //     })
+        //     // 搜索所有省/直辖市信息
+        //     districtSearch.search('武汉市', function(status, result) {
+        //         // 查询成功时，result即为对应的行政区信息
+        //         console.log(status);
+        //     })
+        //     });
+        // },
         change() {
             this.height.value += 0.3;
             if (this.height.value > 75) {
