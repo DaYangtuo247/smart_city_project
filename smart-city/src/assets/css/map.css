@@ -69,3 +69,16 @@
     cursor: pointer;
     transform: translateX(-50%);
 }
+
+video {
+    position: absolute;
+    z-index: 100;
+    width: 100vw;
+    object-fit: cover;
+    height: 100vh;
+}
+
+.fade-out-video {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}

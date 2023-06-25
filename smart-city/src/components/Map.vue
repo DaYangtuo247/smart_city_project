@@ -1,5 +1,5 @@
 <template>
-    <div class="com-container">
+    <div class="com-container" id="com-container">
         <div id="MapContainer"></div>
         <div class="center-btns">
             <button class="btn btn1" @click="immediately_road()"><img src="~@/assets/images/实时路况.png" alt="" /></button>
@@ -551,38 +551,38 @@ export default {
                     // alive();
 
                     //  下面代码未能实现wuwuwu
-                    
+
                     var mask = [];
 
                     var opts = {
-                        subdistrict: 0,
-                        extensions: 'all',
-                        level: 'country'
+                        subdistrict: 1,
+                        extensions: "all",
+                        level: "country",
                     };
-                    
-                    console.log('开始执行 district.search');
-                    var district = new AMap.DistrictSearch(opts);
-                    console.log('开始执行 district.search');
 
-                    district.search('中国', function(status, result) {
+                    console.log("开始执行 district.search");
+                    var district = new AMap.DistrictSearch(opts);
+                    console.log("开始执行 district.search");
+
+                    district.search("中国", function (status, result) {
                         console.log(status);
+
                         var bounds = result.districtList[0].boundaries;
-                        for(var i =0;i<bounds.length;i+=1){
-                            mask.push([bounds[i]])
+                        for (var i = 0; i < bounds.length; i += 1) {
+                            mask.push([bounds[i]]);
                         }
 
-                        for(var i =0;i<bounds.length;i+=1){
+                        for (var i = 0; i < bounds.length; i += 1) {
                             new AMap.Polyline({
-                                path:bounds[i],
-                                strokeColor:'#99ffff',
-                                strokeWeight:4,
-                                map:map
-                            })
-                        }; 
+                                path: bounds[i],
+                                strokeColor: "#99ffff",
+                                strokeWeight: 4,
+                                map: map,
+                            });
+                        }
                     });
                     console.log(mask.length);
-                    console.log('end district.search');
-                    
+                    console.log("end district.search");
 
                     this.map_load_comple();
                     this.load_library();
@@ -614,8 +614,7 @@ export default {
             }
             requestAnimationFrame(this.change);
         },
-        load_library()
-        {
+        load_library() {
             const loader = new GLTFLoader();
             loader.load("library_transform_6_24.glb", gltf => {
                 // gltf.scene.traverse(model => {
@@ -1061,8 +1060,36 @@ export default {
                     if (progressBarBox) {
                         progressBarBox.classList.add("fade-out");
                         setTimeout(() => {
+                            // 创建 video 元素
+                            let video = document.createElement("video");
+                            video.src = "/earth-wuhan.mp4";
+                            video.autoplay = true;
+                            video.muted = true;
+
+                            // 将视频添加到指定的 div 盒子下的第一个位置
+                            let targetDiv = document.getElementById("com-container");
+                            if (targetDiv.firstChild) {
+                                targetDiv.insertBefore(video, targetDiv.firstChild);
+                            } else {
+                                targetDiv.appendChild(video);
+                            }
+
                             progressBarBox.remove();
-                        }, 500);
+
+                            // 播放视频
+                            video.play();
+                            // 监听视频播放结束事件
+                            video.addEventListener("ended", () => {
+                                // 添加渐变类名
+                                video.classList.add("fade-out-video");
+
+                                // 等待一段时间以让渐变效果生效
+                                setTimeout(() => {
+                                    // 移除视频元素
+                                    video.remove();
+                                }, 500);
+                            });
+                        }, 0);
                     }
                 }, 3000);
             });
