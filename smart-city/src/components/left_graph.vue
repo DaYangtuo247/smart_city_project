@@ -1,19 +1,21 @@
 <template>
     <div class="left-graph" v-show="show_library">
         <div class="library" v-show="show_library">
-            <library_model></library_model>
-            <library_trend></library_trend>
+            <!-- <library_model></library_model> -->
+            <library_type></library_type>
         </div>
     </div>
 </template>
 
 <script>
-import library_trend from "graph/library_trend.vue";
+// import library_trend from "graph/library_trend.vue";
+import library_type from "graph/library_type.vue";
 import library_model from "graph/library_model.vue";
 export default {
     components: {
         library_model,
-        library_trend,
+        // library_trend,
+        library_type,
     },
     data() {
         return {

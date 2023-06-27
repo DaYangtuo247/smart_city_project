@@ -1,5 +1,10 @@
 <template>
-    <div ref="typeRef" style="width: 388px; height: 300px"></div>
+    <div class="dropdown">
+        <div class="title" >
+            {{ tit }}
+        </div>
+    </div>
+    <div ref="typeRef" style="width: 388px; height: 500px"></div>
 </template>
 
 <script>
