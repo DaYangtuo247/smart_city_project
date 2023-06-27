@@ -53,7 +53,7 @@ export default {
                 },
                 grid: {
                     left: "3%",
-                    top: "35%",
+                    top: "15%",
                     right: "4%",
                     bottom: "1%",
                     // 把x轴和y轴纳入 grid
@@ -66,7 +66,7 @@ export default {
                 },
                 legend: {
                     left: "center",
-                    top: "18%",
+                    top: "3%",
                     // 图例的icon类型
                     icon: "circle",
                 },

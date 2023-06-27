@@ -9,7 +9,6 @@
 <script>
 // import library_analyse from "graph/library_analyse.vue";
 import library_type from "graph/library_type.vue";
-// import library_trend from "graph/library_trend.vue";
 export default {
     components: {
         // library_analyse,

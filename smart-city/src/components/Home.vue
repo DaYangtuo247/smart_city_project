@@ -47,6 +47,8 @@
         <!-- echarts图表 -->
         <liftGraph></liftGraph>
         <rightGraph></rightGraph>
+        <leftgongdi></leftgongdi>
+        <rightgongdi></rightgongdi>
     </div>
 </template>
 
@@ -55,6 +57,8 @@ import Map from "components/Map.vue";
 import Ai from "components/Ai.vue";
 import liftGraph from "components/left_graph.vue";
 import rightGraph from "components/right_graph.vue";
+import leftgongdi from "components/left_gongdi.vue";
+import rightgongdi from "components/right_gongdi.vue";
 
 export default {
     name: "ScreenPage",
@@ -63,6 +67,8 @@ export default {
         Ai,
         liftGraph,
         rightGraph,
+        leftgongdi,
+        rightgongdi
     },
     data() {
         return {

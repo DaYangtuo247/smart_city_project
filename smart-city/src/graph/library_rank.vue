@@ -50,7 +50,7 @@ export default {
 
             const initOption = {
                 grid: {
-                    top: "40%",
+                    top: "5%",
                     left: "5%",
                     right: "5%",
                     bottom: "5%",

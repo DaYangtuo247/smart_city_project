@@ -17,7 +17,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import AMapLoader from "@amap/amap-jsapi-loader";
 import { buildSlots } from "@vue/compiler-core";
 // let height = 0.0;
-let map, camera, scene, renderer, object; // 高德地图, 相机, 场景, 渲染器, gltf模型场景
+let map, camera, scene, renderer, object, object1; // 高德地图, 相机, 场景, 渲染器, gltf模型场景
 let map_gltf_model_Position = [114.281454, 30.59925], // 模型放置点
     map_init_center = [114.30443, 30.591613]; //初始化地图中心点位置
 let customCoords, zMarker1;
@@ -44,8 +44,9 @@ export default {
     mounted() {
         this.initMap();
         this.change();
+        // this.load_gongdi();
         this.load_library();
-        this.load_gongdi();
+        // this.load_gongdi()
     },
     methods: {
         initMap() {
@@ -182,6 +183,16 @@ export default {
                         [114.235541, 30.650994],
                     ];
 
+                    var gongdi_area = [
+                        [ 114.248476,30.642913 ],
+                        [ 114.249253,30.641568 ],
+                        [ 114.247759,30.640899 ], 
+                        [ 114.248963,30.639109 ],
+                        [ 114.253651,30.641647 ],
+                        [ 114.252333,30.643872 ],
+                        [ 114.248476,30.642913 ],
+                    ]
+
                     // 在地图上添加多边形，该方法来源于 https://lbs.amap.com/api/javascript-api-v2/documentation#Polygon
                     function addPolygon(data, fun) {
                         let polygon = new AMap.Polygon({
@@ -214,13 +225,20 @@ export default {
                     }
                     addPolygon(library_area, showInfoClick); // 参数二为需要执行的函数
                     addPolygon(store_area, showInfoClick);
+                    addPolygon(gongdi_area, showInfoClick1);
 
                     // 图书馆触发事件
                     let eventBus = this.$eventBus; // 该代码下的this指向app实例，在如下函数中的this指向当前函数本身
                     function showInfoClick(e) {
                         console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // 触发一个名为'change'的自定义事件
+                        // eventBus.emit("show-gongdi-graph-lr", "数据(目前没有)"); // 正确
                         eventBus.emit("show-library-graph-lr", "数据(目前没有)"); // 正确
+                    }
+
+                    function showInfoClick1(e) {
+                        console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了工地！");
+                        eventBus.emit("show-gongdi-graph-lr", "数据(目前没有)"); // 正确
                     }
 
                     var loca = new Loca.Container({ map });
@@ -4367,32 +4385,33 @@ export default {
             }
             requestAnimationFrame(this.change);
         },
-        load_gongdi() {
-            const loader = new GLTFLoader();
-            loader.load("6_27.glb", gltf => {
-                // gltf.scene.traverse(model => {
-                //     if (model.isMesh) {
-                //         this.lib_line(model);
-                //         this.black_lib(model);
-                //     }
-                // });
-                gltf.scene.position.z = 10;
-                object = gltf.scene;
+        // load_gongdi(){
+        //     console.log("load_gongdi");
+        //     const loader = new GLTFLoader();
+        //     loader.load("library_transform_6_24.glb", gltf => {
+        //         // gltf.scene.traverse(model => {
+        //         //     if (model.isMesh) {
+        //         //         this.lib_line(model);
+        //         //         this.black_lib(model);
+        //         //     }
+        //         // });
+        //         gltf.scene.position.z = 10;
+        //         object1 = gltf.scene;
 
-                function setRotation(rotation) {
-                    var x = (Math.PI / 180) * (rotation.x || 0);
-                    var y = (Math.PI / 180) * (rotation.y || 0);
-                    var z = (Math.PI / 180) * (rotation.z || 0);
-                    object.rotation.set(x, y, z);
-                }
-                setRotation({ x: 90, y: 0, z: 0 });
-                object.scale.set(1, 1, 1); // 设置x、y、z缩放
-                scene.add(object);
-            });
-        },
+        //         function setRotation(rotation) {
+        //             var x = (Math.PI / 180) * (rotation.x || 0);
+        //             var y = (Math.PI / 180) * (rotation.y || 0);
+        //             var z = (Math.PI / 180) * (rotation.z || 0);
+        //             object1.rotation.set(x, y, z);
+        //         }
+        //         setRotation({ x: 90, y: 0, z: 0 });
+        //         object1.scale.set(1, 1, 1); // 设置x、y、z缩放
+        //         scene.add(object1);
+        //     });
+        // },
         load_library() {
             const loader = new GLTFLoader();
-            loader.load("library_transform_6_24.glb", gltf => {
+            loader.load("cityandlib_6_26.glb", gltf => {
                 // gltf.scene.traverse(model => {
                 //     if (model.isMesh) {
                 //         this.lib_line(model);
