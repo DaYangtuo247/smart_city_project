@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-
+// import store from "./store";
 import mitt from 'mitt'; // vue3中eventBus事件总线的方法被废弃，需要引入第三方库
 import axios from "axios";
 import * as echarts from "echarts";

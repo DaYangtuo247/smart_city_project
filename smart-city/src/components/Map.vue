@@ -38,6 +38,7 @@ export default {
     mounted() {
         this.initMap();
         this.change();
+        this.load_library();
     },
     methods: {
         initMap() {
