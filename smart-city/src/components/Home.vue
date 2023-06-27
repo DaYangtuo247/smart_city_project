@@ -62,7 +62,7 @@ export default {
         Map,
         Ai,
         liftGraph,
-        rightGraph
+        rightGraph,
     },
     data() {
         return {

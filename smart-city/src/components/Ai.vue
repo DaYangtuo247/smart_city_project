@@ -1,7 +1,7 @@
 <template>
-    <el-dialog title="弹窗" :visible="detailVisible" width="35%" class="wind" style="background-color: #222733;">
+    <div title="弹窗" :visible="detailVisible" width="35%" class="wind" style="background-color: #222733">
         <iframe src="http://localhost:5173/" frameborder="0" class="aibox"></iframe>
-    </el-dialog>
+    </div>
 </template>
 
 <script>

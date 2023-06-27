@@ -1,15 +1,11 @@
 {
   "name": "vue3-ts-vite-router-tailwindcss",
-  "version": "0.0.1",
-  "author": "LiangINX",
   "main": "index.html",
-  "license": "MIT",
   "scripts": {
     "ai": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit"
+    "build-only": "vite build"
   },
   "dependencies": {
     "@icon-park/vue-next": "^1.4.2",
