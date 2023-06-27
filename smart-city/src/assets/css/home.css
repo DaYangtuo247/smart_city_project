@@ -80,7 +80,7 @@ header .time {
 }
 
 .ai-btn {
-    position: absolute;
+    position: fixed;
     right: 50px;
     bottom: 100px;
     width: 60px;

@@ -4,11 +4,7 @@
 			class="flex flex-nowrap fixed w-full items-baseline top-0 px-6 py-4 bg-gray-100 dark:bg-dark_bg_nav"
 			style="height: 74px"
 		>
-			<div
-				class="text-2xl font-bold dark:text-dark_text_title1_color"
-				@click="checkTheme()"
-				title="切换主题"
-			>
+			<div class="text-2xl font-bold dark:text-dark_text_title1_color">
 				UrbanGPT
 			</div>
 			<div
@@ -210,33 +206,6 @@ const sendOrSave = () => {
 		clearMessageContent();
 	} else {
 		sendChatMessage();
-	}
-};
-
-// 切换主题
-const checkTheme = () => {
-	if (AiTheme == "light") {
-		document.documentElement.classList.add("dark");
-		const myAi = document.getElementById("myAi");
-		if (myAi) {
-			const items = myAi.getElementsByTagName("li");
-			for (let i = 0; i < items.length; i++) {
-				items[i].style.color = "white";
-			}
-		}
-		AiTheme = "dark";
-		console.log("ai 黑");
-	} else {
-		document.documentElement.classList.remove("dark");
-		const myAi = document.getElementById("myAi");
-		if (myAi) {
-			const items = myAi.getElementsByTagName("li");
-			for (let i = 0; i < items.length; i++) {
-				items[i].style.color = "#6b7280";
-			}
-		}
-		AiTheme = "light";
-		console.log("ai 白");
 	}
 };
 
