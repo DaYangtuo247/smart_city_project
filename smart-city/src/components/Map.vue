@@ -39,6 +39,7 @@ export default {
         this.initMap();
         this.change();
         this.load_library();
+        this.load_gongdi();
     },
     methods: {
         initMap() {
@@ -581,6 +582,29 @@ export default {
                 this.height.value = 0.0;
             }
             requestAnimationFrame(this.change);
+        },
+        load_gongdi(){
+            const loader = new GLTFLoader();
+            loader.load("6_27.glb", gltf => {
+                // gltf.scene.traverse(model => {
+                //     if (model.isMesh) {
+                //         this.lib_line(model);
+                //         this.black_lib(model);
+                //     }
+                // });
+                gltf.scene.position.z = 10;
+                object = gltf.scene;
+
+                function setRotation(rotation) {
+                    var x = (Math.PI / 180) * (rotation.x || 0);
+                    var y = (Math.PI / 180) * (rotation.y || 0);
+                    var z = (Math.PI / 180) * (rotation.z || 0);
+                    object.rotation.set(x, y, z);
+                }
+                setRotation({ x: 90, y: 0, z: 0 });
+                object.scale.set(1, 1, 1); // 设置x、y、z缩放
+                scene.add(object);
+            });
         },
         load_library() {
             const loader = new GLTFLoader();
