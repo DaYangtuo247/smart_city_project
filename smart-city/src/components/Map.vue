@@ -16,7 +16,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import AMapLoader from "@amap/amap-jsapi-loader";
 // let height = 0.0;
-let map, camera, scene, renderer, object; // 高德地图, 相机, 场景, 渲染器, gltf模型场景
+let map, camera, scene, renderer, object, object1; // 高德地图, 相机, 场景, 渲染器, gltf模型场景
 let map_gltf_model_Position = [114.281454, 30.59925], // 模型放置点
     map_init_center = [114.30443, 30.591613]; //初始化地图中心点位置
 let customCoords, zMarker1;
@@ -38,8 +38,9 @@ export default {
     mounted() {
         this.initMap();
         this.change();
+        // this.load_gongdi();
         this.load_library();
-        this.load_gongdi();
+        // this.load_gongdi()
     },
     methods: {
         initMap() {
@@ -583,32 +584,33 @@ export default {
             }
             requestAnimationFrame(this.change);
         },
-        load_gongdi(){
-            const loader = new GLTFLoader();
-            loader.load("6_27.glb", gltf => {
-                // gltf.scene.traverse(model => {
-                //     if (model.isMesh) {
-                //         this.lib_line(model);
-                //         this.black_lib(model);
-                //     }
-                // });
-                gltf.scene.position.z = 10;
-                object = gltf.scene;
+        // load_gongdi(){
+        //     console.log("load_gongdi");
+        //     const loader = new GLTFLoader();
+        //     loader.load("library_transform_6_24.glb", gltf => {
+        //         // gltf.scene.traverse(model => {
+        //         //     if (model.isMesh) {
+        //         //         this.lib_line(model);
+        //         //         this.black_lib(model);
+        //         //     }
+        //         // });
+        //         gltf.scene.position.z = 10;
+        //         object1 = gltf.scene;
 
-                function setRotation(rotation) {
-                    var x = (Math.PI / 180) * (rotation.x || 0);
-                    var y = (Math.PI / 180) * (rotation.y || 0);
-                    var z = (Math.PI / 180) * (rotation.z || 0);
-                    object.rotation.set(x, y, z);
-                }
-                setRotation({ x: 90, y: 0, z: 0 });
-                object.scale.set(1, 1, 1); // 设置x、y、z缩放
-                scene.add(object);
-            });
-        },
+        //         function setRotation(rotation) {
+        //             var x = (Math.PI / 180) * (rotation.x || 0);
+        //             var y = (Math.PI / 180) * (rotation.y || 0);
+        //             var z = (Math.PI / 180) * (rotation.z || 0);
+        //             object1.rotation.set(x, y, z);
+        //         }
+        //         setRotation({ x: 90, y: 0, z: 0 });
+        //         object1.scale.set(1, 1, 1); // 设置x、y、z缩放
+        //         scene.add(object1);
+        //     });
+        // },
         load_library() {
             const loader = new GLTFLoader();
-            loader.load("library_transform_6_24.glb", gltf => {
+            loader.load("cityandlib_6_26.glb", gltf => {
                 // gltf.scene.traverse(model => {
                 //     if (model.isMesh) {
                 //         this.lib_line(model);
