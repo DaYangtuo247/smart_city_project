@@ -29,6 +29,12 @@
     background-color: transparent;
 }
 
+.center-btns .btn1:active,
+.center-btns .btn5:active {
+    transform: scale(0.96);
+    transition: transform 0.3s ease;
+}
+
 .center-btns .btn1 {
     left: 0;
     top: 50%;
@@ -36,20 +42,31 @@
 
 .center-btns .btn2 {
     left: 50%;
-    transform: translate(-236%);
+    transform: translate(-236%,0);
     top: -13px;
+}
+.center-btns .btn2:active{
+    transform: translate(-236%,0) scale(0.96);
 }
 
 .center-btns .btn3 {
     left: 50%;
-    transform: translate(-44%);
+    transform: translate(-44%,0);
     top: -17px;
+}
+
+.center-btns .btn3:active{
+    transform: translate(-44%,0) scale(0.96);
 }
 
 .center-btns .btn4 {
     left: 50%;
     transform: translate(135%);
     top: -10px;
+}
+
+.center-btns .btn4:active{
+    transform: translate(135%,0) scale(0.96);
 }
 
 .center-btns .btn5 {
@@ -67,7 +84,17 @@
     left: 50%;
     bottom: 0;
     cursor: pointer;
-    transform: translateX(-50%);
+    transform: translate(-50%, 0);
+    transition: transform 0.3s ease;
+}
+
+.center-btns .all:hover {
+    filter: drop-shadow(0px 0px 10px #1972f5);
+}
+
+.center-btns .all:active {
+    transform: translate(-50%, 0) scale(0.9);
+    transform-origin: center center;
 }
 
 video {
