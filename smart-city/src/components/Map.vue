@@ -177,6 +177,16 @@ export default {
                         [114.235541, 30.650994],
                     ];
 
+                    var gongdi_area = [
+                        [ 114.248476,30.642913 ],
+                        [ 114.249253,30.641568 ],
+                        [ 114.247759,30.640899 ], 
+                        [ 114.248963,30.639109 ],
+                        [ 114.253651,30.641647 ],
+                        [ 114.252333,30.643872 ],
+                        [ 114.248476,30.642913 ],
+                    ]
+
                     // 在地图上添加多边形，该方法来源于 https://lbs.amap.com/api/javascript-api-v2/documentation#Polygon
                     function addPolygon(data, fun) {
                         let polygon = new AMap.Polygon({
@@ -209,13 +219,20 @@ export default {
                     }
                     addPolygon(library_area, showInfoClick); // 参数二为需要执行的函数
                     addPolygon(store_area, showInfoClick);
+                    addPolygon(gongdi_area, showInfoClick1);
 
                     // 图书馆触发事件
                     let eventBus = this.$eventBus; // 该代码下的this指向app实例，在如下函数中的this指向当前函数本身
                     function showInfoClick(e) {
                         console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了地图！");
                         // 触发一个名为'change'的自定义事件
+                        // eventBus.emit("show-gongdi-graph-lr", "数据(目前没有)"); // 正确
                         eventBus.emit("show-library-graph-lr", "数据(目前没有)"); // 正确
+                    }
+
+                    function showInfoClick1(e) {
+                        console.log("您在 [ " + e.lnglat.getLng() + "," + e.lnglat.getLat() + " ] 的位置单击了工地！");
+                        eventBus.emit("show-gongdi-graph-lr", "数据(目前没有)"); // 正确
                     }
 
                     var loca = new Loca.Container({ map });

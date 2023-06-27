@@ -31,7 +31,7 @@ export default {
         };
     },
     mounted() {
-        this.$eventBus.on("show-library-data-l", showMenu => {
+        this.$eventBus.on("show-gongdi-data-l", showMenu => {
             if (showMenu) {
                 // 在div渲染结束后在初始化图表
                 this.$nextTick(() => {

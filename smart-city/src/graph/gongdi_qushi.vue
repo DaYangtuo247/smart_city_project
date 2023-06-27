@@ -4,12 +4,12 @@
             {{ tit }}
         </div>
     </div>
-    <div ref="RankRef" style="width: 388px; height: 260px"></div>
+    <div ref="qushiRef" style="width: 388px; height: 260px"></div>
 </template>
 
 <script>
 export default {
-    name: "rank",
+    name: "qushi",
     data() {
         return {
             // 图表的实例对象
@@ -20,7 +20,7 @@ export default {
             // currentIndex: 0,
             // currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆使用情况排行.json",
-            tit: "▎图书馆使用情况",
+            tit: "▎区域人员性别比例",
             showDropdown: false, // 下拉菜单显示状态
             // 柱形图 区域缩放起点值
             startValue: 0,
@@ -31,7 +31,7 @@ export default {
         };
     },
     mounted() {
-        this.$eventBus.on("show-library-data-l", showMenu => {
+        this.$eventBus.on("show-gongdi-data-l", showMenu => {
             if (showMenu) {
                 // 在div渲染结束后在初始化图表
                 this.$nextTick(() => {
@@ -46,48 +46,69 @@ export default {
     methods: {
         // 初始化图表的方法
         initChart() {
-            this.chartInstance = this.$echarts.init(this.$refs.RankRef, "default");
-
+            this.chartInstance = this.$echarts.init(this.$refs.qushiRef, "default");
             const initOption = {
-                grid: {
-                    top: "5%",
-                    left: "5%",
-                    right: "5%",
-                    bottom: "5%",
-                    // 把x轴和y轴纳入 grid
-                    containLabel: true,
-                },
                 tooltip: {
-                    show: true,
+                    trigger: 'item'
                 },
-                xAxis: {
-                    type: "category",
+                legend: {
+                    type: 'scroll',
+                    bottom: 10,
+                    data: (function () {
+                    var list = [];
+                    for (var i = 1; i <= 28; i++) {
+                        list.push(i + 2000 + '');
+                    }
+                    return list;
+                    })()
                 },
-                yAxis: {
-                    value: "value",
+                visualMap: {
+                    top: 'middle',
+                    right: 10,
+                    color: ['red', 'yellow'],
+                    calculable: false
                 },
-                series: [
-                    {
-                        type: "bar",
-                        label: {
-                            show: true,
-                            position: "top",
-                            color: "white",
-                            rotate: 30,
+                radar: {
+                    indicator: [
+                    { text: 'IE8-', max: 400 },
+                    { text: 'IE9+', max: 400 },
+                    { text: 'Safari', max: 400 },
+                    { text: 'Firefox', max: 400 },
+                    { text: 'Chrome', max: 400 }
+                    ]
+                },
+                series: (function () {
+                    var series = [];
+                    for (var i = 1; i <= 28; i++) {
+                    series.push({
+                        type: 'radar',
+                        symbol: 'none',
+                        lineStyle: {
+                        width: 1
                         },
-                    },
-                ],
-            };
+                        emphasis: {
+                        areaStyle: {
+                            color: 'rgba(0,250,0,0.3)'
+                        }
+                        },
+                        data: [
+                        {
+                            value: [
+                            (40 - i) * 10,
+                            (38 - i) * 4 + 60,
+                            i * 5 + 10,
+                            i * 9,
+                            (i * i) / 2
+                            ],
+                            name: i + 2000 + ''
+                        }
+                        ]
+                    });
+                    }
+                    return series;
+                })()
+            }
             this.chartInstance.setOption(initOption);
-
-            // 鼠标经过关闭 动画效果
-            this.chartInstance.on("mouseover", () => {
-                clearInterval(this.timerId);
-            });
-            // 鼠标离开 开启动画效果
-            this.chartInstance.on("mouseout", () => {
-                this.startInterval();
-            });
         },
         // 发送请求，获取数据
         async getData() {

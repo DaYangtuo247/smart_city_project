@@ -34,8 +34,14 @@ export default {
         let eventBus = this.$eventBus;
         this.$eventBus.on("show-library-graph-lr", url => {
             this.show_library = !this.show_library;
+            console.log("this.show_library");
             eventBus.emit("show-library-data-l", this.show_library);
         });
+        // this.$eventBus.on("show-gongdi-graph-lr", url => {
+        //     this.show_library = !this.show_library;
+        //     console.log("this.show_gongdi");
+        //     // eventBus.emit("show-library-data-l", this.show_library);
+        // });
     },
 };
 </script>
