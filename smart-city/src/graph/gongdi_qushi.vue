@@ -4,7 +4,7 @@
             {{ tit }}
         </div>
     </div>
-    <div ref="qushiRef" style="width: 388px; height: 260px"></div>
+    <div ref="qushiRef" style="width: 388px; height: 300px"></div>
 </template>
 
 <script>
@@ -47,67 +47,41 @@ export default {
         // 初始化图表的方法
         initChart() {
             this.chartInstance = this.$echarts.init(this.$refs.qushiRef, "default");
+    
             const initOption = {
-                tooltip: {
-                    trigger: 'item'
-                },
-                legend: {
-                    type: 'scroll',
-                    bottom: 10,
-                    data: (function () {
-                    var list = [];
-                    for (var i = 1; i <= 28; i++) {
-                        list.push(i + 2000 + '');
+            legend: {
+                data: ['Allocated Budget', 'Actual Spending'],
+                top: '95%'
+            },
+            radar: {
+                // shape: 'circle',
+                indicator: [
+                { name: 'Sales', max: 6500 },
+                { name: 'Administration', max: 16000 },
+                { name: 'Information Technology', max: 30000 },
+                { name: 'Customer Support', max: 38000 },
+                { name: 'Development', max: 52000 },
+                { name: 'Marketing', max: 25000 }
+                ]
+            },
+            series: [
+                {
+                center: ['50%', '50%'],
+                name: 'Budget vs spending',
+                type: 'radar',
+                data: [
+                    {
+                    value: [4200, 3000, 20000, 35000, 50000, 18000],
+                    name: 'Allocated Budget'
+                    },
+                    {
+                    value: [5000, 14000, 28000, 26000, 42000, 21000],
+                    name: 'Actual Spending'
                     }
-                    return list;
-                    })()
-                },
-                visualMap: {
-                    top: 'middle',
-                    right: 10,
-                    color: ['red', 'yellow'],
-                    calculable: false
-                },
-                radar: {
-                    indicator: [
-                    { text: 'IE8-', max: 400 },
-                    { text: 'IE9+', max: 400 },
-                    { text: 'Safari', max: 400 },
-                    { text: 'Firefox', max: 400 },
-                    { text: 'Chrome', max: 400 }
-                    ]
-                },
-                series: (function () {
-                    var series = [];
-                    for (var i = 1; i <= 28; i++) {
-                    series.push({
-                        type: 'radar',
-                        symbol: 'none',
-                        lineStyle: {
-                        width: 1
-                        },
-                        emphasis: {
-                        areaStyle: {
-                            color: 'rgba(0,250,0,0.3)'
-                        }
-                        },
-                        data: [
-                        {
-                            value: [
-                            (40 - i) * 10,
-                            (38 - i) * 4 + 60,
-                            i * 5 + 10,
-                            i * 9,
-                            (i * i) / 2
-                            ],
-                            name: i + 2000 + ''
-                        }
-                        ]
-                    });
-                    }
-                    return series;
-                })()
-            }
+                ]
+                }
+            ]
+            };
             this.chartInstance.setOption(initOption);
         },
         // 发送请求，获取数据

@@ -4,7 +4,7 @@
             {{ tit }}
         </div>
     </div>
-    <div ref="RankRef" style="width: 388px; height: 260px"></div>
+    <div ref="RankRef" style="width: 388px; height: 250px"></div>
 </template>
 
 <script>

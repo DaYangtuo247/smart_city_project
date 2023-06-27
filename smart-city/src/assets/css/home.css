@@ -127,7 +127,7 @@ header .time {
 .right-graph {
     position: absolute;
     left: 30px;
-    top: 90px;
+    top: 65px;
     width: 430px;
     z-index: 999;
     overflow: hidden;
