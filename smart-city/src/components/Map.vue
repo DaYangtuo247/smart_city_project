@@ -7,7 +7,7 @@
             <button class="btn btn3" @click="model_3D()"><img src="~@/assets/images/3D模型.png" alt="" /></button>
             <button class="btn btn4" @click="people_out()"><img src="~@/assets/images/人口流出.png" alt="" /></button>
             <button class="btn btn5" @click="immediate_bus()"><img src="~@/assets/images/实时公交.png" alt="" /></button>
-            <img src="~@/assets/images/all-btn.png" alt="" class="all" />
+            <img src="~@/assets/images/all-btn.png" @click="wuhan()" alt="" class="all" />
         </div>
     </div>
 </template>
@@ -4559,6 +4559,11 @@ export default {
                 object.scale.set(1, 1, 1); // 设置x、y、z缩放
                 scene.add(object);
             });
+        },
+        wuhan(){
+            let eventBus = this.$eventBus;
+            console.log("您单击了总览按钮！");
+            eventBus.emit("show-wuhan-graph-lr", "数据(目前没有)"); // 正确
         },
         initGltf() {
             const loader = new GLTFLoader();

@@ -49,6 +49,8 @@
         <rightGraph></rightGraph>
         <leftgongdi></leftgongdi>
         <rightgongdi></rightgongdi>
+        <left_wuhan></left_wuhan>
+        <right_wuhan></right_wuhan>
     </div>
 </template>
 
@@ -59,6 +61,8 @@ import liftGraph from "components/left_graph.vue";
 import rightGraph from "components/right_graph.vue";
 import leftgongdi from "components/left_gongdi.vue";
 import rightgongdi from "components/right_gongdi.vue";
+import left_wuhan from "./left_wuhan.vue";
+import right_wuhan from "./right_wuhan.vue";
 
 export default {
     name: "ScreenPage",
@@ -68,7 +72,9 @@ export default {
         liftGraph,
         rightGraph,
         leftgongdi,
-        rightgongdi
+        rightgongdi,
+        left_wuhan,
+        right_wuhan,
     },
     data() {
         return {
