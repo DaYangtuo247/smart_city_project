@@ -19,7 +19,7 @@ import AMapLoader from "@amap/amap-jsapi-loader";
 let map, camera, scene, renderer, object, object1; // 高德地图, 相机, 场景, 渲染器, gltf模型场景
 let map_gltf_model_Position = [114.281454, 30.59925], // 模型放置点
     map_init_center = [114.30443, 30.591613]; //初始化地图中心点位置
-let customCoords, zMarker1;
+let customCoords, zMarker1, zMarker2, zMarker3;
 let avg_tf_loca, people_out_loca, trafficLayer; // 日平均车流, 人口流出情况, 路况对象
 let immediately_road = false, // 实时路况
     model_3D = false, // 3D模型
@@ -390,7 +390,7 @@ export default {
                     //     zooms: [2, 26],
                     // });
 
-                    // var heightFactor = 5;
+                    var heightFactor = 5;
 
                     // var pointGeo = new Loca.GeoJSONSource({
                     //     url: this.$http.defaults.baseURL + "/唐家墩人流量粒子特效.json",
@@ -475,66 +475,193 @@ export default {
                     });
                     loca.add(outLayer);
 
-                    // var top5 = new Loca.GeoJSONSource({
-                    //     data: {
-                    //         type: "FeatureCollection",
-                    //         features: [
-                    //             {
-                    //                 geometry: {
-                    //                     coordinates: [114.271389, 30.618726],
-                    //                     type: "Point",
-                    //                 },
-                    //                 type: "Feature",
-                    //                 properties: {
-                    //                     h: 140,
-                    //                     p: 460,
-                    //                 },
-                    //             },
-                    //         ],
-                    //     },
-                    // });
-                    // zMarker1 = new Loca.ZMarkerLayer({
-                    //     zIndex: 120,
-                    //     loca,
-                    // });
-                    // zMarker1.setSource(top5);
-                    // zMarker1.setStyle({
-                    //     content: (i, feat) => {
-                    //         var people = feat.properties.p;
-                    //         return `<div>
-                    //             <p style="width: 400px; height: 80px; line-height: 80px; font-size: 40px; background-image:linear-gradient(to right,rgba(30,215,196,0.4),rgba(30, 215, 196, 0.3),rgba(0,0,0,0.4)); border:4px solid rgba(30, 215, 196, 0.9); color:#fff; border-radius: 20px; text-align:center; margin:0;padding:0;">
-                    //             人流量: ${people}人/分
-                    //             </p>
-                    //         </div>
-                    //         `;
-                    //     },
-                    //     unit: "meter",
-                    //     rotation: 0,
-                    //     alwaysFront: true,
-                    //     size: [200 * 2, 40 * 2],
-                    //     altitude: (i, feat) => {
-                    //         return feat.properties.h * heightFactor;
-                    //     },
-                    // });
-                    // var pole = new Loca.LaserLayer({
-                    //     zIndex: 120,
-                    //     loca,
-                    //     depth: false,
-                    // });
-                    // pole.setSource(top5, {
-                    //     unit: "meter",
-                    //     height: (i, feat) => {
-                    //         return feat.properties.h * heightFactor;
-                    //     },
-                    //     color: "rgba(30,215,196, 1)",
-                    //     lineWidth: 10,
-                    //     trailLength: 50000,
-                    //     repeat: 0,
-                    // });
+                    var top5 = new Loca.GeoJSONSource({
+                        data: {
+                            type: "FeatureCollection",
+                            features: [
+                                {
+                                    geometry: {
+                                        coordinates: [114.251034,30.641344],
+                                        type: "Point",
+                                    },
+                                    type: "Feature",
+                                    properties: {
+                                        h: 20,
+                                        p: 460,
+                                    },
+                                },
+                                // {
+                                //     geometry: {
+                                //         coordinates: [114.251205,30.64269],
+                                //         type: "Point",
+                                //     },
+                                //     type: "Feature",
+                                //     properties: {
+                                //         h: 20,
+                                //         p: 460,
+                                //     },
+                                // },
+                            ],
+                        },
+                    });
+                    var mark_data1 = new Loca.GeoJSONSource({
+                        data: {
+                            type: "FeatureCollection",
+                            features: [
+                                {
+                                    geometry: {
+                                        coordinates: [114.251205,30.64269],
+                                        type: "Point",
+                                    },
+                                    type: "Feature",
+                                    properties: {
+                                        h: 20,
+                                        p: 460,
+                                    },
+                                },
+                            ],
+                        },
+                    });
+                    var mark_data2 = new Loca.GeoJSONSource({
+                        data: {
+                            type: "FeatureCollection",
+                            features: [
+                                {
+                                    geometry: {
+                                        coordinates: [114.25224,30.641947 ],
+                                        type: "Point",
+                                    },
+                                    type: "Feature",
+                                    properties: {
+                                        h: 15,
+                                        p: 460,
+                                    },
+                                },
+                            ],
+                        },
+                    });
 
-                    // loca.animate.start();
-                    // loca.pointLight.intensity = 0;
-                    // loca.ambLight.intensity = 1;
+                    zMarker1 = new Loca.ZMarkerLayer({
+                        zIndex: 120,
+                        loca,
+                    });
+                    zMarker1.setSource(top5);
+                    zMarker1.setStyle({
+                        content: (i, feat) => {
+                            var people = feat.properties.p;
+                            return `<div>
+                                <p style="width: 400px; height: 80px; line-height: 80px; font-size: 40px; background-image:linear-gradient(to right,rgba(30,215,196,0.5),rgba(30, 215, 196, 0.4),rgba(0,0,0,0.5)); border:4px solid rgba(30, 215, 196, 0.9); color:#fff; border-radius: 20px; text-align:center; margin:0;padding:0;">
+                                扬尘监测点
+                                </p>
+                            </div>
+                            `;
+                        },
+                        unit: "meter",
+                        rotation: 0,
+                        alwaysFront: true,
+                        size: [100, 20],
+                        altitude: (i, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                    });
+                    var pole = new Loca.LaserLayer({
+                        zIndex: 120,
+                        loca,
+                        depth: false,
+                    });
+                    pole.setSource(top5, {
+                        unit: "meter",
+                        height: (i, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                        color: "rgba(30,215,196, 1)",
+                        lineWidth: 1,
+                        trailLength: 50000,
+                        repeat: 0,
+                    });
+
+                    zMarker2 = new Loca.ZMarkerLayer({
+                        zIndex: 120,
+                        loca,
+                    });
+                    zMarker2.setSource(mark_data1);
+                    zMarker2.setStyle({
+                        content: (i, feat) => {
+                            var people = feat.properties.p;
+                            return `<div>
+                                <p style="width: 400px; height: 80px; line-height: 80px; font-size: 40px; background-image:linear-gradient(to right,rgba(30,215,196,0.5),rgba(30, 215, 196, 0.4),rgba(0,0,0,0.5)); border:4px solid rgba(30, 215, 196, 0.9); color:#fff; border-radius: 20px; text-align:center; margin:0;padding:0;">
+                                噪音监测点
+                                </p>
+                            </div>
+                            `;
+                        },
+                        unit: "meter",
+                        rotation: 0,
+                        alwaysFront: true,
+                        size: [100, 20],
+                        altitude: (i, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                    });
+                    var pole1 = new Loca.LaserLayer({
+                        zIndex: 120,
+                        loca,
+                        depth: false,
+                    });
+                    pole1.setSource(mark_data1, {
+                        unit: "meter",
+                        height: (i, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                        color: "rgba(30,215,196, 1)",
+                        lineWidth: 1,
+                        trailLength: 50000,
+                        repeat: 0,
+                    });
+
+                    zMarker3 = new Loca.ZMarkerLayer({
+                        zIndex: 120,
+                        loca,
+                    });
+                    zMarker3.setSource(mark_data2);
+                    zMarker3.setStyle({
+                        content: (i, feat) => {
+                            var people = feat.properties.p;
+                            return `<div>
+                                <p style="width: 400px; height: 80px; line-height: 80px; font-size: 40px; background-image:linear-gradient(to right,rgba(30,215,196,0.5),rgba(30, 215, 196, 0.4),rgba(0,0,0,0.5)); border:4px solid rgba(30, 215, 196, 0.9); color:#fff; border-radius: 20px; text-align:center; margin:0;padding:0;">
+                                智慧监控点
+                                </p>
+                            </div>
+                            `;
+                        },
+                        unit: "meter",
+                        rotation: 0,
+                        alwaysFront: true,
+                        size: [100, 20],
+                        altitude: (i, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                    });
+                    var pole2 = new Loca.LaserLayer({
+                        zIndex: 120,
+                        loca,
+                        depth: false,
+                    });
+                    pole2.setSource(mark_data2, {
+                        unit: "meter",
+                        height: (i, feat) => {
+                            return feat.properties.h * heightFactor;
+                        },
+                        color: "rgba(30,215,196, 1)",
+                        lineWidth: 1,
+                        trailLength: 50000,
+                        repeat: 0,
+                    });
+                    
+
+                    loca.animate.start();
+                    loca.pointLight.intensity = 0;
+                    loca.ambLight.intensity = 1;
 
                     // 渲染请开启此函数
                     function alive() {

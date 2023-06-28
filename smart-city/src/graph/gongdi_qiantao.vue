@@ -4,12 +4,12 @@
             {{ tit }}
         </div>
     </div>
-    <div ref="qushiRef" style="width: 388px; height: 300px"></div>
+    <div ref="qiantaoRef" style="width: 388px; height: 300px"></div>
 </template>
 
 <script>
 export default {
-    name: "qushi",
+    name: "qiantao",
     data() {
         return {
             // 图表的实例对象
@@ -31,7 +31,7 @@ export default {
         };
     },
     mounted() {
-        this.$eventBus.on("show-gongdi-data-l", showMenu => {
+        this.$eventBus.on("show-gongdi-data-r", showMenu => {
             if (showMenu) {
                 // 在div渲染结束后在初始化图表
                 this.$nextTick(() => {
@@ -46,38 +46,74 @@ export default {
     methods: {
         // 初始化图表的方法
         initChart() {
-            this.chartInstance = this.$echarts.init(this.$refs.qushiRef, "default");
+            this.chartInstance = this.$echarts.init(this.$refs.qiantaoRef, "default");
     
             const initOption = {
-            legend: {
-                data: ['Allocated Budget', 'Actual Spending'],
-                top: '95%'
-            },
-            radar: {
-                // shape: 'circle',
-                indicator: [
-                { name: 'Sales', max: 6500 },
-                { name: 'Administration', max: 16000 },
-                { name: 'Information Technology', max: 30000 },
-                { name: 'Customer Support', max: 38000 },
-                { name: 'Development', max: 52000 },
-                { name: 'Marketing', max: 25000 }
-                ]
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
             },
             series: [
                 {
-                center: ['50%', '50%'],
-                name: 'Budget vs spending',
-                type: 'radar',
+                name: 'Access From',
+                type: 'pie',
+                selectedMode: 'single',
+                radius: [0, '30%'],
+                label: {
+                    position: 'inner',
+                    fontSize: 14
+                },
+                labelLine: {
+                    show: false
+                },
                 data: [
-                    {
-                    value: [4200, 3000, 20000, 35000, 50000, 18000],
-                    name: 'Allocated Budget'
+                    { value: 1548, name: 'Search' },
+                    { value: 775, name: 'Direct' },
+                    { value: 679, name: 'Marketing', selected: true }
+                ]
+                },
+                {
+                name: 'Access From',
+                type: 'pie',
+                radius: ['45%', '60%'],
+                labelLine: {
+                    length: 30
+                },
+                label: {
+                    rich: {
+                    a: {
+                        color: '#6E7079',
+                        lineHeight: 22,
+                        align: 'center'
                     },
-                    {
-                    value: [5000, 14000, 28000, 26000, 42000, 21000],
-                    name: 'Actual Spending'
+                    hr: {
+                        borderColor: '#8C8D8E',
+                        width: '100%',
+                        borderWidth: 1,
+                        height: 0
+                    },
+                    b: {
+                        color: '#4C5058',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        lineHeight: 33
+                    },
+                    per: {
+                        color: '#fff',
+                        backgroundColor: '#4C5058',
+                        padding: [3, 4],
+                        borderRadius: 4
                     }
+                    }
+                },
+                data: [
+                    { value: 1048, name: 'Baidu' },
+                    { value: 335, name: 'Direct' },
+                    { value: 310, name: 'Email' },
+                    { value: 251, name: 'Google' },
+                    { value: 234, name: 'Union Ads' },
+                    { value: 147, name: 'Bing' },
+                    { value: 102, name: 'Others' }
                 ]
                 }
             ]

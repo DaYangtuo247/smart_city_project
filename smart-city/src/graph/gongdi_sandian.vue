@@ -4,7 +4,7 @@
             {{ tit }}
         </div>
     </div>
-    <div ref="sandianRef" style="width: 388px; height: 300px"></div>
+    <div ref="sandianRef" style="width: 388px; height: 260px"></div>
 </template>
 
 <script>
@@ -163,13 +163,19 @@ export default {
             shadowColor: 'rgba(0,0,0,0.3)'
             };
             const initOption = {
-            color: ['#dd4444', '#fec42c', '#80F1BE'],
+            color: ['#fec42c', '#80F1BE'],
             legend: {
                 top: 10,
-                data: ['北京', '上海', '广州'],
+                data: ['上海', '广州'],
                 textStyle: {
                 fontSize: 16
                 }
+            },
+            grid: {
+                left: '10%',
+                right: '10%',
+                top: '18%',
+                bottom: '12%'
             },
 
             tooltip: {
@@ -220,8 +226,8 @@ export default {
                 dimension: 2,
                 min: 0,
                 max: 250,
-                itemWidth: 30,
-                itemHeight: 120,
+                itemWidth: 0,
+                itemHeight: 0,
                 precision: 0.1,
                 
                 textGap: 30,
@@ -233,12 +239,6 @@ export default {
 
             ],
             series: [
-                {
-                name: '北京',
-                type: 'scatter',
-                itemStyle: itemStyle,
-                data: dataBJ
-                },
                 {
                 name: '上海',
                 type: 'scatter',
@@ -261,7 +261,7 @@ export default {
             const { data: res } = await this.$http.get(this.url);
             this.allData = res;
             // 更新数据
-            this.updateChart();
+            // this.updateChart();
         },
         // 更新图表配置项
         updateChart() {

@@ -4,12 +4,12 @@
             {{ tit }}
         </div>
     </div>
-    <div ref="qushiRef" style="width: 388px; height: 300px"></div>
+    <div ref="loudouiRef" style="width: 388px; height: 290px"></div>
 </template>
 
 <script>
 export default {
-    name: "qushi",
+    name: "loudou",
     data() {
         return {
             // 图表的实例对象
@@ -31,7 +31,7 @@ export default {
         };
     },
     mounted() {
-        this.$eventBus.on("show-gongdi-data-l", showMenu => {
+        this.$eventBus.on("show-gongdi-data-r", showMenu => {
             if (showMenu) {
                 // 在div渲染结束后在初始化图表
                 this.$nextTick(() => {
@@ -46,38 +46,57 @@ export default {
     methods: {
         // 初始化图表的方法
         initChart() {
-            this.chartInstance = this.$echarts.init(this.$refs.qushiRef, "default");
+            this.chartInstance = this.$echarts.init(this.$refs.loudouiRef, "default");
     
             const initOption = {
-            legend: {
-                data: ['Allocated Budget', 'Actual Spending'],
-                top: '95%'
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c}%'
             },
-            radar: {
-                // shape: 'circle',
-                indicator: [
-                { name: 'Sales', max: 6500 },
-                { name: 'Administration', max: 16000 },
-                { name: 'Information Technology', max: 30000 },
-                { name: 'Customer Support', max: 38000 },
-                { name: 'Development', max: 52000 },
-                { name: 'Marketing', max: 25000 }
-                ]
+            legend: {
+                bottom: 10,
+                data: ['Show', 'Click', 'Visit', 'Inquiry', 'Order']
             },
             series: [
                 {
-                center: ['50%', '50%'],
-                name: 'Budget vs spending',
-                type: 'radar',
-                data: [
-                    {
-                    value: [4200, 3000, 20000, 35000, 50000, 18000],
-                    name: 'Allocated Budget'
-                    },
-                    {
-                    value: [5000, 14000, 28000, 26000, 42000, 21000],
-                    name: 'Actual Spending'
+                name: 'Funnel',
+                type: 'funnel',
+                left: '10%',
+                top: 30,
+                bottom: 60,
+                width: '80%',
+                min: 0,
+                max: 100,
+                minSize: '0%',
+                maxSize: '100%',
+                sort: 'descending',
+                gap: 2,
+                label: {
+                    show: true,
+                    position: 'inside'
+                },
+                labelLine: {
+                    length: 10,
+                    lineStyle: {
+                    width: 1,
+                    type: 'solid'
                     }
+                },
+                itemStyle: {
+                    borderColor: '#fff',
+                    borderWidth: 1
+                },
+                emphasis: {
+                    label: {
+                    fontSize: 20
+                    }
+                },
+                data: [
+                    { value: 60, name: 'Visit' },
+                    { value: 40, name: 'Inquiry' },
+                    { value: 20, name: 'Order' },
+                    { value: 80, name: 'Click' },
+                    { value: 100, name: 'Show' }
                 ]
                 }
             ]
