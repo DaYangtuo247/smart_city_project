@@ -16,6 +16,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import AMapLoader from "@amap/amap-jsapi-loader";
 import { buildSlots } from "@vue/compiler-core";
+import * as turf from "@turf/turf";
 // let height = 0.0;
 let map, camera, scene, renderer, object, object1; // 高德地图, 相机, 场景, 渲染器, gltf模型场景
 let map_gltf_model_Position = [114.281454, 30.59925], // 模型放置点
@@ -31,6 +32,7 @@ let marker = null,
     polyline,
     passedPolyline,
     lineArr; // 实时公交相关
+let busobj;
 export default {
     data() {
         return {
@@ -184,14 +186,14 @@ export default {
                     ];
 
                     var gongdi_area = [
-                        [ 114.248476,30.642913 ],
-                        [ 114.249253,30.641568 ],
-                        [ 114.247759,30.640899 ], 
-                        [ 114.248963,30.639109 ],
-                        [ 114.253651,30.641647 ],
-                        [ 114.252333,30.643872 ],
-                        [ 114.248476,30.642913 ],
-                    ]
+                        [114.248476, 30.642913],
+                        [114.249253, 30.641568],
+                        [114.247759, 30.640899],
+                        [114.248963, 30.639109],
+                        [114.253651, 30.641647],
+                        [114.252333, 30.643872],
+                        [114.248476, 30.642913],
+                    ];
 
                     // 在地图上添加多边形，该方法来源于 https://lbs.amap.com/api/javascript-api-v2/documentation#Polygon
                     function addPolygon(data, fun) {
@@ -4267,7 +4269,7 @@ export default {
                             features: [
                                 {
                                     geometry: {
-                                        coordinates: [114.251034,30.641344],
+                                        coordinates: [114.251034, 30.641344],
                                         type: "Point",
                                     },
                                     type: "Feature",
@@ -4296,7 +4298,7 @@ export default {
                             features: [
                                 {
                                     geometry: {
-                                        coordinates: [114.251205,30.64269],
+                                        coordinates: [114.251205, 30.64269],
                                         type: "Point",
                                     },
                                     type: "Feature",
@@ -4314,7 +4316,7 @@ export default {
                             features: [
                                 {
                                     geometry: {
-                                        coordinates: [114.25224,30.641947 ],
+                                        coordinates: [114.25224, 30.641947],
                                         type: "Point",
                                     },
                                     type: "Feature",
@@ -4443,7 +4445,6 @@ export default {
                         trailLength: 50000,
                         repeat: 0,
                     });
-                    
 
                     loca.animate.start();
                     loca.pointLight.intensity = 0;
@@ -4950,30 +4951,62 @@ export default {
             immediately_road = !immediately_road;
         },
         immediate_bus() {
+            function initGltf() {
+                var loader = new GLTFLoader();
+                loader.load("bus.glb", gltf => {
+                    busobj = gltf.scene;
+                    busobj.scale.set(10, 10, 10);
+                    busobj.renderOrder = 999;
+                    setRotation({ x: 90, y: 0, z: 0 });
+                    setPosition(map_init_center);
+                    scene.add(busobj);
+                });
+            }
+            function setRotation(rotation) {
+                var x = (Math.PI / 180) * (rotation.x || 0);
+                var y = (Math.PI / 180) * (rotation.y || 0);
+                var z = (Math.PI / 180) * (rotation.z || 0);
+                busobj.rotation.set(x, y, z);
+            }
+            function setPosition(lnglat) {
+                // 对模型的经纬度进行转换
+                var position = customCoords.lngLatsToCoords([lnglat])[0];
+                busobj.position.setX(position[0]);
+                busobj.position.setY(position[1]);
+            }
+            function setAngle(angle) {
+                var x = busobj.rotation.x;
+                var z = busobj.rotation.z;
+                var y = (Math.PI / 180) * angle;
+                busobj.rotation.set(x, y, z);
+            }
+            // 计算地图上两点间的角度
+            function calcAngle(start, end) {
+                var diff_lng = end[0] - start[0];
+                var diff_lat = end[1] - start[1];
+                return (360 * Math.atan2(diff_lat, diff_lng)) / (2 * Math.PI);
+            }
+
+            // 改变模型位置和角度
+            var xe = -5.341658,
+                ye = 3.738671; // 坐标偏移量
+            function startMove(Position) {
+                var centerPoint = turf.point([Position.lng + xe, Position.lat + ye]);
+                var pos = turf.transformTranslate(centerPoint, 0.3, 0).geometry.coordinates;
+                setPosition(pos);
+            }
+
+            map.on("click", function (e) {
+                console.log("[" + e.lnglat.getLng() + "," + e.lnglat.getLat() + "]");
+            });
+
             function init() {
                 //坐标来源 https://lbs.amap.com/demo/javascript-api-v2/example/bus-search/plan-route-according-to-name
                 lineArr = [
                     [114.218315, 30.62306],
                     [114.218315, 30.622686],
                     [114.218315, 30.622087],
-                    [114.21833, 30.621649],
-                    [114.218353, 30.621607],
-                    [114.218414, 30.62158],
-                    [114.218994, 30.62158],
-                    [114.219101, 30.62158],
-                    [114.219101, 30.621576],
-                    [114.219078, 30.621223],
-                    [114.219078, 30.62121],
-                    [114.218452, 30.621202],
-                    [114.218155, 30.621206],
                     [114.218147, 30.621206],
-                    [114.218018, 30.621168],
-                    [114.218018, 30.621162],
-                    [114.217896, 30.621063],
-                    [114.217896, 30.621059],
-                    [114.217949, 30.621025],
-                    [114.218056, 30.620899],
-                    [114.218056, 30.620893],
                     [114.218071, 30.620846],
                     [114.21814, 30.620451],
                     [114.218201, 30.620178],
@@ -5152,8 +5185,8 @@ export default {
                 marker = new AMap.Marker({
                     map: map,
                     position: lineArr[0],
-                    icon: "https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png",
-                    offset: new AMap.Pixel(-13, -26),
+                    // icon: "https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png",
+                    content: "<div style='display:none'></div>",
                 });
 
                 // 绘制轨迹
@@ -5162,37 +5195,52 @@ export default {
                     path: lineArr,
                     showDir: true,
                     strokeColor: "#28F", //线颜色
-                    // strokeOpacity: 1,     //线透明度
+                    strokeOpacity: 0.3, //线透明度
                     strokeWeight: 6, //线宽
                     // strokeStyle: "solid"  //线样式
                 });
-
+                
                 passedPolyline = new AMap.Polyline({
                     map: map,
                     strokeColor: "#AF5", //线颜色
                     strokeWeight: 6, //线宽
+                    strokeOpacity: 0.3, //线透明度
                 });
-
+                // 声明一个变量用于存储上一次的角度
+                var previousAngle = 0;
                 // 绑定移动事件监听器
                 marker.on("moving", function (e) {
-                    if (passedPolyline) passedPolyline.setPath(e.passedPath);
+                    var passedPath = e.passedPath,
+                        lastPosi = passedPath[passedPath.length - 1];
+                    passedPolyline.setPath(passedPath);
+                    var angle = calcAngle([passedPath[passedPath.length - 2][0], passedPath[passedPath.length - 2][1]], [lastPosi.lng, lastPosi.lat]);
+
+                    // 判断角度变化的大小是否超过阈值（2度）
+                    if (Math.abs(angle - previousAngle) >= 2) {
+                        setAngle(angle);
+                        previousAngle = angle;
+                    }
+                    startMove(lastPosi);
                 });
             }
             if (!immediate_bus) {
                 if (marker == null) {
+                    initGltf();
                     init();
                 } else {
                     map.add(marker);
+                    scene.add(busobj);
                     map.add(polyline);
                     map.add(passedPolyline);
                 }
                 marker.moveAlong(lineArr, {
-                    duration: 500,
+                    duration: 8000,
                     autoRotation: true,
                 });
             } else {
                 marker.stopMove();
                 map.remove(marker);
+                scene.remove(busobj);
                 map.remove([polyline, passedPolyline]);
             }
             immediate_bus = !immediate_bus;
