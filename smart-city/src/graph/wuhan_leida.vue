@@ -26,7 +26,7 @@ export default {
         };
     },
     mounted() {
-        this.$eventBus.on("show-wuhan-data-l", showMenu => {
+        this.$eventBus.on("show-wuhan-data-r", showMenu => {
             if (showMenu) {
                 // 在div渲染结束后在初始化图表
                 this.$nextTick(() => {
