@@ -69,7 +69,7 @@ export default {
                         pitch: 40, //摄像机视角
                         viewMode: "3D", //是否为3D地图模式
                         zooms: [3, 20],
-                        mapStyle: "amap://styles/grey",
+                        mapStyle: "amap://styles/darkblue",
                         showBuildingBlock: false, // 显示高德自带地图块
                         center: map_init_center, //初始化地图中心点位置
                         doubleClickZoom: false, // 双击放大地图
@@ -430,7 +430,7 @@ export default {
                     var outLayer = new Loca.PolygonLayer({
                         zIndex: 120,
                         cullface: "none",
-                        shininess: 1,
+                        shininess: 5,
                         hasBottom: false,
                         blockHide: false,
                         hasSide: true,
@@ -4256,8 +4256,8 @@ export default {
                         sideBottomColor: function (index, feature) {
                             return "rgba(237,87,87,1)";
                         },
-                        height: 100,
-                        altitude: 0,
+                        height: 700,
+                        altitude: 500,
                     });
                     loca.add(outLayer);
 

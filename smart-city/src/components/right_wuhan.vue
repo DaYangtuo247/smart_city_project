@@ -10,6 +10,7 @@
             <gongdi_qiantao></gongdi_qiantao> -->
             <wuhan_pointandline></wuhan_pointandline>
             <wuhan_transform></wuhan_transform>
+            <wuhan_leida></wuhan_leida>
         </div>
     </div>
 </template>
@@ -28,6 +29,7 @@ import gongdi_loudou from '../graph/gongdi_loudou.vue';
 import gongdi_qiantao from '../graph/gongdi_qiantao.vue';
 import wuhan_pointandline from '../graph/wuhan_pointandline.vue';
 import wuhan_transform from '../graph/wuhan_transform.vue';
+import wuhan_leida from '../graph/wuhan_leida.vue';
 export default {
     components: {
         // library_model,
@@ -42,7 +44,8 @@ export default {
         gongdi_loudou,
         gongdi_qiantao,
         wuhan_pointandline,
-        wuhan_transform
+        wuhan_transform,
+        wuhan_leida
     },
     data() {
         return {
