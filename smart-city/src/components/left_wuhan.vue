@@ -11,6 +11,7 @@
             <!-- <wuhan_air></wuhan_air> -->
             <wuhan_move></wuhan_move>
             <wuhan_forest></wuhan_forest>
+            <wuhan_zhu></wuhan_zhu>
         </div>
     </div>
 </template>
@@ -28,6 +29,7 @@ import gongdi_qushi from '../graph/gongdi_qushi.vue';
 import wuhan_move from '../graph/wuhan_move.vue';
 import wuhan_forest from '../graph/wuhan_forest.vue';
 import wuhan_pointandline from '../graph/wuhan_pointandline.vue';
+import wuhan_zhu from '../graph/wuhan_zhu.vue';
 export default {
     components: {
         // library_model,
@@ -41,7 +43,8 @@ export default {
         gongdi_qushi,
         wuhan_move,
         wuhan_forest,
-        wuhan_pointandline
+        wuhan_pointandline,
+        wuhan_zhu
     },
     data() {
         return {
