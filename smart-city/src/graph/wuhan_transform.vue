@@ -21,12 +21,12 @@ export default {
             currentIndex: 0,
             currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆借阅统计分析.json",
-            tit: "▎武汉aaa据分析",
+            tit: "▎武汉交通运力分析（十万人/年）",
             showDropdown: false, // 下拉菜单显示状态
         };
     },
     mounted() {
-        this.$eventBus.on("show-wuhan-data-r", showMenu => {
+        this.$eventBus.on("show-wuhan-data-l", showMenu => {
             if (showMenu) {
                 // 在div渲染结束后在初始化图表
                 this.$nextTick(() => {
@@ -64,7 +64,7 @@ export default {
             function makeOption(type, symbol) {
             return {
                 legend: {
-                data: ['2015', '2016']
+                data: ['2022', '2023']
                 },
                 tooltip: {
                 trigger: 'axis',
@@ -103,7 +103,7 @@ export default {
                 animationDurationUpdate: 500,
                 series: [
                 {
-                    name: '2015',
+                    name: '2022',
                     id: 'bar1',
                     type: type,
                     label: labelSetting,
@@ -136,7 +136,7 @@ export default {
                     ]
                 },
                 {
-                    name: '2016',
+                    name: '2023',
                     id: 'bar2',
                     type: type,
                     barGap: '10%',

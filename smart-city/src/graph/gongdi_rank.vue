@@ -19,8 +19,8 @@ export default {
             // // 当前显示的一级分类数据类型
             // currentIndex: 0,
             // currentDataIndex: 0, // 添加当前显示的数据索引
-            url: "/图书馆使用情况排行.json",
-            tit: "▎图书馆使用情况",
+            url: "/建设园区.json",
+            tit: "▎园区建材使用情况",
             showDropdown: false, // 下拉菜单显示状态
             // 柱形图 区域缩放起点值
             startValue: 0,

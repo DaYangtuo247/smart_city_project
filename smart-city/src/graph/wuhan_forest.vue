@@ -21,7 +21,7 @@ export default {
             currentIndex: 0,
             currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆借阅统计分析.json",
-            tit: "▎武汉人工绿化数据分析与预测",
+            tit: "▎武汉人工绿化数据分析与预测（平方米/人）",
             showDropdown: false, // 下拉菜单显示状态
         };
     },
@@ -49,9 +49,8 @@ export default {
             my_chat = this.$echarts.init(this.$refs.forestRef, "default");
             const initOption =  {
                 tooltip: {
-                    trigger: 'axis',
                     axisPointer: {
-                    type: 'none',
+                    type: 'shadow',
                     
                     },
                     position: ['10%', '10%'],
@@ -106,7 +105,7 @@ export default {
             function makeCategoryData() {
             var categoryData = [];
             for (var i = 0; i < lineCount; i++) {
-                categoryData.push(i + 'a');
+                categoryData.push(i + '平方米');
             }
             return categoryData;
             }

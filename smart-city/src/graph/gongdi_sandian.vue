@@ -20,7 +20,7 @@ export default {
             // currentIndex: 0,
             // currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆使用情况排行.json",
-            tit: "▎区域人员性别比例",
+            tit: "▎园区空气质量监测点情况",
             showDropdown: false, // 下拉菜单显示状态
             // 柱形图 区域缩放起点值
             startValue: 0,
@@ -166,7 +166,7 @@ export default {
             color: ['#fec42c', '#80F1BE'],
             legend: {
                 top: 10,
-                data: ['上海', '广州'],
+                data: ['监测点1', '监测点2'],
                 textStyle: {
                 fontSize: 16
                 }
@@ -240,13 +240,13 @@ export default {
             ],
             series: [
                 {
-                name: '上海',
+                name: '监测点1',
                 type: 'scatter',
                 itemStyle: itemStyle,
                 data: dataSH
                 },
                 {
-                name: '广州',
+                name: '监测点2',
                 type: 'scatter',
                 itemStyle: itemStyle,
                 data: dataGZ

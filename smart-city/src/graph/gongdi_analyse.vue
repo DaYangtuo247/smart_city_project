@@ -21,7 +21,7 @@ export default {
             currentIndex: 0,
             currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆借阅统计分析.json",
-            tit: "▎图书馆年级借阅书目统计（册）",
+            tit: "▎园区资金投入分布",
             showDropdown: false, // 下拉菜单显示状态
         };
     },
@@ -68,15 +68,16 @@ export default {
                     itemStyle: {
                         borderRadius: 8
                     },
+                    label: {
+                        color: 'rgb(255, 255, 255)'
+                    },
                     data: [
-                        { value: 40, name: 'rose 1' },
-                        { value: 38, name: 'rose 2' },
-                        { value: 32, name: 'rose 3' },
-                        { value: 30, name: 'rose 4' },
-                        { value: 28, name: 'rose 5' },
-                        { value: 26, name: 'rose 6' },
-                        { value: 22, name: 'rose 7' },
-                        { value: 18, name: 'rose 8' }
+                        { value: 40, name: '建设投资' },
+                        { value: 38, name: '运营投资' },
+                        { value: 32, name: '维护投资' },
+                        { value: 30, name: '扶持投资' },
+                        { value: 28, name: '建材购买' },
+                        { value: 26, name: '宣传投资' },
                     ]
                     }
                 ],

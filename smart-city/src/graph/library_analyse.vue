@@ -66,7 +66,7 @@ export default {
                             show: true,
                             position: "inside",
                             fontSize: 14,
-                            color: "white",
+                            color: 'rgb(255,255,255)',
                         },
                         emphasis: {
                             itemStyle: {
