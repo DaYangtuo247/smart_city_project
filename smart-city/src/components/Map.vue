@@ -6,8 +6,13 @@
             <button class="btn btn2" @click="traffic_flow()"><img src="~@/assets/images/日均车流.png" alt="" /></button>
             <button class="btn btn3" @click="model_3D()"><img src="~@/assets/images/3D模型.png" alt="" /></button>
             <button class="btn btn4" @click="people_out()"><img src="~@/assets/images/人口流出.png" alt="" /></button>
-            <button class="btn btn5" @click="immediate_bus()"><img src="~@/assets/images/实时公交.png" alt="" /></button>
+            <button class="btn btn5" @click="show_Bus_Model()"><img src="~@/assets/images/实时公交.png" alt="" /></button>
             <img src="~@/assets/images/all-btn.png" @click="wuhan()" alt="" class="all" />
+        </div>
+        <div class="busModel" v-show="showBusModel">
+            <div><span>起点:</span><input type="text" name="" id="origin" /></div>
+            <div><span>终点:</span><input type="text" name="" id="terminus" /></div>
+            <div><button @click="hidden_Bus_Model()">取消</button><button @click="immediate_bus()">确认</button></div>
         </div>
     </div>
 </template>
@@ -41,6 +46,7 @@ export default {
             },
             color: "#1791fc",
             opacity: 0,
+            showBusModel:false,
         };
     },
     mounted() {
@@ -5280,6 +5286,19 @@ export default {
                 map.remove([polyline, passedPolyline]);
             }
             immediate_bus = !immediate_bus;
+        },
+        hidden_Bus_Model() {
+            this.showBusModel = false;
+            if (immediate_bus) {
+                marker.stopMove();
+                map.remove(marker);
+                scene.remove(busobj);
+                map.remove([polyline, passedPolyline]);
+            }
+            immediate_bus = !immediate_bus;
+        },
+        show_Bus_Model() {
+            this.showBusModel = !this.showBusModel;
         },
         traffic_flow() {
             if (traffic_flow) {
