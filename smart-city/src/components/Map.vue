@@ -236,6 +236,39 @@ export default {
                         // 触发一个名为'change'的自定义事件
                         // eventBus.emit("show-gongdi-graph-lr", "数据(目前没有)"); // 正确
                         eventBus.emit("show-library-graph-lr", "数据(目前没有)"); // 正确
+                        var loca = new Loca.Container({ map });
+                        loca.animate.start();
+                        map.setCenter([114.22225,30.652476], true);
+                        let nowzoom = map.getZoom();
+                        // 创建动画对象
+                        loca.viewControl.addAnimates([
+                            {
+                                // 缩放动画
+                                zoom: {
+                                    value: 19.2, // 动画终点的地图缩放等级
+                                    control: [
+                                        [0, nowzoom],
+                                        [1, 19.2],
+                                    ], // 控制器，x是0～1的起始区间，y是zoom值
+                                    timing: [0, 0, 1, 1],
+                                    duration: 2000,
+                                },
+                                // 旋转动画
+                                rotation: {
+                                    value: 360, // 动画终点的地图旋转角度
+                                    control: [
+                                        [0, 0],
+                                        [1, 360],
+                                    ], // 控制器，x是0～1的起始区间，y是rotation值
+                                    timing: [0, 0, 1, 1],
+                                    duration: 100000,
+                                },
+                            },
+                        ]);
+                        // 鼠标介入时取消动画
+                        map.on("mousedown", function () {
+                            loca.viewControl.clearAnimates();
+                        });
                     }
 
                     function showInfoClick1(e) {
