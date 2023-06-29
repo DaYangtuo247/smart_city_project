@@ -20,7 +20,7 @@ export default {
             // currentIndex: 0,
             // currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆使用情况排行.json",
-            tit: "▎区域人员性别比例",
+            tit: "▎建材购买源分布",
             showDropdown: false, // 下拉菜单显示状态
             // 柱形图 区域缩放起点值
             startValue: 0,
@@ -55,25 +55,26 @@ export default {
             },
             series: [
                 {
-                name: 'Access From',
+                name: '建材占比',
                 type: 'pie',
                 selectedMode: 'single',
                 radius: [0, '30%'],
                 label: {
                     position: 'inner',
-                    fontSize: 14
+                    fontSize: 14,
+                    color: 'rgb(255, 255, 255)'
                 },
                 labelLine: {
                     show: false
                 },
                 data: [
-                    { value: 1548, name: 'Search' },
-                    { value: 775, name: 'Direct' },
-                    { value: 679, name: 'Marketing', selected: true }
+                    { value: 1548, name: '钢材' },
+                    { value: 775, name: '混凝土' },
+                    { value: 679, name: '涂料', selected: true }
                 ]
                 },
                 {
-                name: 'Access From',
+                name: '来源',
                 type: 'pie',
                 radius: ['45%', '60%'],
                 labelLine: {
@@ -103,17 +104,19 @@ export default {
                         backgroundColor: '#4C5058',
                         padding: [3, 4],
                         borderRadius: 4
-                    }
-                    }
+                    },
+                    
+                    },
+                    color: 'rgb(255, 255, 255)'
                 },
                 data: [
-                    { value: 1048, name: 'Baidu' },
-                    { value: 335, name: 'Direct' },
-                    { value: 310, name: 'Email' },
-                    { value: 251, name: 'Google' },
-                    { value: 234, name: 'Union Ads' },
-                    { value: 147, name: 'Bing' },
-                    { value: 102, name: 'Others' }
+                    { value: 1048, name: '上海' },
+                    { value: 335, name: '山东' },
+                    { value: 310, name: '河北' },
+                    { value: 251, name: '山西' },
+                    { value: 234, name: '印度' },
+                    { value: 147, name: '沙特' },
+                    { value: 102, name: '其他' }
                 ]
                 }
             ]

@@ -53,6 +53,7 @@ export default {
                         },
                         label: {
                             rotate: "radial",
+                            color:'rgb(255,255,255)'
                         },
                         itemStyle: {
                             borderWidth: 2,

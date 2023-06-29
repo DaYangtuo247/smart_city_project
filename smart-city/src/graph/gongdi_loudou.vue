@@ -20,7 +20,7 @@ export default {
             // currentIndex: 0,
             // currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆使用情况排行.json",
-            tit: "▎区域人员性别比例",
+            tit: "▎园区人员占比比例",
             showDropdown: false, // 下拉菜单显示状态
             // 柱形图 区域缩放起点值
             startValue: 0,
@@ -55,7 +55,7 @@ export default {
             },
             legend: {
                 bottom: 10,
-                data: ['Show', 'Click', 'Visit', 'Inquiry', 'Order']
+                data: ['租户企业员工', '建筑工人', '行政人员', '物业管理人员', '其他支持人员']
             },
             series: [
                 {
@@ -92,11 +92,11 @@ export default {
                     }
                 },
                 data: [
-                    { value: 60, name: 'Visit' },
-                    { value: 40, name: 'Inquiry' },
-                    { value: 20, name: 'Order' },
-                    { value: 80, name: 'Click' },
-                    { value: 100, name: 'Show' }
+                    { value: 40, name: '其他支持人员' },
+                    { value: 20, name: '物业管理人员' },
+                    { value: 60, name: '行政人员' },
+                    { value: 100, name: '建筑工人' },
+                    { value: 75, name: '租户企业员工' }
                 ]
                 }
             ]

@@ -21,7 +21,7 @@ export default {
             currentIndex: 0,
             currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆借阅统计分析.json",
-            tit: "▎武汉GDP数据分析与预测",
+            tit: "▎武汉GDP数据展示与预测（十万元/年）",
             showDropdown: false, // 下拉菜单显示状态
         };
     },

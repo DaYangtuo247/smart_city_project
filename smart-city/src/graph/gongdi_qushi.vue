@@ -20,7 +20,7 @@ export default {
             // currentIndex: 0,
             // currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆使用情况排行.json",
-            tit: "▎区域人员性别比例",
+            tit: "▎园区不同项目投入人员占比",
             showDropdown: false, // 下拉菜单显示状态
             // 柱形图 区域缩放起点值
             startValue: 0,
@@ -50,18 +50,18 @@ export default {
     
             const initOption = {
             legend: {
-                data: ['Allocated Budget', 'Actual Spending'],
+                data: ['项目进度', '投入人员'],
                 top: '95%'
             },
             radar: {
                 // shape: 'circle',
                 indicator: [
-                { name: 'Sales', max: 6500 },
-                { name: 'Administration', max: 16000 },
-                { name: 'Information Technology', max: 30000 },
-                { name: 'Customer Support', max: 38000 },
-                { name: 'Development', max: 52000 },
-                { name: 'Marketing', max: 25000 }
+                { name: '园区企业建设', max: 6500 },
+                { name: '园区企业装修', max: 16000 },
+                { name: '园区建设', max: 30000 },
+                { name: '园区企业招标', max: 38000 },
+                { name: '园区运营', max: 52000 },
+                { name: '园区规划', max: 25000 }
                 ]
             },
             series: [
@@ -72,11 +72,11 @@ export default {
                 data: [
                     {
                     value: [4200, 3000, 20000, 35000, 50000, 18000],
-                    name: 'Allocated Budget'
+                    name: '项目进度'
                     },
                     {
                     value: [5000, 14000, 28000, 26000, 42000, 21000],
-                    name: 'Actual Spending'
+                    name: '投入人员'
                     }
                 ]
                 }

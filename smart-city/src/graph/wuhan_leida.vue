@@ -21,12 +21,12 @@ export default {
             currentIndex: 0,
             currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆借阅统计分析.json",
-            tit: "▎武汉aaa据分析与预测",
+            tit: "▎武汉支柱产业产值预测",
             showDropdown: false, // 下拉菜单显示状态
         };
     },
     mounted() {
-        this.$eventBus.on("show-wuhan-data-r", showMenu => {
+        this.$eventBus.on("show-wuhan-data-l", showMenu => {
             if (showMenu) {
                 // 在div渲染结束后在初始化图表
                 this.$nextTick(() => {
@@ -63,11 +63,11 @@ export default {
             },
             radar: {
                 indicator: [
-                { text: 'IE8-', max: 400 },
-                { text: 'IE9+', max: 400 },
-                { text: 'Safari', max: 400 },
-                { text: 'Firefox', max: 400 },
-                { text: 'Chrome', max: 400 }
+                { text: '钢铁工业', max: 400 },
+                { text: '货运业', max: 400 },
+                { text: '服务业', max: 400 },
+                { text: '旅游业', max: 400 },
+                { text: '高新科技', max: 400 }
                 ]
             },
             series: (function () {

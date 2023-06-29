@@ -21,12 +21,12 @@ export default {
             currentIndex: 0,
             currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆借阅统计分析.json",
-            tit: "▎武汉aaa据分析与预测",
+            tit: "▎武汉未来一月气候变化（摄氏度/天， 毫米/天）",
             showDropdown: false, // 下拉菜单显示状态
         };
     },
     mounted() {
-        this.$eventBus.on("show-wuhan-data-r", showMenu => {
+        this.$eventBus.on("show-wuhan-data-l", showMenu => {
             if (showMenu) {
                 // 在div渲染结束后在初始化图表
                 this.$nextTick(() => {
@@ -51,10 +51,10 @@ export default {
             category.push(
                 [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-')
             );
-            let b = Math.random() * 200;
-            let d = Math.random() * 200;
-            barData.push(b);
-            lineData.push(d + b);
+            let b = (Math.random() * 5).toFixed(2);
+            let d = (Math.random() * 5).toFixed(2);
+            barData.push(parseFloat(b));
+            lineData.push(parseFloat(d) + parseFloat(b));
             }
             let my_chat = this.chartInstance;
             my_chat = this.$echarts.init(this.$refs.moveRef, "default");
@@ -67,13 +67,15 @@ export default {
                 bottom: '10%'
             },
             tooltip: {
-                trigger: 'axis',
                 axisPointer: {
-                type: 'shadow'
+                type: 'shadow',
+                label:{
+                    precision : '2',
+                }
                 }
             },
             legend: {
-                data: ['line', 'bar'],
+                data: ['温差', '降水量'],
                 textStyle: {
                 color: '#ccc'
                 }
@@ -96,7 +98,7 @@ export default {
             },
             series: [
                 {
-                name: 'line',
+                name: '温差',
                 type: 'line',
                 smooth: true,
                 showAllSymbol: true,
@@ -105,7 +107,7 @@ export default {
                 data: lineData
                 },
                 {
-                name: 'bar',
+                name: '降水量',
                 type: 'bar',
                 barWidth: 10,
                 itemStyle: {
@@ -118,7 +120,7 @@ export default {
                 data: barData
                 },
                 {
-                name: 'line',
+                name: '温差',
                 type: 'bar',
                 barGap: '-100%',
                 barWidth: 10,
@@ -133,7 +135,7 @@ export default {
                 data: lineData
                 },
                 {
-                name: 'dotted',
+                name: '降水量',
                 type: 'pictorialBar',
                 symbol: 'rect',
                 itemStyle: {
