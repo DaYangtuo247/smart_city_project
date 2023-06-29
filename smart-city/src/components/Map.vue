@@ -4560,10 +4560,41 @@ export default {
                 scene.add(object);
             });
         },
-        wuhan(){
-            let eventBus = this.$eventBus;
-            console.log("您单击了总览按钮！");
-            eventBus.emit("show-wuhan-graph-lr", "数据(目前没有)"); // 正确
+        wuhan() {
+            var loca = new Loca.Container({ map });
+            loca.animate.start();
+            map.setCenter(map_init_center, true);
+            let nowzoom = map.getZoom();
+            // 创建动画对象
+            loca.viewControl.addAnimates([
+                {
+                    // 缩放动画
+                    zoom: {
+                        value: 11.2, // 动画终点的地图缩放等级
+                        control: [
+                            [0, nowzoom],
+                            [1, 11.2],
+                        ], // 控制器，x是0～1的起始区间，y是zoom值
+                        timing: [0, 0, 1, 1],
+                        duration: 2000,
+                    },
+                    // 旋转动画
+                    rotation: {
+                        value: 360, // 动画终点的地图旋转角度
+                        control: [
+                            [0, 0],
+                            [1, 360],
+                        ], // 控制器，x是0～1的起始区间，y是rotation值
+                        timing: [0, 0, 1, 1],
+                        duration: 100000,
+                    },
+                },
+            ]);
+            // 鼠标介入时取消动画
+            map.on("mousedown", function () {
+                loca.viewControl.clearAnimates();
+            });
+            this.$eventBus.emit("show-wuhan-graph-lr", "数据(目前没有)"); // 正确
         },
         initGltf() {
             const loader = new GLTFLoader();
@@ -5204,7 +5235,7 @@ export default {
                     strokeWeight: 6, //线宽
                     // strokeStyle: "solid"  //线样式
                 });
-                
+
                 passedPolyline = new AMap.Polyline({
                     map: map,
                     strokeColor: "#AF5", //线颜色
