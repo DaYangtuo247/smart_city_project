@@ -21,7 +21,7 @@ export default {
             currentIndex: 0,
             currentDataIndex: 0, // 添加当前显示的数据索引
             url: "/图书馆借阅统计分析.json",
-            tit: "▎来汉人口工作去向",
+            tit: "▎来汉就业去向",
             showDropdown: false, // 下拉菜单显示状态
         };
     },

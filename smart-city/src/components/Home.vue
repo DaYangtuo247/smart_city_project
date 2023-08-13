@@ -1,7 +1,7 @@
 <template>
     <div class="com-container">
         <Map ref="map"></Map>
-        <!-- 顶部导航 -->
+        <!-- 头部 -->
         <header>
             <img src="~@/assets/images/header-bg.png" alt="" class="header-bg" />
             <div class="nav-left" v-if="weatherData">
