@@ -50,8 +50,8 @@ export default {
             color: "#1791fc",
             opacity: 0,
             showBusModel: false,
-            origin: "园博园",
-            terminus: "金银潭地铁站",
+            origin: "园博园东路园博园东门",
+            terminus: "常青五路新湾二路",
         };
     },
     mounted() {
@@ -249,7 +249,7 @@ export default {
                         eventBus.emit("show-library-graph-lr", "数据(目前没有)"); // 正确
                         var loca = new Loca.Container({ map });
                         loca.animate.start();
-                        map.setCenter([114.22225,30.652476], true);
+                        map.setCenter([114.22225, 30.652476], true);
                         let nowzoom = map.getZoom();
                         // 创建动画对象
                         loca.viewControl.addAnimates([
@@ -4856,72 +4856,72 @@ export default {
                     return ranks < 5
                         ? heights[0]
                         : ranks < 10
-                        ? heights[1]
-                        : ranks < 20
-                        ? heights[2]
-                        : ranks < 30
-                        ? heights[3]
-                        : ranks < 50
-                        ? heights[4]
-                        : ranks < 80
-                        ? heights[5]
-                        : ranks < 100
-                        ? heights[6]
-                        : heights[7];
+                            ? heights[1]
+                            : ranks < 20
+                                ? heights[2]
+                                : ranks < 30
+                                    ? heights[3]
+                                    : ranks < 50
+                                        ? heights[4]
+                                        : ranks < 80
+                                            ? heights[5]
+                                            : ranks < 100
+                                                ? heights[6]
+                                                : heights[7];
                 },
                 topColor: function (index, feature) {
                     var ranks = (feature.coordinates && feature.coordinates.length) || 0;
                     return ranks < 5
                         ? colors[0]
                         : ranks < 10
-                        ? colors[1]
-                        : ranks < 20
-                        ? colors[2]
-                        : ranks < 30
-                        ? colors[3]
-                        : ranks < 50
-                        ? colors[4]
-                        : ranks < 80
-                        ? colors[5]
-                        : ranks < 100
-                        ? colors[6]
-                        : colors[7];
+                            ? colors[1]
+                            : ranks < 20
+                                ? colors[2]
+                                : ranks < 30
+                                    ? colors[3]
+                                    : ranks < 50
+                                        ? colors[4]
+                                        : ranks < 80
+                                            ? colors[5]
+                                            : ranks < 100
+                                                ? colors[6]
+                                                : colors[7];
                 },
                 sideTopColor: function (index, feature) {
                     var ranks = (feature.coordinates && feature.coordinates.length) || 0;
                     return ranks < 5
                         ? colors[0]
                         : ranks < 10
-                        ? colors[1]
-                        : ranks < 20
-                        ? colors[2]
-                        : ranks < 30
-                        ? colors[3]
-                        : ranks < 50
-                        ? colors[4]
-                        : ranks < 80
-                        ? colors[5]
-                        : ranks < 100
-                        ? colors[6]
-                        : colors[7];
+                            ? colors[1]
+                            : ranks < 20
+                                ? colors[2]
+                                : ranks < 30
+                                    ? colors[3]
+                                    : ranks < 50
+                                        ? colors[4]
+                                        : ranks < 80
+                                            ? colors[5]
+                                            : ranks < 100
+                                                ? colors[6]
+                                                : colors[7];
                 },
                 sideBottomColor: function (index, feature) {
                     var ranks = (feature.coordinates && feature.coordinates.length) || 0;
                     return ranks < 5
                         ? colors[0]
                         : ranks < 10
-                        ? colors[1]
-                        : ranks < 20
-                        ? colors[2]
-                        : ranks < 30
-                        ? colors[3]
-                        : ranks < 50
-                        ? colors[4]
-                        : ranks < 80
-                        ? colors[5]
-                        : ranks < 100
-                        ? colors[6]
-                        : colors[7];
+                            ? colors[1]
+                            : ranks < 20
+                                ? colors[2]
+                                : ranks < 30
+                                    ? colors[3]
+                                    : ranks < 50
+                                        ? colors[4]
+                                        : ranks < 80
+                                            ? colors[5]
+                                            : ranks < 100
+                                                ? colors[6]
+                                                : colors[7];
                 },
             });
             avg_tf_loca.add(ll);
@@ -5091,7 +5091,7 @@ export default {
                     path: lineArr,
                     showDir: true,
                     strokeColor: "#28F", //线颜色
-                    strokeOpacity: 0.3, //线透明度
+                    strokeOpacity: 0.9, //线透明度
                     strokeWeight: 6, //线宽
                     // strokeStyle: "solid"  //线样式
                 });
@@ -5343,7 +5343,7 @@ export default {
             }
 
             function show_bus_lines() {
-                
+
                 // 初始化绘制多条公交路线
                 // 参考文档 https://lbs.amap.com/demo/javascript-api-v2/example/bus-info/search-bus-route
 
@@ -5356,9 +5356,9 @@ export default {
                 /*公交线路查询*/
                 function lineSearch(number) {
                     var busLineName = number;
-                    if(!busLineName) return;
+                    if (!busLineName) return;
                     //实例化公交线路查询类，只取回一条路线
-                    if(!linesearch){
+                    if (!linesearch) {
                         linesearch = new AMap.LineSearch({
                             pageIndex: 1,
                             city: '武汉',
@@ -5367,7 +5367,7 @@ export default {
                         });
                     }
                     //搜索相关公交线路
-                    linesearch.search(busLineName, function(status, result) {
+                    linesearch.search(busLineName, function (status, result) {
                         // map.clearMap()
                         if (status === 'complete' && result.info === 'OK') {
                             lineSearch_Callback(result);
@@ -5389,7 +5389,7 @@ export default {
                             var endPot = stops[stops.length - 1].location;
                             // if (i == 0) //作为示例，只绘制一条线路
                             drawbusLine(startPot, endPot, pathArr);
-                        
+
                         }
                     }
                 }
@@ -5414,31 +5414,32 @@ export default {
                     busPolyline = new AMap.Polyline({
                         map: map,
                         path: BusArr,
+                        showDir: true,
                         strokeColor: "#09f",//线颜色
-                        strokeOpacity: 0.8,//线透明度
-                        isOutline:true,
-                        outlineColor:'white',
+                        strokeOpacity: 0.3,//线透明度
+                        isOutline: true,
+                        outlineColor: 'white',
                         strokeWeight: 6//线宽
                     });
                     // 将 busPolyline 显示在地图中心并自动缩放地图到合适级别。
                     // true表示需要动画过程，[60,200,60,60]表示上下左右避让像素
                     // map.setFitView(busPolyline, true, [60,200,60,60]);
-                
+
                 }
                 lineSearch("356");
-                lineSearch("358");
-                lineSearch("359");
-                lineSearch("360");
-                lineSearch("361");
-                lineSearch("362");
-                lineSearch("363");
+                lineSearch("217");
+                lineSearch("339");
+                lineSearch("47");
+                lineSearch("602");
+                lineSearch("318");
+                lineSearch("713");
             }
 
             async function init_bus() {
                 lineArr = await find_road();
                 initGltf();
                 init();
-                show_bus_lines();
+                // show_bus_lines();
                 map.add(marker);
                 scene.add(busobj);
                 map.add(polyline);
@@ -5474,6 +5475,104 @@ export default {
             map.clearMap();  // 清除地图上的公交路线
         },
         show_Bus_Model() {
+            var linesearch = new AMap.LineSearch({
+                pageIndex: 1,
+                city: '武汉',
+                pageSize: 1,
+                extensions: 'all'
+            });
+            /*公交线路查询*/
+            function lineSearch(number) {
+                var busLineName = number;
+                if (!busLineName) return;
+                //实例化公交线路查询类，只取回一条路线
+                if (!linesearch) {
+                    linesearch = new AMap.LineSearch({
+                        pageIndex: 1,
+                        city: '武汉',
+                        pageSize: 1,
+                        extensions: 'all'
+                    });
+                }
+                //搜索相关公交线路
+                linesearch.search(busLineName, function (status, result) {
+                    // map.clearMap()
+                    if (status === 'complete' && result.info === 'OK') {
+                        lineSearch_Callback(result);
+                    } else {
+                        alert(result);
+                    }
+                });
+            }
+            /*公交路线查询服务返回数据解析概况*/
+            function lineSearch_Callback(data) {
+                var lineArr = data.lineInfo;
+                var lineNum = data.lineInfo.length;
+                if (lineNum == 0) {
+                } else {
+                    for (var i = 0; i < lineNum; i++) {
+                        var pathArr = lineArr[i].path;
+                        var stops = lineArr[i].via_stops;
+                        var startPot = stops[0].location;
+                        var endPot = stops[stops.length - 1].location;
+                        // if (i == 0) //作为示例，只绘制一条线路
+                        drawbusLine(startPot, endPot, pathArr);
+
+                    }
+                }
+            }
+            /*绘制路线*/
+            function drawbusLine(startPot, endPot, BusArr) {
+                //绘制起点，终点
+                new AMap.Marker({
+                    map: map,
+                    position: startPot, //基点位置
+                    icon: "https://webapi.amap.com/theme/v1.3/markers/n/start.png",
+                    zIndex: 10,
+                    anchor: 'bottom-center',
+                });
+                new AMap.Marker({
+                    map: map,
+                    position: endPot, //基点位置
+                    icon: "https://webapi.amap.com/theme/v1.3/markers/n/end.png",
+                    zIndex: 10,
+                    anchor: 'bottom-center',
+                });
+                //绘制乘车的路线
+                busPolyline = new AMap.Polyline({
+                    map: map,
+                    path: BusArr,
+                    showDir: true,
+                    strokeColor: "#09f",//线颜色
+                    strokeOpacity: 0.3,//线透明度
+                    isOutline: true,
+                    outlineColor: 'white',
+                    strokeWeight: 6//线宽
+                });
+                // 将 busPolyline 显示在地图中心并自动缩放地图到合适级别。
+                // true表示需要动画过程，[60,200,60,60]表示上下左右避让像素
+                // map.setFitView(busPolyline, true, [60,200,60,60]);
+
+            }
+            lineSearch("356");
+            lineSearch("217");
+            lineSearch("339");
+            lineSearch("47");
+            lineSearch("602");
+            lineSearch("318");
+            lineSearch("713");
+            lineSearch("336");
+
+            // busPolyline = new AMap.Polyline({
+            //         map: map,
+            //         path: lineArr,
+            //         showDir: true,
+            //         strokeColor: "#09f",//线颜色
+            //         strokeOpacity: 0.3,//线透明度
+            //         isOutline:true,
+            //         outlineColor:'white',
+            //         strokeWeight: 6//线宽
+            //     });
             this.showBusModel = !this.showBusModel;
         },
         traffic_flow() {
