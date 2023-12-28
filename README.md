@@ -1,3 +1,8 @@
+## 视频展示
+[计算机设计大赛信息可视化赛道作品展示-新型智慧城市可视化_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1TH4y1X7BL/?t=1&spm_id_from=333.1350.jump_directly&vd_source=bc4fa866e16a93e8322d340eefe71de3)
+
+
+
 ## 技术栈
 
 该项目主要使用`Vue`搭配`Echarts`采用组件化的方式开发完成,此外项目中陆续使用有
