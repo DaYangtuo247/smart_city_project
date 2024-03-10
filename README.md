@@ -37,8 +37,8 @@ git clone https://github.com/DaYangtuo247/smart_city_project
 ### 启动前端
 
 ```bash
-cd view
-npm install
+cd smart-city
+npm install //只需第一次运行时使用
 npm run smart-city
 ```
 
@@ -46,8 +46,16 @@ npm run smart-city
 
 ```bash
 cd server
-npm install
+npm install //只需第一次运行时使用
 node app.js
+```
+
+### 启动ai
+
+```bash
+cd chatgpt
+npm install //只需第一次运行时使用
+npm run ai
 ```
 
 ### 项目成员
