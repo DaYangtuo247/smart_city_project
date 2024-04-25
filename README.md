@@ -1,6 +1,5 @@
 ## 视频展示
 [计算机设计大赛信息可视化赛道作品展示-新型智慧城市可视化_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1TH4y1X7BL/?t=1&spm_id_from=333.1350.jump_directly&vd_source=bc4fa866e16a93e8322d340eefe71de3)
-https://urbancompshare.nas.cpolar.cn/smart-city/
 
 目前项目已上线，网址：https://urbancompshare.nas.cpolar.cn/smart-city/
 
